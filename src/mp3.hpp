@@ -194,6 +194,8 @@ enum class advertTracks: uint16_t {
   t_322_bt_pairing             = 322,
   t_323_standby_timer_off      = 323,
   t_324_standby_timer_on       = 324,
+  t_325_endless_off            = 325,
+  t_326_endless_on             = 326,
 };
 
 // implement a notification class,
@@ -239,6 +241,7 @@ public:
   void enqueueTrack(uint8_t folder, uint8_t firstTrack, uint8_t lastTrack, uint8_t currentTrack = 0);
   void enqueueTrack(uint8_t folder, uint8_t track);
   void setEndless(bool v = true) { endless = v; }
+  bool isEndless() { return endless; }
   void shuffleQueue();
   void enqueueMp3FolderTrack(uint16_t  track, bool playAfter = false);
   void enqueueMp3FolderTrack(mp3Tracks track, bool playAfter = false);

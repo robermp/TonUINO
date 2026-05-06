@@ -14,6 +14,8 @@ advert/0321_bt_off.mp3|Bluetooth wird ausgeschaltet
 advert/0322_bt_pairing.mp3|Bluetooth wird verbunden
 advert/0323_standby_timer_off.mp3|Der Standby Timer wird ausgeschaltet
 advert/0324_standby_timer_on.mp3|Der Standby Timer wird wieder eingeschaltet
+advert/0325_endless_off.mp3|Der Endlos Modus wird ausgeschaltet
+advert/0326_endless_on.mp3|Der Endlos Modus wird eingeschaltet
 mp3/0300_new_tag.mp3|Oh, eine neue Karte!
 mp3/0301_select_folder.mp3|Ok, verwende nun die Lautstärketasten um einen Ordner für die Karte auszuwählen.
 mp3/0310.mp3|Wähle mit den Lautstärketasten den Wiedergabemodus aus. Drücke die Pausetaste um fortzufahren.
@@ -127,6 +129,7 @@ mp3/0977_modifier_bluetooth.mp3|Bluetoothkarte - Mit der Bluetoothkarte kannst d
 mp3/0978_modifier_jukebox.mp3|Jukeboxkarte - Wenn schon ein Track abgespielt wird und eine neue Karte wird, wird diese nicht sofort abgespielt sondern in eine Warteschlange gestellt. Erst, wenn die aktuelle Karte beendet ist, wird die nächste Karte aus der Warteschlange genommen.
 mp3/0979_modifier_pauseAftTr.mp3|Pause nach jedem Track Karte - Mit diese Karte geht der Tonuino nach jedem Track in den Pausenstate.
 mp3/0980_modifier_disableStandby.mp3|Disable Standby Karte - Mit dieser Karte kannst du den Standby Timer temporär aus- und wieder einschalten
+mp3/0981_modifier_switchEndless.mp3|Endlos Ein- und Ausschaltkarte - Mit dieser Karte kannst du den Endlos Modus ein- und wieder ausschalten
 mp3/0985_admin_lock_intro.mp3|Wähle bitte aus ob und wie das Adminmenü geschützt werden soll.
 mp3/0986_admin_lock_disabled.mp3|Kein Schutz - das Adminmenü kann jederzeit durch drücken von allen drei Tasten aktiviert werden.
 mp3/0987_admin_lock_card.mp3|Nur Adminkarte - das Adminmenü kann nur mit einer Adminkarte geöffnet werden. Eine neue Adminkarte kann jederzeit angelernt werden.

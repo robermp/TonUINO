@@ -94,6 +94,8 @@ public:
   void switchStandbyTimerOnOff();
   bool isStandbyTimerOff() { return standbyTimerOff; }
 
+  void switchEndlessOnOff();
+
 private:
 
   void setup_timer();

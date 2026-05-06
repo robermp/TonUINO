@@ -287,6 +287,7 @@ const char main_html[] PROGMEM = R"rawliteral(
                                                    <option>Jukebox               </option>
                                                    <option>Pause nach jedem Track</option>
                                                    <option>Standby Timer Off     </option>
+                                                   <option>Endless switch        </option>
                                                  </select>
 <br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special" value="1" min="-127" max="127">
                                                    <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: Tr. wird beendet)

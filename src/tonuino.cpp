@@ -548,6 +548,14 @@ void Tonuino::switchStandbyTimerOnOff() {
 
 }
 
+void Tonuino::switchEndlessOnOff() {
+  mp3.setEndless(not mp3.isEndless());
+  if (mp3.isEndless())
+    mp3.playAdvertisement(advertTracks::t_326_endless_on , false/*olnyIfIsPlaying*/);
+  else
+    mp3.playAdvertisement(advertTracks::t_325_endless_off, false/*olnyIfIsPlaying*/);
+}
+
 bool Tonuino::specialCard(const folderSettings &nfcTag) {
   LOG(card_log, s_debug, F("special card, mode = "), static_cast<uint8_t>(nfcTag.mode));
   if (activeModifier->getActive() == nfcTag.mode) {
@@ -558,11 +566,11 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
   }
 
 #ifdef QUIZ_GAME
-  if (SM_tonuino::is_in_state<Quiz>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw)
+  if (SM_tonuino::is_in_state<Quiz>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw && nfcTag.mode != pmode_t::endless_sw)
     return false;
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
-  if (SM_tonuino::is_in_state<Memory>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw)
+  if (SM_tonuino::is_in_state<Memory>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw && nfcTag.mode != pmode_t::endless_sw)
     return false;
 #endif // MEMORY_GAME
 
@@ -620,6 +628,10 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
 
   case pmode_t::stdb_timer_sw:LOG(card_log, s_info, F("toggle std timer from "), standbyTimerOff);
                               switchStandbyTimerOnOff();
+                              return true;
+
+  case pmode_t::endless_sw:   LOG(card_log, s_info, F("toggle endless from "), mp3.isEndless());
+                              switchEndlessOnOff();
                               return true;
 
   default:                    return false;
