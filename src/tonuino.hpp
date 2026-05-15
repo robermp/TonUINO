@@ -182,6 +182,7 @@ private:
 #endif
 
   bool                 standbyTimerOff     {};
+  bool                 endless             {};
 };
 
 #endif /* SRC_TONUINO_HPP_ */

@@ -109,7 +109,7 @@ void Mp3::waitForTrackToFinish() {
 void Mp3::waitForTrackToStart() {
   LOG(mp3_log, s_debug, F("waitForTrackToStart "), isPlaying());
   Timer timer;
-  timer.start(dfPlayer_timeUntilStarts);
+  timer.start(2*dfPlayer_timeUntilStarts);
 
   do {
     loop();
@@ -123,40 +123,48 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   advPlaying = true;
 #endif
   if (isPlaying()) {
-    LOG(mp3_log, s_debug, F("playAdvertisement()"));
-    Base::playAdvertisement(track);
-  }
-  else if (not olnyIfIsPlaying) {
-    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
-    if (isPause) {
-      Base::start();
-      LOG(mp3_log, s_debug, F("after start"));
-    }
-    else {
-      Base::playFolderTrack(1, 1);
-      LOG(mp3_log, s_debug, F("after playFolderTrack"));
-      delay(dfPlayer_timeUntilStarts);
-      LOG(mp3_log, s_debug, F("after delay"));
-    }
-    waitForTrackToStart();
-    LOG(mp3_log, s_debug, F("after waitForTrackToStart"));
-
+    LOG(mp3_log, s_info, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
     delay(dfPlayer_timeUntilStarts);
-    LOG(mp3_log, s_debug, F("after delay"));
+    LOG(mp3_log, s_info, F("after delay"));
+  }
+  else if (not olnyIfIsPlaying) {
+    if (isPause) {
+      // should not be in playing
+      waitForTrackToFinish();
+      LOG(modifier_log, s_info, "after waitForTrackToFinish");
+      Base::start();
+      LOG(mp3_log, s_info, F("after start (from pause)"));
+    }
+    else {
+      // should not be in playing
+      waitForTrackToFinish();
+      LOG(modifier_log, s_info, "after waitForTrackToFinish");
+      Base::playFolderTrack(1, 1);
+      LOG(mp3_log, s_info, F("after playFolderTrack(1,1)"));
+//      delay(dfPlayer_timeUntilStarts);
+//      LOG(mp3_log, s_info, F("after delay"));
+    }
+    waitForTrackToStart();
+    LOG(mp3_log, s_info, F("after waitForTrackToStart"));
+
+    LOG(mp3_log, s_info, F("playAdvertisement: "), track);
+    Base::playAdvertisement(track);
+    delay(2*dfPlayer_timeUntilStarts);
+    LOG(mp3_log, s_info, F("after delay"));
 
     waitForTrackToFinish(); // finish adv
-    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+    LOG(modifier_log, s_info, "after waitForTrackToFinish");
 
     waitForTrackToStart();  // start folder track
-    LOG(mp3_log, s_debug, F("after waitForTrackToStart()"));
+    LOG(mp3_log, s_info, F("after waitForTrackToStart()"));
 
 #ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
     waitForTrackToFinish();
-    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
+    LOG(modifier_log, s_info, "after waitForTrackToFinish");
 
     waitForTrackToStart();
-    LOG(modifier_log, s_debug, "after waitForTrackToStart");
+    LOG(modifier_log, s_info, "after waitForTrackToStart");
 #endif
 
     delay(10);

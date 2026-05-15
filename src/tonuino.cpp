@@ -395,6 +395,8 @@ void Tonuino::playFolder() {
     // Nothing to enqueue here
     break;
   }
+  if (endless)
+    mp3.setEndless();
 }
 
 void Tonuino::playTrackNumber () {
@@ -549,11 +551,13 @@ void Tonuino::switchStandbyTimerOnOff() {
 }
 
 void Tonuino::switchEndlessOnOff() {
-  mp3.setEndless(not mp3.isEndless());
-  if (mp3.isEndless())
+  endless = not endless;
+  if (endless)
     mp3.playAdvertisement(advertTracks::t_326_endless_on , false/*olnyIfIsPlaying*/);
   else
     mp3.playAdvertisement(advertTracks::t_325_endless_off, false/*olnyIfIsPlaying*/);
+
+  mp3.setEndless(endless);
 }
 
 bool Tonuino::specialCard(const folderSettings &nfcTag) {
