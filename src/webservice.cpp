@@ -548,7 +548,8 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
 
   if (request->arg("mod_action") == "activate") {
     LOG(webserv_log, s_info, "activate modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
-    tonuino.specialCard(mod);
+    settings.setShortCut(0, mod);
+    cmd = commandRaw::mod_from_web;
   }
   else if (request->arg("mod_action") == "write") {
     LOG(webserv_log, s_info, "write modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);

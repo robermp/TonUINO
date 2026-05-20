@@ -125,7 +125,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   if (isPlaying()) {
     LOG(mp3_log, s_info, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
-    delay(dfPlayer_timeUntilStarts);
+    delay(500); // to prevent missingOnPlayerFinish
     LOG(mp3_log, s_info, F("after delay"));
   }
   else if (not olnyIfIsPlaying) {

@@ -608,6 +608,8 @@ bool Base::checkForShortcutAndShutdown(command cmd) {
   case command::start        : shortCut = 4      ; break;
 #ifdef TonUINO_Esp32
   case command::card_from_web: shortCut = 0      ; break;
+  case command::mod_from_web : tonuino.specialCard(settings.getShortCut(0))
+                                                 ; break;
 #endif
 #ifndef DISABLE_SHUTDOWN_VIA_BUTTON
   case command::shutdown : if (tonuino.getActiveModifier().handleButton(command::shutdown))

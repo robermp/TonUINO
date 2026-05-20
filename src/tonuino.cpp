@@ -551,6 +551,9 @@ void Tonuino::switchStandbyTimerOnOff() {
 }
 
 void Tonuino::switchEndlessOnOff() {
+  if (((myFolder.mode == pmode_t::party) || (myFolder.mode == pmode_t::party_vb)) && mp3.isEndless())
+    endless = true;
+
   endless = not endless;
   if (endless)
     mp3.playAdvertisement(advertTracks::t_326_endless_on , false/*olnyIfIsPlaying*/);

@@ -64,7 +64,8 @@ enum class commandRaw: uint8_t {
   specialStart   = 18,
   menu_jump      = 19,
   card_from_web       = 20,
-  write_card_from_web = 21,
+  mod_from_web        = 21,
+  write_card_from_web = 22,
   cmd_end        = 22,
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
@@ -101,7 +102,8 @@ enum class command: uint8_t {
   adm_end     = 20,
 #ifdef TonUINO_Esp32
   card_from_web       = 21,
-  write_card_from_web = 22,
+  mod_from_web        = 22,
+  write_card_from_web = 23,
 #endif
   last        = 23,
 #ifdef BUTTONS3X3

@@ -55,10 +55,12 @@ const command cmd_table[][4] PROGMEM = {
 #endif
 #ifdef TonUINO_Esp32
 /* 20 card_from_web,  */ ,{ command::none , command::card_from_web, command::card_from_web , command::card_from_web}
-/* 21 w_card_from_web,*/ ,{ command::none , command::write_card_from_web, command::none    , command::none}
+/* 21 mod_from_web,   */ ,{ command::none , command::mod_from_web , command::mod_from_web  , command::mod_from_web}
+/* 22 w_card_from_web,*/ ,{ command::none , command::write_card_from_web, command::none    , command::none}
 #else
 /* 20 card_from_web,  */ ,{ command::none      , command::none       , command::none       , command::none        }
-/* 21 w_card_from_web,*/ ,{ command::none      , command::none       , command::none       , command::none        }
+/* 21 mod_from_web,   */ ,{ command::none      , command::none       , command::none       , command::none        }
+/* 22 w_card_from_web,*/ ,{ command::none      , command::none       , command::none       , command::none        }
 #endif
 };
 Commands::Commands(const Settings& settings, CommandSource* source1, CommandSource* source2, CommandSource* source3, CommandSource* source4)
