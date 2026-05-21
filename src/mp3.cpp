@@ -117,7 +117,7 @@ void Mp3::waitForTrackToStart() {
   LOG(mp3_log, s_debug, F("waitForTrackToStart End "), isPlaying());
 }
 
-void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
+void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
   LOG(mp3_log, s_info, F("play adv: "), track);
 #ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   advPlaying = true;
@@ -128,7 +128,7 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
     delay(500); // to prevent missingOnPlayerFinish
     LOG(mp3_log, s_info, F("after delay"));
   }
-  else if (not olnyIfIsPlaying) {
+  else if (not onlyIfIsPlaying) {
     if (isPause) {
       // should not be in playing
       waitForTrackToFinish();
@@ -185,8 +185,8 @@ void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
   }
 }
 
-void Mp3::playAdvertisement(advertTracks track, bool olnyIfIsPlaying) {
-  playAdvertisement(static_cast<uint16_t>(track), olnyIfIsPlaying);
+void Mp3::playAdvertisement(advertTracks track, bool onlyIfIsPlaying) {
+  playAdvertisement(static_cast<uint16_t>(track), onlyIfIsPlaying);
 }
 
 void Mp3::clearFolderQueue() {

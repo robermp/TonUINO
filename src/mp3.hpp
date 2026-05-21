@@ -225,8 +225,8 @@ public:
   bool isPlaying() const { return is_playing_cache; }
   void waitForTrackToFinish();
   void waitForTrackToStart();
-  void playAdvertisement(uint16_t     track, bool olnyIfIsPlaying = true);
-  void playAdvertisement(advertTracks track, bool olnyIfIsPlaying = true);
+  void playAdvertisement(uint16_t     track, bool onlyIfIsPlaying = true);
+  void playAdvertisement(advertTracks track, bool onlyIfIsPlaying = true);
 
   void clearFolderQueue();
   void clearMp3Queue();
