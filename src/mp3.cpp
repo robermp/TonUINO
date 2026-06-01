@@ -102,6 +102,9 @@ void Mp3::waitForTrackToFinish() {
 
   do {
     loop();
+#ifdef UNIT_TESTS
+    pin_value[dfPlayer_busyPin] = (dfPlayer_busyPinType == levelType::activeLow) ? HIGH : LOW;
+#endif
   } while (isPlaying());
   LOG(mp3_log, s_debug, F("waitForTrackToFinish End "), isPlaying());
 }

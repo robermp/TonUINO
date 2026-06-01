@@ -3,6 +3,6 @@
 
 #include <Arduino.h>
 
-static const __FlashStringHelper* TONUINO_TNG_VERSION() { return F("V3.3.3 20.05.26"); }
+static const __FlashStringHelper* TONUINO_TNG_VERSION() { return F("V3.3.3 01.06.26"); }
 
 #endif /* SRC_VERSION_HPP_ */
