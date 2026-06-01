@@ -69,7 +69,7 @@ void setup()
 
 #ifdef FIVEBUTTONS
   LOG(init_log, s_error, F("5"));
-#elif  BUTTONS3X3
+#elif defined(BUTTONS3X3)
   LOG(init_log, s_error, F("3x3"));
 #else
   LOG(init_log, s_error, F("3"));
