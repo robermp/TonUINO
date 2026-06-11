@@ -129,13 +129,13 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
     LOG(mp3_log, s_info, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
     delay(500); // to prevent missingOnPlayerFinish
-    LOG(mp3_log, s_info, F("after delay"));
+    LOG(mp3_log, s_debug, F("after delay"));
   }
   else if (not onlyIfIsPlaying) {
     if (isPause) {
       // should not be in playing
       waitForTrackToFinish();
-      LOG(modifier_log, s_info, "no track playing");
+      LOG(modifier_log, s_debug, "no track playing");
 
       Base::start();
       LOG(mp3_log, s_info, F("start (from pause)"));
@@ -143,7 +143,7 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
     else {
       // should not be in playing
       waitForTrackToFinish();
-      LOG(modifier_log, s_info, "no track is playing");
+      LOG(modifier_log, s_debug, "no track is playing");
 
       Base::playFolderTrack(1, 1);
       LOG(mp3_log, s_info, F("playFolderTrack(1,1)"));
@@ -157,33 +157,33 @@ void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
 #endif
 
     waitForTrackToStart(); // origin track starts
-    LOG(mp3_log, s_info, F("origin track started"));
+    LOG(mp3_log, s_debug, F("origin track started"));
 
     LOG(mp3_log, s_info, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
 
     waitForTrackToFinish(); // origin track pauses
-    LOG(modifier_log, s_info, F("origin track pauses"));
+    LOG(modifier_log, s_debug, F("origin track pauses"));
 
     waitForTrackToStart();  // adv track starts
-    LOG(mp3_log, s_info, F("adv track started"));
+    LOG(mp3_log, s_debug, F("adv track started"));
 
     waitForTrackToFinish(); // adv track finished
-    LOG(modifier_log, s_info, F("adv track finished"));
+    LOG(modifier_log, s_debug, F("adv track finished"));
 
 //#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
 //    waitForTrackToStart();
-//    LOG(modifier_log, s_info, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy"));
+//    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy"));
 //    waitForTrackToFinish();
-//    LOG(modifier_log, s_info, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy finished"));
+//    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy finished"));
 //#endif
 
     waitForTrackToStart();  // origin track starts again
-    LOG(mp3_log, s_info, F("origin track started (again)"));
+    LOG(mp3_log, s_debug, F("origin track started (again)"));
 
     delay(10);
     Base::pause();
-    LOG(mp3_log, s_info, F("origin track pauses (again)"));
+    LOG(mp3_log, s_debug, F("origin track pauses (again)"));
     loop();
   }
 }
