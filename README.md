@@ -109,7 +109,8 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 
 # Change Log
 
-## Version 3.3.3 (15.05.2026)
+## Version 3.3.3 (16.05.2026)
+- [Issue 319](https://github.com/tonuino/TonUINO-TNG/issues/319): Hoerbuch mode "random folder"
 - [Issue 330](https://github.com/tonuino/TonUINO-TNG/issues/330): Compiler error when defining "BOUTTONS3X3"
 - [Issue 324](https://github.com/tonuino/TonUINO-TNG/issues/324): Rotary Encoder doesn't work stable for ESP32
 - [Issue 322](https://github.com/tonuino/TonUINO-TNG/issues/322): ESP32: add a possibility to indicate that the power hold pin is ready.
