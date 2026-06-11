@@ -533,6 +533,7 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
 #endif
                  request->arg("mod_mode") == "Pause nach jedem Track"? pmode_t::pause_aft_tr  :
                  request->arg("mod_mode") == "Standby Timer Off"     ? pmode_t::stdb_timer_sw :
+                 request->arg("mod_mode") == "Endless switch"        ? pmode_t::endless_sw    :
                                                                        pmode_t::none          ;
   int special  = request->arg("mod_special").toInt();
   if (mod.mode == pmode_t::sleep_timer) {
@@ -547,7 +548,8 @@ void Webservice::modifier(AsyncWebServerRequest *request) {
 
   if (request->arg("mod_action") == "activate") {
     LOG(webserv_log, s_info, "activate modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
-    tonuino.specialCard(mod);
+    settings.setShortCut(0, mod);
+    cmd = commandRaw::mod_from_web;
   }
   else if (request->arg("mod_action") == "write") {
     LOG(webserv_log, s_info, "write modifier mode: ", static_cast<uint8_t>(mod.mode), " special: ", mod.special);
@@ -756,6 +758,9 @@ String Webservice::get_status() {
   }
   if (tonuino.isStandbyTimerOff()) {
     status += String("<br>Modifier: Standby Timer Off");
+  }
+  if (mp3.isEndless()) {
+    status += String("<br>Modifier: Endless");
   }
   if (tonuino.getRemainingStandbyTimer() < 60 * 60 * 1000ul) {
     unsigned long remaining = tonuino.getRemainingStandbyTimer()/1000;

@@ -442,6 +442,8 @@ void Tonuino::playFolder() {
     // Nothing to enqueue here
     break;
   }
+  if (endless)
+    mp3.setEndless();
 }
 
 void Tonuino::playTrackNumber () {
@@ -566,15 +568,15 @@ void Tonuino::shutdown() {
 void Tonuino::switchBtModuleOnOff() {
   btModuleOn = not btModuleOn;
   if (btModuleOn)
-    mp3.playAdvertisement(advertTracks::t_320_bt_on , false/*olnyIfIsPlaying*/);
+    mp3.playAdvertisement(advertTracks::t_320_bt_on , false/*onlyIfIsPlaying*/);
   else
-    mp3.playAdvertisement(advertTracks::t_321_bt_off, false/*olnyIfIsPlaying*/);
+    mp3.playAdvertisement(advertTracks::t_321_bt_off, false/*onlyIfIsPlaying*/);
   pin_set_level(btModuleOnPin, btModuleOnPinType, btModuleOn ? level::active : level::inactive);
 }
 
 void Tonuino::btModulePairing() {
   if (not btModulePairingTimer.isActive()) {
-    mp3.playAdvertisement(advertTracks::t_322_bt_pairing, false/*olnyIfIsPlaying*/);
+    mp3.playAdvertisement(advertTracks::t_322_bt_pairing, false/*onlyIfIsPlaying*/);
     btModulePairingTimer.start(btModulePairingPulse);
     pin_set_active(btModulePairingPin, btModulePairingPinType);
   }
@@ -585,14 +587,27 @@ void Tonuino::switchStandbyTimerOnOff() {
   standbyTimerOff = not standbyTimerOff;
   if (standbyTimerOff) {
     disableStandbyTimer();
-    mp3.playAdvertisement(advertTracks::t_323_standby_timer_off , false/*olnyIfIsPlaying*/);
+    mp3.playAdvertisement(advertTracks::t_323_standby_timer_off , false/*onlyIfIsPlaying*/);
   }
   else {
     if (SM_tonuino::is_in_state<Pause>() || SM_tonuino::is_in_state<Idle>())
       setStandbyTimer();
-    mp3.playAdvertisement(advertTracks::t_324_standby_timer_on, false/*olnyIfIsPlaying*/);
+    mp3.playAdvertisement(advertTracks::t_324_standby_timer_on, false/*onlyIfIsPlaying*/);
   }
 
+}
+
+void Tonuino::switchEndlessOnOff() {
+  if (((myFolder.mode == pmode_t::party) || (myFolder.mode == pmode_t::party_vb)) && mp3.isEndless())
+    endless = true;
+
+  endless = not endless;
+  if (endless)
+    mp3.playAdvertisement(advertTracks::t_326_endless_on , false/*onlyIfIsPlaying*/);
+  else
+    mp3.playAdvertisement(advertTracks::t_325_endless_off, false/*onlyIfIsPlaying*/);
+
+  mp3.setEndless(endless);
 }
 
 bool Tonuino::specialCard(const folderSettings &nfcTag) {
@@ -600,61 +615,61 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
   if (activeModifier->getActive() == nfcTag.mode) {
     resetActiveModifier();
     LOG(card_log, s_info, F("modifier removed"));
-    mp3.playAdvertisement(advertTracks::t_261_deactivate_mod_card, false/*olnyIfIsPlaying*/);
+    mp3.playAdvertisement(advertTracks::t_261_deactivate_mod_card, false/*onlyIfIsPlaying*/);
     return true;
   }
 
 #ifdef QUIZ_GAME
-  if (SM_tonuino::is_in_state<Quiz>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw)
+  if (SM_tonuino::is_in_state<Quiz>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw && nfcTag.mode != pmode_t::endless_sw)
     return false;
 #endif // QUIZ_GAME
 #ifdef MEMORY_GAME
-  if (SM_tonuino::is_in_state<Memory>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw)
+  if (SM_tonuino::is_in_state<Memory>() && nfcTag.mode != pmode_t::bt_module && nfcTag.mode != pmode_t::stdb_timer_sw && nfcTag.mode != pmode_t::endless_sw)
     return false;
 #endif // MEMORY_GAME
 
 
   switch (nfcTag.mode) {
   case pmode_t::sleep_timer:  LOG(card_log, s_info, F("act. sleepTimer"));
-                              mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_302_sleep            , false/*onlyIfIsPlaying*/);
                               activeModifier = &sleepTimer;
                               break;
 
   case pmode_t::freeze_dance: LOG(card_log, s_info, F("act. freezeDance"));
-                              mp3.playAdvertisement(advertTracks::t_300_freeze_into      , false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_300_freeze_into      , false/*onlyIfIsPlaying*/);
                               activeModifier = &danceGame;
                               break;
 
   case pmode_t::fi_wa_ai:     LOG(card_log, s_info, F("act. FeWaLu"));
-                              mp3.playAdvertisement(advertTracks::t_303_fi_wa_ai         , false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_303_fi_wa_ai         , false/*onlyIfIsPlaying*/);
                               activeModifier = &danceGame;
                               break;
 
   case pmode_t::toddler:      LOG(card_log, s_info, F("act. toddlerMode"));
-                              mp3.playAdvertisement(advertTracks::t_304_buttonslocked    , false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_304_buttonslocked    , false/*onlyIfIsPlaying*/);
                               activeModifier = &toddlerMode;
                               break;
 
   case pmode_t::kindergarden: LOG(card_log, s_info, F("act. kindergarden"));
-                              mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*onlyIfIsPlaying*/);
                               activeModifier = &kindergardenMode;
                               break;
 
   case pmode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingle"));
-                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*onlyIfIsPlaying*/);
                               activeModifier = &repeatSingleModifier;
                               break;
 
 #ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
   case pmode_t::pause_aft_tr: LOG(card_log, s_info, F("act. pauseAftTr"));
-                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_260_activate_mod_card, false/*onlyIfIsPlaying*/);
                               activeModifier = &pauseAfterTrack;
                               break;
 #endif
 
 #ifdef MODIFICATION_CARD_JUKEBOX
   case pmode_t::jukebox:      LOG(card_log, s_info, F("act. jukebox"));
-                              mp3.playAdvertisement(advertTracks::t_309_jukebox          , false/*olnyIfIsPlaying*/);
+                              mp3.playAdvertisement(advertTracks::t_309_jukebox          , false/*onlyIfIsPlaying*/);
                               activeModifier = &jukeboxModifier;
                               break;
 #endif
@@ -667,6 +682,10 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
 
   case pmode_t::stdb_timer_sw:LOG(card_log, s_info, F("toggle std timer from "), standbyTimerOff);
                               switchStandbyTimerOnOff();
+                              return true;
+
+  case pmode_t::endless_sw:   LOG(card_log, s_info, F("toggle endless from "), mp3.isEndless());
+                              switchEndlessOnOff();
                               return true;
 
   default:                    return false;

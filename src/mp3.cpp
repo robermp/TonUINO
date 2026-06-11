@@ -102,6 +102,9 @@ void Mp3::waitForTrackToFinish() {
 
   do {
     loop();
+#ifdef UNIT_TESTS
+    pin_value[dfPlayer_busyPin] = (dfPlayer_busyPinType == levelType::activeLow) ? HIGH : LOW;
+#endif
   } while (isPlaying());
   LOG(mp3_log, s_debug, F("waitForTrackToFinish End "), isPlaying());
 }
@@ -109,7 +112,7 @@ void Mp3::waitForTrackToFinish() {
 void Mp3::waitForTrackToStart() {
   LOG(mp3_log, s_debug, F("waitForTrackToStart "), isPlaying());
   Timer timer;
-  timer.start(dfPlayer_timeUntilStarts);
+  timer.start(2*dfPlayer_timeUntilStarts);
 
   do {
     loop();
@@ -117,56 +120,76 @@ void Mp3::waitForTrackToStart() {
   LOG(mp3_log, s_debug, F("waitForTrackToStart End "), isPlaying());
 }
 
-void Mp3::playAdvertisement(uint16_t track, bool olnyIfIsPlaying) {
+void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
   LOG(mp3_log, s_info, F("play adv: "), track);
 #ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   advPlaying = true;
 #endif
   if (isPlaying()) {
-    LOG(mp3_log, s_debug, F("playAdvertisement()"));
+    LOG(mp3_log, s_info, F("playAdvertisement: "), track);
     Base::playAdvertisement(track);
+    delay(500); // to prevent missingOnPlayerFinish
+    LOG(mp3_log, s_debug, F("after delay"));
   }
-  else if (not olnyIfIsPlaying) {
-    LOG(mp3_log, s_debug, F("playAdvertisement: "), track);
+  else if (not onlyIfIsPlaying) {
     if (isPause) {
+      // should not be in playing
+      waitForTrackToFinish();
+      LOG(modifier_log, s_debug, "no track playing");
+
       Base::start();
-      LOG(mp3_log, s_debug, F("after start"));
+      LOG(mp3_log, s_info, F("start (from pause)"));
     }
     else {
+      // should not be in playing
+      waitForTrackToFinish();
+      LOG(modifier_log, s_debug, "no track is playing");
+
       Base::playFolderTrack(1, 1);
-      LOG(mp3_log, s_debug, F("after playFolderTrack"));
-      delay(dfPlayer_timeUntilStarts);
-      LOG(mp3_log, s_debug, F("after delay"));
+      LOG(mp3_log, s_info, F("playFolderTrack(1,1)"));
     }
-    waitForTrackToStart();
-    LOG(mp3_log, s_debug, F("after waitForTrackToStart"));
-
-    Base::playAdvertisement(track);
-    delay(dfPlayer_timeUntilStarts);
-    LOG(mp3_log, s_debug, F("after delay"));
-
-    waitForTrackToFinish(); // finish adv
-    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
-
-    waitForTrackToStart();  // start folder track
-    LOG(mp3_log, s_debug, F("after waitForTrackToStart()"));
 
 #ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
-    waitForTrackToFinish();
-    LOG(modifier_log, s_debug, "after waitForTrackToFinish");
-
     waitForTrackToStart();
-    LOG(modifier_log, s_debug, "after waitForTrackToStart");
+    LOG(modifier_log, s_info, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy"));
+    waitForTrackToFinish();
+    LOG(modifier_log, s_info, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy finished"));
 #endif
+
+    waitForTrackToStart(); // origin track starts
+    LOG(mp3_log, s_debug, F("origin track started"));
+
+    LOG(mp3_log, s_info, F("playAdvertisement: "), track);
+    Base::playAdvertisement(track);
+
+    waitForTrackToFinish(); // origin track pauses
+    LOG(modifier_log, s_debug, F("origin track pauses"));
+
+    waitForTrackToStart();  // adv track starts
+    LOG(mp3_log, s_debug, F("adv track started"));
+
+    waitForTrackToFinish(); // adv track finished
+    LOG(modifier_log, s_debug, F("adv track finished"));
+
+//#ifdef DFMiniMp3_T_CHIP_MH2024K24SS_MP3_TF_16P_V3_0
+//    waitForTrackToStart();
+//    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy"));
+//    waitForTrackToFinish();
+//    LOG(modifier_log, s_debug, F("MH2024K24SS_MP3_TF_16P_V3_0: additional busy finished"));
+//#endif
+
+    waitForTrackToStart();  // origin track starts again
+    LOG(mp3_log, s_debug, F("origin track started (again)"));
 
     delay(10);
     Base::pause();
+    LOG(mp3_log, s_debug, F("origin track pauses (again)"));
     loop();
   }
 }
 
-void Mp3::playAdvertisement(advertTracks track, bool olnyIfIsPlaying) {
-  playAdvertisement(static_cast<uint16_t>(track), olnyIfIsPlaying);
+void Mp3::playAdvertisement(advertTracks track, bool onlyIfIsPlaying) {
+  playAdvertisement(static_cast<uint16_t>(track), onlyIfIsPlaying);
 }
 
 void Mp3::clearFolderQueue() {

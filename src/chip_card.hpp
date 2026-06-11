@@ -39,6 +39,7 @@ enum class pmode_t: uint8_t {
   jukebox       =   8,
   pause_aft_tr  =   9,
   stdb_timer_sw =  10,
+  endless_sw    =  11,
 
   admin_card    = 0xff,
 };

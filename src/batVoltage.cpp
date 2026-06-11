@@ -87,7 +87,7 @@ bool BatVoltage::check() {
 }
 
 void BatVoltage::lowMessage() {
-  mp3.playAdvertisement(advertTracks::t_262_pling, false /*olnyIfIsPlaying*/);
+  mp3.playAdvertisement(advertTracks::t_262_pling, false /*onlyIfIsPlaying*/);
 }
 
 #endif // BAT_VOLTAGE_MEASUREMENT

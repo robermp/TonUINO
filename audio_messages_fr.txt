@@ -14,6 +14,8 @@ advert/0321_bt_off.mp3|Le Bluetooth est désactivé
 advert/0322_bt_pairing.mp3|Connexion Bluetooth en cours
 advert/0323_standby_timer_off.mp3|Le minuteur de veille est désactivé
 advert/0324_standby_timer_on.mp3|Le minuteur de veille est réactivé
+advert/0325_endless_off.mp3|Der Endlos Modus wird ausgeschaltet
+advert/0326_endless_on.mp3|Der Endlos Modus wird eingeschaltet
 mp3/0300_new_tag.mp3|Oh, une nouvelle carte !
 mp3/0301_select_folder.mp3|OK, utilise maintenant les boutons de volume pour sélectionner un dossier pour la carte.
 mp3/0310.mp3|Sélectionne le mode de lecture avec les boutons de volume. Appuie sur le bouton pause pour continuer.
@@ -32,6 +34,7 @@ mp3/0322_mode_quiz_game.mp3|Mode quiz : jouer à un quiz
 mp3/0323_mode_memory_game.mp3|Mode memory : jouer à un jeu de memory
 mp3/0324_mode_switch_bt.mp3|Basculer Bluetooth : activer ou désactiver le Bluetooth
 mp3/0325_mode_teapot_game.mp3|Teekesselchen Spiel Modus: Spiele ein Teekesselchen Spiel.
+mp3/0326_special_audio_book.mp3|Spezialmodus Von-Bis, Hörbuch: Alle Dateien zwischen der Start und Enddatei wiedergeben und den Fortschritt speichern.
 mp3/0327_select_file.mp3|OK, sélectionne maintenant le fichier avec les boutons de volume.
 mp3/0328_select_first_file.mp3|OK, sélectionne maintenant le fichier de départ avec les boutons de volume.
 mp3/0329_select_last_file.mp3|Sélectionne maintenant le fichier de fin avec les boutons de volume.
@@ -126,6 +129,7 @@ mp3/0977_modifier_bluetooth.mp3|Carte Bluetooth – permet d'activer ou de désa
 mp3/0978_modifier_jukebox.mp3|Carte jukebox – si un titre est déjà en cours et qu'une nouvelle carte est posée, elle n'est pas lue immédiatement mais ajoutée à une file d'attente.
 mp3/0979_modifier_pauseAftTr.mp3|Carte pause après chaque piste – avec cette carte, le TonUINO passe en pause après chaque piste.
 mp3/0980_modifier_disableStandby.mp3|Carte désactiver veille – permet d'activer ou de désactiver temporairement le minuteur de veille.
+mp3/0981_modifier_switchEndless.mp3|Endlos Ein- und Ausschaltkarte - Mit dieser Karte kannst du den Endlos Modus ein- und wieder ausschalten
 mp3/0985_admin_lock_intro.mp3|Choisis si et comment le menu administrateur doit être protégé.
 mp3/0986_admin_lock_disabled.mp3|Aucune protection – le menu administrateur peut être ouvert à tout moment en appuyant sur les trois boutons.
 mp3/0987_admin_lock_card.mp3|Carte admin uniquement – le menu administrateur ne peut être ouvert qu'avec une carte admin. Une nouvelle carte admin peut être enregistrée à tout moment.
