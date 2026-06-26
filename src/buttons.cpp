@@ -17,6 +17,9 @@ Buttons::Buttons()
 , buttonFour (buttonFourPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 , buttonFive (buttonFivePin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
 #endif
+#ifdef LANGUAGE_SELECT
+, buttonLang (buttonLangPin , buttonDbTime, buttonPinIsActiveLow, buttonPinIsActiveLow)
+#endif
 {
 }
 
@@ -27,6 +30,9 @@ void Buttons::begin() {
 #ifdef FIVEBUTTONS
   buttonFour .begin();
   buttonFive .begin();
+#endif
+#ifdef LANGUAGE_SELECT
+  buttonLang .begin();
 #endif
 }
 
@@ -133,6 +139,12 @@ commandRaw Buttons::getCommandRaw() {
   }
 #endif
 
+#ifdef LANGUAGE_SELECT
+  else if (buttonLang.wasReleased() && not ignoreRelease) {
+    ret = commandRaw::lang;
+  }
+#endif
+
   switch (ret) {
   case commandRaw::pauseLong     :
   case commandRaw::upLong        :
@@ -165,6 +177,9 @@ bool Buttons::isNoButton() {
       && not buttonFour .isPressed()
       && not buttonFive .isPressed()
 #endif
+#ifdef LANGUAGE_SELECT
+      && not buttonLang .isPressed()
+#endif
       ;
 }
 
@@ -181,5 +196,8 @@ void Buttons::readButtons() {
 #ifdef FIVEBUTTONS
   buttonFour .read();
   buttonFive .read();
+#endif
+#ifdef LANGUAGE_SELECT
+  buttonLang .read();
 #endif
 }

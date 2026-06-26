@@ -72,6 +72,9 @@ struct Settings {
   uint8_t     hpMaxVolume         {};
   uint8_t     hpMinVolume         {};
   uint8_t     hpInitVolume        {};
+#ifdef LANGUAGE_SELECT
+  uint8_t     language            {};  // 0=ES, 1=IT, 2=EN (offset de prompts (idioma+1)*1000)
+#endif
 #ifdef TonUINO_Esp32
   folderSettings cardFromWeb      {};
 #endif

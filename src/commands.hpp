@@ -67,6 +67,9 @@ enum class commandRaw: uint8_t {
   mod_from_web        = 21,
   write_card_from_web = 22,
   cmd_end        = 22,
+#ifdef LANGUAGE_SELECT
+  lang           = 23,   // botón de idioma dedicado (estilo 2.x)
+#endif
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,
@@ -106,6 +109,9 @@ enum class command: uint8_t {
   write_card_from_web = 23,
 #endif
   last        = 23,
+#ifdef LANGUAGE_SELECT
+  language    = 24,  // ciclar idioma (ES->IT->EN)
+#endif
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
   ext_end   = ext_begin +  buttonExtSC_buttons,

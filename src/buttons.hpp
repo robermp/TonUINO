@@ -27,6 +27,9 @@ private:
   Button  buttonFour;
   Button  buttonFive;
 #endif
+#ifdef LANGUAGE_SELECT
+  Button  buttonLang;
+#endif
   bool ignoreRelease     = false;
   bool ignoreAll         = false;
 

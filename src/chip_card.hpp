@@ -103,6 +103,9 @@ private:
   void stopCrypto1();
   void stopCard   ();
   bool auth       (MFRC522::PICC_Type piccType);
+#ifdef DISNEY_CARDS
+  readCardEvent readDisneyCard(folderSettings &nfcTag);
+#endif
 
   MFRC522             mfrc522;
   Mp3                 &mp3;

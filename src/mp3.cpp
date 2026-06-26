@@ -121,6 +121,10 @@ void Mp3::waitForTrackToStart() {
 }
 
 void Mp3::playAdvertisement(uint16_t track, bool onlyIfIsPlaying) {
+#ifdef LANGUAGE_SELECT
+  if (settings.language < numLanguages)
+    track += static_cast<uint16_t>(settings.language + 1) * languageMp3Step;
+#endif
   LOG(mp3_log, s_info, F("play adv: "), track);
 #ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   advPlaying = true;
@@ -240,6 +244,10 @@ void Mp3::shuffleQueue() {
   LOG(mp3_log, s_info, str_Space());
 }
 void Mp3::enqueueMp3FolderTrack(uint16_t track, bool playAfter) {
+#ifdef LANGUAGE_SELECT
+  if (settings.language < numLanguages)
+    track += static_cast<uint16_t>(settings.language + 1) * languageMp3Step;
+#endif
   LOG(mp3_log, s_info, F("enqueue mp3 "), track, str_Space(), playAfter);
   clearFolderQueue();
   if (not playAfter)

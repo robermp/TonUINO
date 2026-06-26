@@ -368,8 +368,14 @@ public:
     minVolume,
     initVolume,
     eq,
+#ifdef LANGUAGE_SELECT
+    language,
+#endif
   };
   static Type type;
+#ifdef LANGUAGE_SELECT
+  static uint8_t origLanguage;
+#endif
 };
 
 class Admin_ModCard: public Amin_BaseWriteCard

@@ -1,18 +1,18 @@
 # TonUINO
-Die DIY Musikbox (nicht nur) für Kinder
+La caja de música DIY (no solo) para niños
 
-Dies ist die offizielle Software für die Musikbox, die [hier](https://www.tonuino.de/TNG) beschrieben ist. 
+Este es el software oficial para la caja de música que se describe [aquí](https://www.tonuino.de/TNG). 
 
-Falls du Interesse daran hast, zur Weiterentwicklung des TonUINO-Projekts beizutragen, bist du herzlich eingeladen, dich zu beteiligen. Für Diskussionen verwende bitte das [Forum](https://discourse.voss.earth). Dort findest du auch weitere Anleitungen und bekommst Hilfe bei Problemen. 
+Si te interesa contribuir al desarrollo del proyecto TonUINO, estás cordialmente invitado a participar. Para las discusiones utiliza por favor el [foro](https://discourse.voss.earth). Allí encontrarás también más guías y obtendrás ayuda con los problemas. 
 
-# Anleitung zum Compilieren
+# Instrucciones para compilar
 
 ## Arduino IDE
-Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TNG](https://www.tonuino.de/TNG) und hier [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
+Guías generales para configurar el IDE se encuentran aquí [www.tonuino.de/TNG](https://www.tonuino.de/TNG) y aquí [www.leiterkartenpiraten.de](https://www.leiterkartenpiraten.de)
 
-- Es ist unbedingt darauf zu achten, dass das Verzeichnis in das das Repository gecloned oder heruntergeladen wird (also das Verzeichnis, in dem schließlich auch die TonUINO-TNG.ino zu finden ist, genau so heißt, wie die ino Datei, also in diesem Fall "TonUINO-TNG"!
+- Es imprescindible asegurarse de que el directorio en el que se clona o descarga el repositorio (es decir, el directorio en el que finalmente se encuentra también el TonUINO-TNG.ino) se llame exactamente igual que el archivo ino, en este caso "TonUINO-TNG".
 
-- Bei der classic (Nano, Every, Every4808 und Esp32) sowie AiO HW Variante muss die Datei 'platform.local.txt' in den avr HW Ordner kopiert werden. Dieser Ordner ist gewöhnlich folgender:  
+- En la variante de HW classic (Nano, Every, Every4808 y Esp32) así como AiO, el archivo 'platform.local.txt' debe copiarse en la carpeta de HW avr. Esta carpeta suele ser la siguiente:  
 
 ```
     Windows:  
@@ -34,58 +34,58 @@ Allgemeine Anleitungen zum Einrichten der IDE findet man hier [www.tonuino.de/TN
       Esp32:    ~/Library/Arduino15/packages/arduino/hardware/esp32/2.0.18-arduino.5/
 ```
 
-- Man findet den Ordner auch, wenn man die Datei platform.txt sucht.  
+- También se encuentra la carpeta buscando el archivo platform.txt.  
 
-- Für die AiOplus HW Variante sind keine Änderungen notwendig  
+- Para la variante de HW AiOplus no son necesarios cambios  
 
-- Die HW Variante (TonUINO_*, ALLinONE oder ALLinONE_Plus) sowie die Button Konfiguration (THREEBUTTONS, FIVEBUTTONS oder BUTTONS3X3) muss in der Datei constants.hpp durch Entfernen des entsprechenden Kommentars angegeben werden. (nur wenn die Arduino IDE verwendet wird) 
+- La variante de HW (TonUINO_*, ALLinONE o ALLinONE_Plus) así como la configuración de botones (THREEBUTTONS, FIVEBUTTONS o BUTTONS3X3) deben indicarse en el archivo constants.hpp eliminando el comentario correspondiente. (solo si se utiliza el Arduino IDE) 
 
-**Libraries**
-- Es müssen folgende Versionen der Libraries verwendet werden:  
+**Librerías**
+- Deben utilizarse las siguientes versiones de las librerías:  
     - jchristensen/JC_Button: 2.1.2  
     - boerge1/MFRC522_fix: 1.4.12  
     - makuna/DFPlayer Mini Mp3 by Makuna: 1.2.3
-    - adafruit/Adafruit NeoPixel: 1.11.0 (optional, nur bei Feature NEO_RING notwendig)
+    - adafruit/Adafruit NeoPixel: 1.11.0 (opcional, solo necesario con la función NEO_RING)
 
-- Für die Esp32 HW Variante zusätzlich:
+- Para la variante de HW Esp32 adicionalmente:
     - plerup/espsoftwareserial: 8.1.0
     - esp32async/AsyncTCP: 3.3.6
     - esp32async/ESPAsyncWebServer: 3.7.2
     - bblanchon/ArduinoJson: 7.3.0
 
 **ESP32 Nano**
-Bei der Arduino IDE muss unter "Werkzeuge/Tools" --> "Pin Numbering" unbedingt "By GPIO number (legacy)" eingestellt werden! 
+En el Arduino IDE debe configurarse obligatoriamente en "Herramientas/Tools" --> "Pin Numbering" la opción "By GPIO number (legacy)". 
 
 ## platform.io
 
-- Es werden die gleichen HW Varianten angeboten wie beim Online Upload ohne die Datei constants.hpp editieren zu müssen
+- Se ofrecen las mismas variantes de HW que en la subida online, sin necesidad de editar el archivo constants.hpp
 
 ```
-  Classic, Every, Every4808, AiO, AiOplus und Esp32
+  Classic, Every, Every4808, AiO, AiOplus y Esp32
     3 Buttons
     5 Buttons
     3x3 Button Board
-    5 Buttons mit vollem Feature-Umfang (nur Every, Esp32 und AiOplus)
+    5 Buttons con todas las funciones (solo Every, Esp32 y AiOplus)
 ```
 
-**Verwendung zusammen mit Visual Code**
+**Uso junto con Visual Code**
 
-Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-software-mit-platformio-aufspielen/13468)
+Una guía para ello se encuentra [aquí](https://discourse.voss.earth/t/tonuino-software-mit-platformio-aufspielen/13468)
 
-**Nur platform.io (CLI)**
-- platform.io installieren
+**Solo platform.io (CLI)**
+- instalar platform.io
 
 ```
   pip install platformio
 ```
 
-- Build (wähle [spezielle Variante](platformio.ini) mit dem Flag `-e <environment>`)
+- Build (elige la [variante específica](platformio.ini) con el flag `-e <environment>`)
 
 ```
   pio run
 ```
 
-- Upload (Der Port kann mit `pio device list` gefunden werden)
+- Upload (el puerto se puede encontrar con `pio device list`)
 
 ```
   pio run -e <environment> -t upload --upload-port <port>
@@ -97,15 +97,15 @@ Eine Anleitung dafür findet man [hier](https://discourse.voss.earth/t/tonuino-s
   pio device monitor -p <port>
 ```
 
-# Installation
+# Instalación
 
-Die SD Karte (Ordner mp3 und advert) hat sich gegenüber der Version 3.3.2 geändert. Hier kann man die Dateien downloaden: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
+La tarjeta SD (carpetas mp3 y advert) ha cambiado respecto a la versión 3.3.2. Aquí se pueden descargar los archivos: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
-# Hinweise zur WLAN Konfigurattion des ESP32
+# Notas sobre la configuración WLAN del ESP32
 
-Wenn man ausschließlich mit dem TonUINO AP mit der SSID "TonUINO" verbunden ist, erreicht man die Webseite mit 
-jeder beliebigen Adresse (mit mindestens einem Punkt), also z.B. "http://tonuino.t". 
-Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adresse nehmen: "http://192.168.4.1". 
+Si se está conectado exclusivamente al AP de TonUINO con el SSID "TonUINO", se accede a la página web con 
+cualquier dirección (con al menos un punto), por ejemplo "http://tonuino.t". 
+Si además se está conectado a Internet, hay que usar la dirección IP: "http://192.168.4.1". 
 
 # Change Log
 
@@ -278,7 +278,7 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 - [Issue 070](https://github.com/tonuino/TonUINO-TNG/issues/70): Revise modification cards
 - [Issue 076](https://github.com/tonuino/TonUINO-TNG/issues/76): \<\<Phopp\>\> sound at poweroff
 - [Issue 072](https://github.com/tonuino/TonUINO-TNG/issues/72): Support Rotary Encoder KY-040 for setting the volume
-- Viele Fehlerkorrekturen und Verbesserungen
+- Muchas correcciones de errores y mejoras
 - [Issue 019](https://github.com/tonuino/TonUINO-TNG/issues/19): Implement support for the 3x3 Button board
 
 ## Version 3.1.2 (03.03.2023)
@@ -307,50 +307,50 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 - [Issue 005](https://github.com/tonuino/TonUINO-TNG/issues/5): Update to use new mp3 library version 1.1.0
 
 ## Version 3.1 (13.10.2022)
-- Unterstützung für alle Platinen der Leiterkartenpiraten hinzugefügt (über einfaches #define in der `src/constants.hpp` konfigurierbar)
+- Añadido soporte para todas las placas de Leiterkartenpiraten (configurable mediante un sencillo #define en `src/constants.hpp`)
   - TonUINO Classic
   - All-in-One
   - All-in-One Plus
   - fix for NTAG213
 
 ## Version 3.0 (xx.xx.xxxx) - by Boerge1
-- vollständiges Refactoring mit State-Machine
-- Die Main-Loop läuft jetzt stabil mit 50 ms
-- Neues Feature: neuer Mode: Hörbuch einzeln (nur ein Titel wird gespielt und Fortschritt gespeichert)
-- Neues Feature: Pause, wenn Karte entfernt wird (lässt sich per Einstellungen steuern)
-- Das Admin-Menü wird nach einer Einstellung nicht verlassen (kann in der Software leicht geändert werden)
-- Das Admin-Menü kann an jeder Stelle abgebrochen werden
-- Viele weitere Verbesserungen und Bug-Fixes
+- refactorización completa con máquina de estados
+- El bucle principal ahora funciona de forma estable con 50 ms
+- Nueva función: nuevo modo: Audiolibro individual (solo se reproduce un título y se guarda el progreso)
+- Nueva función: Pausa cuando se retira la tarjeta (se puede controlar mediante los ajustes)
+- El menú de administración no se abandona después de un ajuste (se puede cambiar fácilmente en el software)
+- El menú de administración se puede cancelar en cualquier punto
+- Muchas otras mejoras y correcciones de errores
 
 ## Version 2.1 (xx.xx.xxxx) noch WIP
-- Partymodus hat nun eine Queue -> jedes Lied kommt nur genau 1x vorkommt
-- Neue Wiedergabe-Modi "Spezialmodus Von-Bis" - Hörspiel, Album und Party -> erlaubt z.B. verschiedene Alben in einem Ordner zu haben und je mit einer Karte zu verknüpfen
-- Admin-Menü
-- Maximale, Minimale und Initiale Lautstärke
-- Karten werden nun über das Admin-Menü neu konfiguriert
-- die Funktion der Lautstärketasten (lauter/leiser oder vor/zurück) kann im Adminmenü vertauscht werden
-- Shortcuts können konfiguriert werden!
-- Support für 5 Knöpfe hinzugefügt
-- Reset der Einstellungen ins Adminmenü verschoben
-- Modikationskarten (Sleeptimer, Tastensperre, Stopptanz, KiTa-Modus)
-- Admin-Menü kann abgesichert werden
+- El modo fiesta ahora tiene una cola -> cada canción aparece exactamente 1 vez
+- Nuevos modos de reproducción "Modo especial De-Hasta" - Audiocuento, Álbum y Fiesta -> permite, por ejemplo, tener varios álbumes en una carpeta y vincular cada uno con una tarjeta
+- Menú de administración
+- Volumen máximo, mínimo e inicial
+- Las tarjetas ahora se reconfiguran a través del menú de administración
+- la función de los botones de volumen (subir/bajar o avanzar/retroceder) se puede intercambiar en el menú de administración
+- ¡Los accesos directos (shortcuts) se pueden configurar!
+- Añadido soporte para 5 botones
+- Restablecimiento de los ajustes movido al menú de administración
+- Tarjetas de modificación (temporizador de apagado, bloqueo de botones, baile de la silla, modo guardería)
+- El menú de administración se puede proteger
 
 ## Version 2.01 (01.11.2018)
-- kleiner Fix um die Probleme beim Anlernen von Karten zu reduzieren
+- pequeña corrección para reducir los problemas al asociar tarjetas
 
 ## Version 2.0 (26.08.2018)
 
-- Lautstärke wird nun über einen langen Tastendruck geändert
-- bei kurzem Tastendruck wird der nächste / vorherige Track abgespielt (je nach Wiedergabemodus nicht verfügbar)
-- Während der Wiedergabe wird bei langem Tastendruck auf Play/Pause die Nummer des aktuellen Tracks angesagt
-- Neuer Wiedergabemodus: **Einzelmodus**
-  Eine Karte kann mit einer einzelnen Datei aus einem Ordner verknüpft werden. Dadurch sind theoretisch 25000 verschiedene Karten für je eine Datei möglich
-- Neuer Wiedergabemodus: **Hörbuch-Modus**
-  Funktioniert genau wie der Album-Modus. Zusätzlich wir der Fortschritt im EEPROM des Arduinos gespeichert und beim nächsten mal wird bei der jeweils letzten Datei neu gestartet. Leider kann nur der Track, nicht die Stelle im Track gespeichert werden
-- Um mehr als 100 Karten zu unterstützen wird die Konfiguration der Karten nicht mehr im EEPROM gespeichert sondern direkt auf den Karten - die Karte muss daher beim Anlernen aufgelegt bleiben!
-- Durch einen langen Druck auf Play/Pause kann **eine Karte neu konfiguriert** werden
-- In den Auswahldialogen kann durch langen Druck auf die Lautstärketasten jeweils um 10 Ordner oder Dateien vor und zurück gesprungen werden
-- Reset des MP3 Moduls beim Start entfernt - war nicht nötig und hat "Krach" gemacht
+- El volumen ahora se cambia mediante una pulsación larga de botón
+- con una pulsación corta se reproduce la pista siguiente / anterior (no disponible según el modo de reproducción)
+- Durante la reproducción, con una pulsación larga en Play/Pause se anuncia el número de la pista actual
+- Nuevo modo de reproducción: **Modo individual**
+  Una tarjeta se puede vincular con un único archivo de una carpeta. Con ello son posibles teóricamente 25000 tarjetas distintas, cada una para un archivo
+- Nuevo modo de reproducción: **Modo audiolibro**
+  Funciona exactamente como el modo álbum. Además, el progreso se guarda en la EEPROM del Arduino y la próxima vez se reinicia en el último archivo correspondiente. Lamentablemente solo se puede guardar la pista, no la posición dentro de la pista
+- Para admitir más de 100 tarjetas, la configuración de las tarjetas ya no se guarda en la EEPROM, sino directamente en las tarjetas; ¡por eso la tarjeta debe permanecer colocada durante la asociación!
+- Mediante una pulsación larga en Play/Pause se puede **reconfigurar una tarjeta**
+- En los diálogos de selección se puede saltar 10 carpetas o archivos hacia adelante y hacia atrás mediante una pulsación larga de los botones de volumen
+- Eliminado el reinicio del módulo MP3 al arrancar; no era necesario y hacía "ruido"
 
 # Open Source 
 
@@ -362,9 +362,9 @@ Wenn man zusätzlich noch mit dem Internet verbunden ist, muss man die IP Adress
 - esp32async/AsyncTCP - LGPL 2007 
 - esp32async/ESPAsyncWebServer - LGPL 2007
 - bblanchon/ArduinoJson - MIT
-- digint.ch/tinyfsm - free PD (code geändert)
-- circuitcode/AsyncWebSerial - MIT (code geändert)
-- tuniii/LogRingBuffer - GPL V3+ (code geändert)
+- digint.ch/tinyfsm - free PD (código modificado)
+- circuitcode/AsyncWebSerial - MIT (código modificado)
+- tuniii/LogRingBuffer - GPL V3+ (código modificado)
 
 
 

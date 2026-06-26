@@ -41,7 +41,7 @@ amazonVoiceByLang = {
     'fr': 'Léa',
     'nl': 'Lotte',
     'es': 'Lucia',
-    'it': 'Carla'
+    'it': 'Bianca'
 }
 coquiVoiceByLang = {
     # Available language models: 'tts --list_models'

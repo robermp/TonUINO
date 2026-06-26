@@ -22,12 +22,12 @@ const command cmd_table[][4] PROGMEM = {
 /*  9 downLong,       */ ,{ command::previous10, command::shortcut3  , command::previous10 , command::none        }
 /* 10 downLongRepeat, */ ,{ command::none      , command::none       , command::none       , command::none        }
 /* 11 updownLong,     */ ,{ command::none      , command::shortcut1  , command::to_first   , command::none        }
-/* 12 four,           */ ,{ command::next      , command::bright_up  , command::volume_up  , command::none        }
-/* 13 fourLong,       */ ,{ command::next10    , command::none       , command::volume_up  , command::none        }
-/* 14 fourLongRepeat, */ ,{ command::none      , command::none       , command::volume_up  , command::none        }
-/* 15 five,           */ ,{ command::previous  , command::bright_down, command::volume_down, command::none        }
-/* 16 fiveLong,       */ ,{ command::previous10, command::none       , command::volume_down, command::none        }
-/* 17 fiveLongRepeat, */ ,{ command::none      , command::none       , command::volume_down, command::none        }
+/* 12 four,           */ ,{ command::next      , command::volume_up  , command::volume_up  , command::none        }
+/* 13 fourLong,       */ ,{ command::next10    , command::volume_up  , command::volume_up  , command::none        }
+/* 14 fourLongRepeat, */ ,{ command::none      , command::volume_up  , command::volume_up  , command::none        }
+/* 15 five,           */ ,{ command::previous  , command::volume_down, command::volume_down, command::none        }
+/* 16 fiveLong,       */ ,{ command::previous10, command::volume_down, command::volume_down, command::none        }
+/* 17 fiveLongRepeat, */ ,{ command::none      , command::volume_down, command::volume_down, command::none        }
 #else // Three Button
 /*  5 up,             */ ,{ command::next      , command::bright_up  , command::next       , command::volume_up   }
 /*  6 upLong,         */ ,{ command::next10    , command::shortcut2  , command::volume_up  , command::next        }
@@ -61,6 +61,9 @@ const command cmd_table[][4] PROGMEM = {
 /* 20 card_from_web,  */ ,{ command::none      , command::none       , command::none       , command::none        }
 /* 21 mod_from_web,   */ ,{ command::none      , command::none       , command::none       , command::none        }
 /* 22 w_card_from_web,*/ ,{ command::none      , command::none       , command::none       , command::none        }
+#endif
+#ifdef LANGUAGE_SELECT
+/* 23 lang,           */ ,{ command::none      , command::language   , command::language   , command::language    }
 #endif
 };
 Commands::Commands(const Settings& settings, CommandSource* source1, CommandSource* source2, CommandSource* source3, CommandSource* source4)
@@ -97,7 +100,11 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
     s = state_for_command::play_invert;
 #endif
 
-  if (b < commandRaw::cmd_end) {
+  if (b < commandRaw::cmd_end
+#ifdef LANGUAGE_SELECT
+      || b == commandRaw::lang
+#endif
+     ) {
     PROGMEM_read(&cmd_table[static_cast<int>(b)][static_cast<int>(s)], ret);
   }
 

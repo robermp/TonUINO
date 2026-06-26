@@ -5,6 +5,7 @@
 
 #include "mp3.hpp"
 #include "constants.hpp"
+#include "tonuino.hpp"
 #include "logger.hpp"
 
 // select whether StatusCode and PiccType are printed as names
@@ -65,6 +66,37 @@ auto printPiccType(MFRC522& mfrc522, MFRC522::PICC_Type piccType) {
 MFRC522::MIFARE_Key key{ 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 const byte sector       = 1;
 const byte trailerBlock = 7;
+
+#ifdef DISNEY_CARDS
+bool readDisneyFudanBlock(MFRC522 &mfrc522, byte block, byte *buffer) {
+  byte size = buffferSizeRead;
+  return static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(block, buffer, &size)) == MFRC522::STATUS_OK;
+}
+
+bool selectDisneyFudan(MFRC522 &mfrc522) {
+  byte buffer[buffferSizeRead] = {};
+
+  if (!readDisneyFudanBlock(mfrc522, 0, buffer)) {
+    byte atqa[2];
+    byte atqaSize = sizeof(atqa);
+    mfrc522.PICC_WakeupA(atqa, &atqaSize);
+    if (!readDisneyFudanBlock(mfrc522, 0, buffer))
+      return false;
+  }
+
+  if (buffer[0] != 0x05 || buffer[1] != 0x00)
+    return false;
+
+  if (!readDisneyFudanBlock(mfrc522, 1, buffer))
+    return false;
+
+  mfrc522.uid.size = 4;
+  for (byte i = 0; i < mfrc522.uid.size; ++i)
+    mfrc522.uid.uidByte[i] = buffer[i];
+  mfrc522.uid.sak = 0x0A;
+  return true;
+}
+#endif
 } // namespace
 
 Chip_card::Chip_card(Mp3 &mp3)
@@ -116,11 +148,112 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
   return true;
 }
 
+#ifdef DISNEY_CARDS
+// Detecta y resuelve tarjetas de audiocuentos Disney (NFC ajenas, sin cookie
+// TonUINO) fabricando un folderSettings de reproduccion de una sola pista.
+// Hay DOS familias compatibles:
+//   - Audiocuentos Disney:
+//       * FUDAN (SAK 0x0A): la pista se guarda en el byte 0 del bloque 2.
+//       * UL_A  (SAK 0x00 + CC E1 10 12 00 sin pagina 4): el byte 0 del bloque 2
+//               se mapea a una pista fija (clones Disney conocidos).
+//   - Cuentos de Mickey y sus amigos (SAK 0x00 sin CC NDEF, Ultralight "pequeno"
+//     con solo paginas 0..3): se tratan como FUDAN; la pista es el byte 0 de la
+//     pagina 0 (1er byte de UID).
+Chip_card::readCardEvent Chip_card::readDisneyCard(folderSettings &nfcTag) {
+  const byte sak = mfrc522.uid.sak & 0x7F;
+  byte buffer[buffferSizeRead];
+  byte size;
+
+  // FUDAN: la pista es directamente el byte 0 del bloque 2.
+  if (sak == 0x0A) {
+    size = sizeof(buffer);
+    if (mfrc522.MIFARE_Read(2, buffer, &size) != MFRC522::STATUS_OK)
+      return readCardEvent::none;
+    nfcTag.folder   = disneyFudanFolder;
+#ifdef LANGUAGE_SELECT
+    nfcTag.folder  += Tonuino::getTonuino().getSettings().language; // 97/98/99
+#endif
+    nfcTag.mode     = pmode_t::einzel;
+    nfcTag.special  = buffer[0];
+    nfcTag.special2 = 0;
+    LOG(card_log, s_info, F("Disney FUDAN trk "), nfcTag.special);
+    return readCardEvent::known;
+  }
+
+  // SAK 0x00: dos tipos de tarjeta Disney, ambos Ultralight "pequenos" (solo
+  // paginas 0..3). Se distinguen por el CC NDEF de la pagina 3:
+  //   - UL_A (audiocuentos): CC E1 10 12 00 y pagina 4 ausente.
+  //   - Mickey: sin CC NDEF; se confirma porque la pagina 8 no existe.
+  if (sak == 0x00) {
+    size = sizeof(buffer);
+    if (mfrc522.MIFARE_Read(0, buffer, &size) != MFRC522::STATUS_OK)
+      return readCardEvent::none;
+    const bool hasNdefCC = (buffer[12] == 0xE1 && buffer[13] == 0x10 && buffer[14] == 0x12 && buffer[15] == 0x00);
+    const uint8_t mickeyTrack = buffer[0]; // 1er byte de UID (pista en Mickey)
+
+    // Confirma "Ultralight pequeno": la pagina 4 (UL_A) o la pagina 8 (Mickey)
+    // deben devolver NACK/TIMEOUT (no existen). Si existen, es UL/NTAG normal.
+    const byte probePage = hasNdefCC ? 4 : 8;
+    size = sizeof(buffer);
+    const MFRC522::StatusCode st = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(probePage, buffer, &size));
+    if (st != MFRC522::STATUS_MIFARE_NACK && st != MFRC522::STATUS_TIMEOUT)
+      return readCardEvent::none; // tiene esa pagina -> no es Disney
+
+    // la lectura fallida deja la comunicacion en mal estado: reiniciar
+    mfrc522.PICC_HaltA();
+    byte atqa[2];
+    byte atqaSize = sizeof(atqa);
+    mfrc522.PICC_WakeupA(atqa, &atqaSize);
+    mfrc522.PICC_Select(&mfrc522.uid);
+
+    if (hasNdefCC) {
+      // Audiocuentos Disney UL_A: byte 0 del bloque 2 mapeado a pista fija.
+      size = sizeof(buffer);
+      if (mfrc522.MIFARE_Read(2, buffer, &size) != MFRC522::STATUS_OK)
+        return readCardEvent::none;
+      uint8_t id = 0;
+      switch (buffer[0]) {
+        case 0x7E: id =  1; break;
+        case 0x6C: id =  2; break;
+        case 0x5F: id =  3; break;
+        case 0x34: id = 19; break;
+        default  : id =  0; break;
+      }
+      nfcTag.folder   = disneyUlAFolder;
+      nfcTag.mode     = pmode_t::einzel;
+      nfcTag.special  = id;
+      nfcTag.special2 = 0;
+      LOG(card_log, s_info, F("Disney UL_A trk "), nfcTag.special);
+      return readCardEvent::known;
+    }
+
+    // Cuentos de Mickey y sus amigos: tratada como la familia FUDAN.
+    nfcTag.folder   = disneyFudanFolder;
+#ifdef LANGUAGE_SELECT
+    nfcTag.folder  += Tonuino::getTonuino().getSettings().language; // 97/98/99
+#endif
+    nfcTag.mode     = pmode_t::einzel;
+    nfcTag.special  = mickeyTrack;
+    nfcTag.special2 = 0;
+    LOG(card_log, s_info, F("Disney Mickey trk "), nfcTag.special);
+    return readCardEvent::known;
+  }
+
+  return readCardEvent::none;
+}
+#endif
+
 Chip_card::readCardEvent Chip_card::readCard(folderSettings &nfcTag) {
   // Show some details of the PICC (that is: the tag/card)
   LOG(card_log, s_debug, F("Card UID: "), dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size));
   const MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
   LOG(card_log, s_debug, F("PICC type: "), printPiccType(mfrc522, piccType));
+
+#ifdef DISNEY_CARDS
+  // Tarjetas Disney (NFC ajenas): se detectan por SAK antes del flujo estandar.
+  if (const readCardEvent disney = readDisneyCard(nfcTag); disney == readCardEvent::known)
+    return disney;
+#endif
 
   byte buffer[buffferSizeRead];
   MFRC522::StatusCode status = MFRC522::STATUS_ERROR;
@@ -176,6 +309,21 @@ Chip_card::readCardEvent Chip_card::readCard(folderSettings &nfcTag) {
     nfcTag.mode     = static_cast<pmode_t>(buffer[6]);
     nfcTag.special  = buffer[7];
     nfcTag.special2 = buffer[8];
+    if (version == 1) {
+      switch (buffer[6]) {
+      case 6: nfcTag.mode = pmode_t::hoerspiel_vb; break;
+      case 7: nfcTag.mode = pmode_t::album_vb;     break;
+      case 8: nfcTag.mode = pmode_t::party_vb;     break;
+      case 9:
+#ifdef LANGUAGE_SELECT
+        nfcTag.folder += Tonuino::getTonuino().getSettings().language;
+#endif
+        nfcTag.mode = pmode_t::einzel;
+        break;
+      default:
+        break;
+      }
+    }
   }
   else {
     LOG(card_log, s_warning, F("bad ver "), version);
@@ -284,11 +432,28 @@ cardEvent Chip_card::getCardEvent() {
   byte bufferSize = sizeof(bufferATQA);
   MFRC522::StatusCode result = mfrc522.PICC_RequestA(bufferATQA, &bufferSize);
 
+  // Fiabilidad: una sola REQA puede no ver una tarjeta recien colocada con
+  // acoplamiento debil (tipico en tarjetas Disney / Ultralight). Mientras no
+  // haya tarjeta presente reintentamos con WUPA, que ademas despierta tarjetas
+  // en estado HALT. Solo se reintenta sin tarjeta para no retrasar la deteccion
+  // de retirada.
+  if (result != mfrc522.STATUS_OK && cardRemoved) {
+    bufferSize = sizeof(bufferATQA);
+    result = mfrc522.PICC_WakeupA(bufferATQA, &bufferSize);
+  }
+
   if(result != mfrc522.STATUS_OK) {
     ++cardRemovedSwitch;
   } else {
-    mfrc522.PICC_ReadCardSerial();
-    cardRemovedSwitch.reset();
+    bool selected = mfrc522.PICC_ReadCardSerial();
+#ifdef DISNEY_CARDS
+    if (!selected)
+      selected = selectDisneyFudan(mfrc522);
+#endif
+    if (selected)
+      cardRemovedSwitch.reset();
+    else
+      ++cardRemovedSwitch;
   }
 
   if (cardRemovedSwitch.on()) {

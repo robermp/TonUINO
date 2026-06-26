@@ -42,6 +42,8 @@ if __name__ == '__main__':
         for i in range(1,256):
             targetFile1 = '{}/mp3/{:0>4}.mp3'.format(targetDir, i)
             targetFile2 = '{}/advert/{:0>4}.mp3'.format(targetDir, i)
+            if args.only_new and os.path.isfile(targetFile1) and os.path.isfile(targetFile2):
+                continue
             text_to_speech.textToSpeechUsingArgs(text='{}'.format(i), targetFile=targetFile1, args=args)
             shutil.copy(targetFile1, targetFile2)
 

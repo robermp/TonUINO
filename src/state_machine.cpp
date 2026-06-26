@@ -55,6 +55,15 @@ const __FlashStringHelper* str_to                      () { return F(" -> ") ; }
 const __FlashStringHelper* str_enter                   () { return F("enter ") ; }
 const __FlashStringHelper* str_abort                   () { return F(" abort") ; }
 
+#ifdef LANGUAGE_SELECT
+void selectNextLanguage() {
+  if (++settings.language >= numLanguages)
+    settings.language = 0;
+  settings.writeSettingsToFlash();
+  mp3.enqueueMp3FolderTrack(languageNameMp3);
+}
+#endif
+
 }
 
 // #######################################################
@@ -751,6 +760,17 @@ void Idle::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Idle(), str_to(), str_Admin_Allow());
     transit<Admin_Allow>();
     return;
+#ifdef LANGUAGE_SELECT
+  case command::language:
+    selectNextLanguage();
+    return;
+#endif
+  case command::volume_up:
+    mp3.increaseVolume();
+    return;
+  case command::volume_down:
+    mp3.decreaseVolume();
+    return;
 #ifdef REPLAY_ON_PLAY_BUTTON
   case command::pause:
     if (tonuino.getFolder() != 0) {
@@ -867,6 +887,11 @@ void Play::react(command_e const &cmd_e) {
   case command::volume_down:
     mp3.decreaseVolume();
     break;
+#ifdef LANGUAGE_SELECT
+  case command::language:
+    selectNextLanguage();
+    return;
+#endif
   case command::previous:
     tonuino.previousTrack();
     break;
@@ -893,9 +918,7 @@ void Play::react(card_e const &c_e) {
   switch (c_e.card_ev) {
   case cardEvent::inserted:
     if (readCard()) {
-#ifdef DONT_ACCEPT_SAME_RFID_TWICE
       if (not (tonuino.getMyFolder() == lastCardRead))
-#endif
         handleReadCard();
     }
     else {
@@ -960,6 +983,17 @@ void Pause::react(command_e const &cmd_e) {
       LOG(state_log, s_debug, str_Pause(), str_to(), str_Play());
       transit<Play>();
     }
+    return;
+#ifdef LANGUAGE_SELECT
+  case command::language:
+    selectNextLanguage();
+    return;
+#endif
+  case command::volume_up:
+    mp3.increaseVolume();
+    return;
+  case command::volume_down:
+    mp3.decreaseVolume();
     return;
   default:
     break;
@@ -1732,7 +1766,11 @@ void Admin_Entry::entry() {
   tonuino.disableStandbyTimer();
   tonuino.resetActiveModifier();
 
+#ifdef LANGUAGE_SELECT
+  numberOfOptions   = 15;
+#else
   numberOfOptions   = 14;
+#endif
   startMessage      = lastCurrentValue == 0 ? mp3Tracks::t_900_admin : mp3Tracks::t_919_continue_admin;
   messageOffset     = mp3Tracks::t_900_admin;
   preview           = false;
@@ -1834,6 +1872,13 @@ void Admin_Entry::react(command_e const &cmd_e) {
 //             mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
 //#endif
              return;
+#ifdef LANGUAGE_SELECT
+    case 15: // set initial language
+             LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_SimpleSetting());
+             Admin_SimpleSetting::type = Admin_SimpleSetting::language;
+             transit<Admin_SimpleSetting>();
+             return;
+#endif
     }
   }
 }
@@ -1903,15 +1948,27 @@ void Admin_SimpleSetting::entry() {
   numberOfOptions   = type == maxVolume  ? 30 - mp3.getMinVolume()                        :
                       type == minVolume  ? mp3.getMaxVolume() - 1                         :
                       type == initVolume ? mp3.getMaxVolume() - mp3.getMinVolume() + 1    :
-                      type == eq         ? 6                                              : 0;
+                      type == eq         ? 6                                              :
+#ifdef LANGUAGE_SELECT
+                      type == language   ? numLanguages                                   :
+#endif
+                                           0;
   startMessage      = type == maxVolume  ? mp3Tracks::t_930_max_volume_intro              :
                       type == minVolume  ? mp3Tracks::t_931_min_volume_into               :
                       type == initVolume ? mp3Tracks::t_932_init_volume_into              :
-                      type == eq         ? mp3Tracks::t_920_eq_intro                      : mp3Tracks::t_0;
+                      type == eq         ? mp3Tracks::t_920_eq_intro                      :
+#ifdef LANGUAGE_SELECT
+                      type == language   ? mp3Tracks::t_950_set_language_intro            :
+#endif
+                                           mp3Tracks::t_0;
   messageOffset     = type == maxVolume  ? static_cast<mp3Tracks>(mp3.getMinVolume())     :
                       type == minVolume  ? mp3Tracks::t_0                                 :
                       type == initVolume ? static_cast<mp3Tracks>(mp3.getMinVolume() - 1) :
-                      type == eq         ? mp3Tracks::t_920_eq_intro                      : mp3Tracks::t_0;
+                      type == eq         ? mp3Tracks::t_920_eq_intro                      :
+#ifdef LANGUAGE_SELECT
+                      type == language   ? mp3Tracks::t_0                                  :
+#endif
+                                           mp3Tracks::t_0;
   preview           = false;
   previewFromFolder = 0;
 
@@ -1920,7 +1977,15 @@ void Admin_SimpleSetting::entry() {
   currentValue      = type == maxVolume  ? mp3.getMaxVolume()  - mp3.getMinVolume()        :
                       type == minVolume  ? mp3.getMinVolume()                             :
                       type == initVolume ? mp3.getInitVolume() - mp3.getMinVolume() + 1   :
-                      type == eq         ? settings.eq                                    : 0;
+                      type == eq         ? settings.eq                                    :
+#ifdef LANGUAGE_SELECT
+                      type == language   ? static_cast<uint8_t>(settings.language + 1)    :
+#endif
+                                           0;
+#ifdef LANGUAGE_SELECT
+  if (type == language)
+    origLanguage = settings.language;
+#endif
 }
 
 void Admin_SimpleSetting::react(command_e const &cmd_e) {
@@ -1928,6 +1993,31 @@ void Admin_SimpleSetting::react(command_e const &cmd_e) {
     LOG(state_log, s_debug, str_Admin_SimpleSetting(), F("::react() "), static_cast<int>(cmd_e.cmd_raw));
   }
   const command cmd = commands.getCommand(cmd_e.cmd_raw, state_for_command::admin);
+
+#ifdef LANGUAGE_SELECT
+  if (type == language) {
+    if (isAbort(cmd)) {
+      settings.language = origLanguage;
+      return;
+    }
+    if (cmd == command::next || cmd == command::next10) {
+      if (++settings.language >= numLanguages)
+        settings.language = 0;
+    }
+    else if (cmd == command::previous || cmd == command::previous10) {
+      settings.language = (settings.language == 0 ? numLanguages : settings.language) - 1;
+    }
+    else if (Commands::isSelect(cmd)) {
+      saveAndTransit();
+      return;
+    }
+    else
+      return;
+    currentValue = settings.language + 1;
+    mp3.enqueueMp3FolderTrack(languageNameMp3);
+    return;
+  }
+#endif
 
   VoiceMenu::react(cmd);
 
@@ -2532,5 +2622,8 @@ folderSettings Base::lastCardRead{};
 
 uint8_t Admin_Entry::lastCurrentValue{};
 Admin_SimpleSetting::Type Admin_SimpleSetting::type{};
+#ifdef LANGUAGE_SELECT
+uint8_t Admin_SimpleSetting::origLanguage{};
+#endif
 bool Admin_NewCard::return_to_idle{false};
 bool Admin_NewCard::wait_track_finished{false};

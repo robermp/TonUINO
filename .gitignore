@@ -48,3 +48,8 @@ Temporary Items
 .pio
 .vscode
 release.sh
+
+
+# TonUINO
+*/__pycache__
+*.pyc

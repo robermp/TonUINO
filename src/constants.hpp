@@ -452,7 +452,30 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 //#define MRFC522_RX_GAIN RxGain_48dB
 //#define MRFC522_RX_GAIN RxGain_min  // 18dB
 //#define MRFC522_RX_GAIN RxGain_avg  // 33dB
-//#define MRFC522_RX_GAIN RxGain_max  // 48dB
+#define MRFC522_RX_GAIN RxGain_max  // 48dB - mejora fiabilidad de lectura (tarjetas Disney/UL)
+
+// ######################################################################
+
+/* Soporte de audiocuentos Disney (tarjetas NFC ajenas, no TonUINO).
+ * Las tarjetas FUDAN (SAK 0x0A) usan la carpeta base + idioma; las
+ * Ultralight A (SAK 0x00) usan una carpeta fija con mapeo de UID a pista.
+ */
+#ifdef DISNEY_CARDS
+inline constexpr uint8_t  disneyFudanFolder = 97; // +idioma (97/98/99)
+inline constexpr uint8_t  disneyUlAFolder   = 96;
+#endif
+
+// ######################################################################
+
+/* Seleccion de idioma en runtime (ES/IT/EN). Los prompts y numeros se
+ * reproducen desde /mp3/ con el prefijo (idioma+1)*1000, de modo que:
+ *   idioma 0 (ES) -> 1xxx, idioma 1 (IT) -> 2xxx, idioma 2 (EN) -> 3xxx.
+ */
+#ifdef LANGUAGE_SELECT
+inline constexpr uint8_t  numLanguages    = 3;     // ES, IT, EN
+inline constexpr uint16_t languageMp3Step = 1000;  // offset por idioma
+inline constexpr uint16_t languageNameMp3 = 309;   // pista que dice el nombre del idioma (en cada pack)
+#endif
 
 // ######################################################################
 
@@ -548,6 +571,16 @@ inline constexpr uint32_t  buttonLongPressRepeat =  200; // timeout for long pre
 #if defined(TonUINO_Classic) or defined(TonUINO_Every) or defined(TonUINO_Every_4808)
 // ####### buttons #####################################
 
+#if defined(FIVEBUTTONS) && defined(LANGUAGE_SELECT)
+// Mapeo de pines compatible con el firmware 2.x del fork (con botón de idioma dedicado)
+//   play/pause = A4   siguiente = A0   anterior = A3   vol+ = A2   vol- = A1   idioma = A5
+inline constexpr uint8_t   buttonPausePin  = A4;
+inline constexpr uint8_t   buttonUpPin     = A0;
+inline constexpr uint8_t   buttonDownPin   = A3;
+inline constexpr uint8_t   buttonFourPin   = A2;
+inline constexpr uint8_t   buttonFivePin   = A1;
+inline constexpr uint8_t   buttonLangPin   = A5;
+#else
 inline constexpr uint8_t   buttonPausePin  = A0;
 
 #if defined(BUTTONS3X3)
@@ -564,6 +597,8 @@ inline constexpr uint8_t   buttonFivePin   = A2;
 inline constexpr uint8_t   buttonUpPin     = A1;
 inline constexpr uint8_t   buttonDownPin   = A2;
 #endif
+
+#endif // FIVEBUTTONS && LANGUAGE_SELECT
 
 inline constexpr levelType buttonPinType   = levelType::activeLow;
 inline constexpr uint32_t  buttonDbTime    = 25; // Debounce time in milliseconds (default 25ms)

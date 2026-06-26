@@ -60,7 +60,7 @@ void Settings::writeSettingsToFlash() {
 void Settings::resetSettings() {
   LOG(settings_log, s_debug, F("resetSettings"));
   cookie               = cardCookie;
-  version              =  2;
+  version              =  3;
   spkMaxVolume         = 25;
   spkMinVolume         =  5;
   spkInitVolume        = 15;
@@ -81,6 +81,9 @@ void Settings::resetSettings() {
   hpMaxVolume          = 25;
   hpMinVolume          =  5;
   hpInitVolume         = 15;
+#ifdef LANGUAGE_SELECT
+  language             =  0;  // idioma por defecto (ES)
+#endif
 
   writeSettingsToFlash();
 }
@@ -102,6 +105,13 @@ void Settings::loadSettingsFromFlash() {
     hpInitVolume         = 15;
     writeSettingsToFlash();
   }
+
+#ifdef LANGUAGE_SELECT
+  if (language >= numLanguages) {  // valor invalido (EEPROM viejo/borrado)
+    language = 0;
+    writeSettingsToFlash();
+  }
+#endif
 
   LOG(settings_log, s_info, F("Ver:"), version);
   LOG(settings_log, s_info, F("Vol:"), spkMaxVolume, F(" "), spkMinVolume, F(" "), spkInitVolume, F(" "), hpMaxVolume, F(" "), hpMinVolume, F(" "), hpInitVolume);

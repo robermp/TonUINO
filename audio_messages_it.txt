@@ -1,0 +1,145 @@
+advert/0300_freeze_into.mp3|Ora giochiamo al ballo dello stop. Quando la musica si ferma, resta immobile!
+advert/0301_freeze_freeze1.mp3|e stop!
+advert/0301_freeze_freeze2.mp3|Non muoverti!
+advert/0301_freeze_freeze3.mp3|si continua!
+advert/0302_sleep.mp3|Funzione di spegnimento automatico attivata.
+advert/0303_fi_wa_ai.mp3|Ora giochiamo a fuoco, acqua e vento. Con il fuoco corri in un angolo, con l'acqua sali su qualcosa e con il vento sdraiati a terra.
+advert/0304_buttonslocked.mp3|I pulsanti sono bloccati.
+advert/0305_kindergarden.mp3|Modalità asilo attivata.
+advert/0306_fire.mp3|Fuoco....10 secondi....e si continua!
+advert/0307_water.mp3|Acqua....10 secondi....e si continua!
+advert/0308_air.mp3|Vento....10 secondi....e si continua!
+advert/0320_bt_on.mp3|Bluetooth attivato.
+advert/0321_bt_off.mp3|Bluetooth disattivato.
+advert/0322_bt_pairing.mp3|Il Bluetooth verrà riconnesso.
+advert/0323_standby_timer_off.mp3|Timer di spegnimento disattivato.
+advert/0324_standby_timer_on.mp3|Timer di spegnimento attivato.
+advert/0325_endless_off.mp3|Modalità infinita disattivata.
+advert/0326_endless_on.mp3|Modalità infinita attivata.
+mp3/0300_new_tag.mp3|Oh, una carta nuova!
+mp3/0301_select_folder.mp3|Ok, ora usa i pulsanti volume per selezionare una cartella per la carta.
+mp3/0309.mp3|Italiano
+mp3/0310.mp3|Usa i pulsanti volume per selezionare la modalità di riproduzione. Premi il pulsante pausa per continuare.
+mp3/0311_mode_random_episode.mp3|Modalità casuale: riproduce un file a caso dalla cartella.
+mp3/0312_mode_album.mp3|Modalità Album: riproduce l'intera cartella.
+mp3/0313_mode_party.mp3|Modalità Party: riproduce le tracce di una cartella in modo casuale.
+mp3/0314_mode_single_track.mp3|Modalità Single: riproduce un file specifico dalla cartella.
+mp3/0315_mode_audio_book.mp3|Modalità Audiolibro: riproduce una cartella e salva il progresso.
+mp3/0316_admin.mp3|Funzioni di amministrazione.
+mp3/0317_special_random.mp3|Modalità speciale Da-A, casuale: riproduce un file a caso tra il file iniziale e quello finale.
+mp3/0318_special_album.mp3|Modalità speciale Da-A, Album: riproduce tutti i file tra quello iniziale e quello finale.
+mp3/0319_special_party.mp3|Modalità speciale Da-A, Party: riproduce in modo casuale tutti i file tra quello iniziale e quello finale.
+mp3/0320_mode_audio_book_single.mp3|Modalità Audiolibro singola: riproduce la traccia successiva della cartella e salva il progresso.
+mp3/0321_mode_repeat_last_card.mp3|Modalità ripeti carta: si ripete l'ultima carta o scorciatoia.
+mp3/0322_mode_quiz_game.mp3|Modalità quiz: gioca a un quiz.
+mp3/0323_mode_memory_game.mp3|Modalità memory: gioca a un gioco di memoria.
+mp3/0324_mode_switch_bt.mp3|Cambia Bluetooth: attiva o disattiva il Bluetooth.
+mp3/0325_mode_teapot_game.mp3|Modalità indovinello: gioca al gioco delle parole con più significati.
+mp3/0326_special_audio_book.mp3|Modalità speciale Da-A, Audiolibro: riproduce tutti i file tra quello iniziale e quello finale e salva il progresso.
+mp3/0327_select_file.mp3|Ok, ora seleziona il file con i pulsanti volume.
+mp3/0328_select_first_file.mp3|Ok, ora seleziona il file iniziale con i pulsanti volume.
+mp3/0329_select_last_file.mp3|Ora seleziona il file finale con i pulsanti volume.
+mp3/0330.mp3|Devo dire il numero prima di ogni file? Puoi chiedere il numero attuale in qualsiasi momento con una pressione lunga del pulsante pausa.
+mp3/0331.mp3|No, non dire il numero.
+mp3/0332.mp3|Sì, di' il numero.
+mp3/0333_num_answer.mp3|Quante risposte diverse ha il quiz per ogni domanda?
+mp3/0334_num_answer_2.mp3|2 risposte.
+mp3/0335_num_answer_4.mp3|4 risposte.
+mp3/0336_num_answer_2_1.mp3|2 risposte e una soluzione.
+mp3/0337_num_answer_4_1.mp3|4 risposte e una soluzione.
+mp3/0338_num_answer_0_1.mp3|solo una soluzione con il pulsante.
+mp3/0400_ok.mp3|Ok. Ho configurato la carta.
+mp3/0401_error.mp3|Oh no! Purtroppo non ha funzionato!
+mp3/0402_ok_settings.mp3|Ok, ho salvato le impostazioni.
+mp3/0500_quiz_game_intro.mp3|Ora giochi a un quiz. Premi il pulsante pausa per ottenere una nuova domanda. Poi premi i pulsanti avanti, indietro o volume per ascoltare le diverse risposte. Quando pensi di aver sentito la risposta giusta, premi il pulsante pausa per scoprire se è quella corretta. Ripeti il tutto quante volte vuoi. Puoi terminare il quiz con una pressione lunga dei pulsanti indietro e avanti.
+mp3/0501_quiz_game_ok.mp3|Sì, è la risposta giusta. Bravo. Continua con il pulsante pausa.
+mp3/0502_quiz_game_bad.mp3|Oh no, non è la risposta giusta. Prova con la domanda successiva. Continua con il pulsante pausa.
+mp3/0503_quiz_game_ok_with_solution.mp3|Sì, è la risposta giusta. Bravo. Ecco la spiegazione della soluzione.
+mp3/0504_quiz_game_bad_with_solution.mp3|Oh no, non è la risposta giusta. Ecco la soluzione.
+mp3/0505_quiz_game_buzzer_down.mp3|Il giocatore indietro è stato il primo! Qual è la soluzione? Poi riproduci la soluzione con il pulsante pausa.
+mp3/0506_quiz_game_buzzer_up.mp3|Il giocatore avanti è stato il primo! Qual è la soluzione? Poi riproduci la soluzione con il pulsante pausa.
+mp3/0507_quiz_game_buzzer_vol-.mp3|Il giocatore volume giù è stato il primo! Qual è la soluzione? Poi riproduci la soluzione con il pulsante pausa.
+mp3/0508_quiz_game_buzzer_vol+.mp3|Il giocatore volume su è stato il primo! Qual è la soluzione? Poi riproduci la soluzione con il pulsante pausa.
+mp3/0509_quiz_game_buzzer_intro.mp3|Ora giochi a un quiz con il pulsante. Premi il pulsante pausa per ottenere una nuova domanda. Poi usa i pulsanti indietro, avanti, volume giù e volume su come pulsanti di prenotazione. Quando il giocatore più veloce ha detto la risposta, premi il pulsante pausa per scoprire se è quella corretta. Ripeti il tutto quante volte vuoi. Puoi terminare il quiz con una pressione lunga dei pulsanti indietro e avanti.
+mp3/0510_quiz_game_continue.mp3|Continua con il pulsante pausa.
+mp3/0520_memory_game_intro.mp3|Ora giochi a un gioco di memoria. Gioca una prima carta e poi una seconda. Dopo la seconda carta, premi il pulsante pausa per scoprire se le due carte vanno insieme. Se è così, puoi tenerle entrambe, altrimenti rimettile in gioco. Il gioco continua con il giocatore successivo. Puoi terminare il gioco di memoria tenendo premuti i pulsanti indietro e avanti.
+mp3/0521_memory_game_ok.mp3|Sì, le due carte vanno insieme.
+mp3/0522_memory_game_bad.mp3|Oh no, le carte non corrispondono.
+mp3/0523_memory_game_1.mp3|Gira la prima carta.
+mp3/0524_memory_game_2.mp3|Gira la seconda carta.
+mp3/0530_teapot_game_intro.mp3|Ora giochi al gioco di indovinare le parole con più significati. Tieni premuto il pulsante pausa per sentire una nuova descrizione. Poi premi i pulsanti pausa, indietro, avanti, volume giù o volume su per sentire altre descrizioni. Quando pensi di aver indovinato la parola giusta, tieni premuto il pulsante pausa per sentire la risposta. Ripeti quante volte vuoi. Puoi terminare il gioco tenendo premuto il pulsante avanti o indietro.
+mp3/0531_teapot_game_continue.mp3|Continua con una pressione lunga del pulsante pausa.
+mp3/0532_teapot_game_solution.mp3|Ecco la soluzione.
+mp3/0800_waiting_for_card.mp3|Appoggia la carta adesso!
+mp3/0801_remove_card.mp3|Rimuovi la carta dal lettore!
+mp3/0802_reset_aborted.mp3|Ok, ho annullato l'operazione.
+mp3/0900_admin.mp3|Benvenuto nel menu di amministrazione. Seleziona una funzione con i pulsanti volume e conferma con il pulsante pausa. Con una pressione lunga del pulsante pausa puoi annullare l'operazione.
+mp3/0901_card_reset.mp3|Configura una nuova carta.
+mp3/0902_max_volume.mp3|Imposta il volume massimo.
+mp3/0903_min_volume.mp3|Imposta il volume minimo.
+mp3/0904_init_volume.mp3|Imposta il volume all'avvio.
+mp3/0905_eq.mp3|Configura l'equalizzatore.
+mp3/0906_modifiers.mp3|Crea una carta di modifica. Queste carte si appoggiano dopo le carte musicali e cambiano il comportamento del tuo TonUINO.
+mp3/0907_shortcut.mp3|Configura una scorciatoia. Una scorciatoia si avvia con una pressione lunga e funziona solo se non si sta riproducendo nulla.
+mp3/0908_standbytimer.mp3|Configura il timer.
+mp3/0909_batch_cards.mp3|Crea carte singole per una cartella.
+mp3/0910_switch_volume.mp3|Inverti la funzione dei pulsanti volume.
+mp3/0911_reset.mp3|Cancella tutte le impostazioni.
+mp3/0912_admin_lock.mp3|Proteggi il menu di amministrazione.
+mp3/0913_pause_on_card_removed.mp3|Metti in pausa quando la carta viene rimossa.
+mp3/0914_memory_cards.mp3|Crea le carte per il gioco di memoria.
+mp3/0915_set_language.mp3|Imposta la lingua iniziale.
+mp3/0919_continue_admin.mp3|E si continua nel menu di amministrazione. Puoi uscire dal menu di amministrazione tenendo premuto il pulsante pausa.
+mp3/0920_eq_intro.mp3|Seleziona un'impostazione per l'equalizzatore con i pulsanti volume e conferma con il pulsante pausa.
+mp3/0921_normal.mp3|Normale
+mp3/0922_pop.mp3|Pop
+mp3/0923_rock.mp3|Rock
+mp3/0924_jazz.mp3|Jazz
+mp3/0925_classic.mp3|Classica
+mp3/0926_bass.mp3|Bassi
+mp3/0930_max_volume_intro.mp3|Seleziona il volume massimo e conferma con il pulsante pausa.
+mp3/0931_min_volume_into.mp3|Seleziona il volume minimo e conferma con il pulsante pausa.
+mp3/0932_init_volume_into.mp3|Seleziona il volume all'avvio e conferma con il pulsante pausa.
+mp3/0933_switch_volume_intro.mp3|Vuoi invertire la funzione dei pulsanti volume nella versione a 3 pulsanti? Così puoi cambiare il volume con una pressione breve, ma dovrai tenere premuti i pulsanti per andare avanti o indietro di una canzone.
+mp3/0934_no.mp3|No.
+mp3/0935_yes.mp3|Sì.
+mp3/0936_batch_cards_intro.mp3|Ok, ora appoggia le carte sul box una dopo l'altra. Annuncerò il numero corrispondente prima, così non ti confondi. Per annullare, tieni premuto il pulsante pausa!
+mp3/0937_memory_game_cards_intro.mp3|Ok, ora appoggia le carte per il gioco di memoria sul box una dopo l'altra. Annuncerò il numero corrispondente prima, così non ti confondi. Per annullare, premi brevemente il pulsante pausa!
+mp3/0940_shortcut_into.mp3|Seleziona la scorciatoia che vuoi configurare. Se hai la scheda con 3 per 3 pulsanti, puoi premere un pulsante anche lì.
+mp3/0941_pause.mp3|Pulsante su e giù.
+mp3/0942_up.mp3|Pulsante su.
+mp3/0943_down.mp3|Pulsante giù.
+mp3/0944_startup.mp3|All'avvio.
+mp3/0950_set_language_intro.mp3|Usa i pulsanti volume per selezionare la lingua iniziale e conferma con il pulsante pausa. Tieni premuto il pulsante pausa per annullare.
+mp3/0960_timer_intro.mp3|Dopo quanti minuti deve spegnersi il TonUINO?
+mp3/0961_timer_5.mp3|5 minuti.
+mp3/0962_timer_15.mp3|15 minuti.
+mp3/0963_timer_30.mp3|30 minuti.
+mp3/0964_timer_60.mp3|60 minuti.
+mp3/0965_timer_disabled.mp3|non spegnere automaticamente.
+mp3/0966_dance_pause_intro.mp3|Per quanto tempo deve suonare la musica tra le pause?
+mp3/0967_dance_pause_15_30.mp3|da 15 a 30 secondi
+mp3/0968_dance_pause_25_40.mp3|da 25 a 40 secondi
+mp3/0969_dance_pause_35_50.mp3|da 35 a 50 secondi
+mp3/0970_modifier_Intro.mp3|Ora seleziona la tua carta di modifica con i pulsanti volume.
+mp3/0971_modifier_SleepTimer.mp3|Modalità di spegnimento automatico.
+mp3/0972_modifier_FreezeDance.mp3|Ballo dello stop: il TonUINO gioca con te al ballo dello stop e ferma brevemente la riproduzione in modo casuale.
+mp3/0973_modifier_FiWaAi.mp3|Gioco di fuoco, acqua e vento.
+mp3/0974_modifier_Toddler.mp3|Modalità bimbi: tutti i pulsanti del TonUINO sono bloccati per i più piccoli. Le carte funzionano ancora.
+mp3/0975_modifier_KinderGarden.mp3|Modalità asilo: per evitare conflitti, le carte nuove non vengono riprodotte subito, ma solo dopo la fine della canzone attuale. I pulsanti avanti e indietro sono bloccati.
+mp3/0976_modifier_repeat1.mp3|Ripeti traccia: ripete all'infinito la traccia attuale.
+mp3/0977_modifier_bluetooth.mp3|Carta Bluetooth: con la carta Bluetooth puoi attivare o disattivare il Bluetooth.
+mp3/0978_modifier_jukebox.mp3|Carta jukebox: se è già in riproduzione una traccia e si appoggia una carta nuova, non viene riprodotta subito ma messa in coda. Solo quando la carta attuale è finita si prende la successiva dalla coda.
+mp3/0979_modifier_pauseAftTr.mp3|Carta di pausa dopo ogni traccia: con questa carta, il TonUINO va in pausa dopo ogni traccia.
+mp3/0980_modifier_disableStandby.mp3|Carta per disattivare lo spegnimento: con questa carta puoi disattivare e riattivare temporaneamente il timer di spegnimento.
+mp3/0981_modifier_switchEndless.mp3|Carta modalità infinita: con questa carta puoi attivare o disattivare la modalità infinita.
+mp3/0985_admin_lock_intro.mp3|Seleziona se e come proteggere il menu di amministrazione.
+mp3/0986_admin_lock_disabled.mp3|Nessuna protezione: il menu di amministrazione può essere attivato in qualsiasi momento premendo tutti e tre i pulsanti.
+mp3/0987_admin_lock_card.mp3|Solo carta admin: il menu di amministrazione può essere aperto solo con una carta admin. Una nuova carta admin può essere appresa in qualsiasi momento.
+mp3/0988_admin_lock_pin.mp3|Inserisci il codice PIN: il menu di amministrazione è protetto da un PIN di quattro cifre. Se scegli questa opzione, la prossima cosa da fare è impostare il PIN.
+mp3/0989_admin_lock_calc.mp3|Operazione matematica: si può entrare nel menu di amministrazione solo risolvendo un'operazione matematica.
+mp3/0991_admin_pin.mp3|Inserisci il PIN.
+mp3/0992_admin_calc.mp3|Quanto fa
+mp3/0993_admin_calc.mp3|più
+mp3/0994_admin_calc.mp3|meno
+mp3/0999_reset_ok.mp3|Il reset è stato eseguito!
