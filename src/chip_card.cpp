@@ -173,7 +173,7 @@ Chip_card::readCardEvent Chip_card::readDisneyCard(folderSettings &nfcTag) {
 #ifdef LANGUAGE_SELECT
     nfcTag.folder  += Tonuino::getTonuino().getSettings().language; // 97/98/99
 #endif
-    nfcTag.mode     = pmode_t::einzel;
+    nfcTag.mode     = pmode_t::single_track;
     nfcTag.special  = buffer[0];
     nfcTag.special2 = 0;
     LOG(card_log, s_info, F("Disney FUDAN trk "), nfcTag.special);
@@ -220,7 +220,7 @@ Chip_card::readCardEvent Chip_card::readDisneyCard(folderSettings &nfcTag) {
         default  : id =  0; break;
       }
       nfcTag.folder   = disneyUlAFolder;
-      nfcTag.mode     = pmode_t::einzel;
+      nfcTag.mode     = pmode_t::single_track;
       nfcTag.special  = id;
       nfcTag.special2 = 0;
       LOG(card_log, s_info, F("Disney UL_A trk "), nfcTag.special);
@@ -232,7 +232,7 @@ Chip_card::readCardEvent Chip_card::readDisneyCard(folderSettings &nfcTag) {
 #ifdef LANGUAGE_SELECT
     nfcTag.folder  += Tonuino::getTonuino().getSettings().language; // 97/98/99
 #endif
-    nfcTag.mode     = pmode_t::einzel;
+    nfcTag.mode     = pmode_t::single_track;
     nfcTag.special  = mickeyTrack;
     nfcTag.special2 = 0;
     LOG(card_log, s_info, F("Disney Mickey trk "), nfcTag.special);
@@ -311,14 +311,14 @@ Chip_card::readCardEvent Chip_card::readCard(folderSettings &nfcTag) {
     nfcTag.special2 = buffer[8];
     if (version == 1) {
       switch (buffer[6]) {
-      case 6: nfcTag.mode = pmode_t::hoerspiel_vb; break;
-      case 7: nfcTag.mode = pmode_t::album_vb;     break;
-      case 8: nfcTag.mode = pmode_t::party_vb;     break;
+      case 6: nfcTag.mode = pmode_t::audio_play_from_to; break;
+      case 7: nfcTag.mode = pmode_t::album_from_to;     break;
+      case 8: nfcTag.mode = pmode_t::party_from_to;     break;
       case 9:
 #ifdef LANGUAGE_SELECT
         nfcTag.folder += Tonuino::getTonuino().getSettings().language;
 #endif
-        nfcTag.mode = pmode_t::einzel;
+        nfcTag.mode = pmode_t::single_track;
         break;
       default:
         break;

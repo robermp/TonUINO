@@ -19,7 +19,7 @@ void Mp3Notify::OnPlaySourceOnline  (DfMp3&, DfMp3_PlaySources source) { Println
 void Mp3Notify::OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("bereit"  )); }
 void Mp3Notify::OnPlaySourceRemoved (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("entfernt")); }
 void Mp3Notify::PrintlnSourceAction(DfMp3_PlaySources source, const __FlashStringHelper* action) {
-  if (source & DfMp3_PlaySources_Sd   ) LOG(mp3_log, s_debug, F("SD Karte "), action);
+  if (source & DfMp3_PlaySources_Sd   ) LOG(mp3_log, s_debug, F("SD card "), action);
   if (source & DfMp3_PlaySources_Usb  ) LOG(mp3_log, s_debug, F("USB "     ), action);
   if (source & DfMp3_PlaySources_Flash) LOG(mp3_log, s_debug, F("Flash "   ), action);
 }

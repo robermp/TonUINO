@@ -20,8 +20,6 @@
 
 /*
 Please select your TonUINO PCB (Classic, AiO or AiO+) in file constants.hpp
-
-Bitte wählt eure TonUINO-Platine (Classic, AiO oder AiO+) in der Datei constants.hpp
 */
 
 void setup()
@@ -32,7 +30,7 @@ void setup()
     delay(5000);
 #endif
 
-  // Dieser Hinweis darf nicht entfernt werden
+  // This notice must not be removed
   LOG(init_log, s_error, F(""));
   LOG(init_log, s_error, F(" _____         _____ _____ _____ _____ "));
   LOG(init_log, s_error, F("|_   _|___ ___|  |  |     |   | |     |"));

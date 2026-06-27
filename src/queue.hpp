@@ -49,7 +49,7 @@ public:
   void clear() { s = 0; }
   uint8_t size()  { return s; }
   void shuffle() {
-    // Queue mischen
+    // Shuffle queue
     for (uint8_t i = 0; i < s; ++i) {
       const uint8_t j = random(0, s);
       swap(c[i], c[j]);

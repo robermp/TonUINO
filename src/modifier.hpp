@@ -73,14 +73,14 @@ public:
   static constexpr uint8_t minSecondsBetweenStops[]      = {15, 25, 35};
   static constexpr uint8_t maxSecondsBetweenStops[]      = {30, 40, 50};
   static constexpr uint8_t addSecondsBetweenStopsFreezeD =  6;
-  static constexpr uint8_t addSecondsBetweenStopsFiWaAi  = 17;
+  static constexpr uint8_t addSecondsBetweenStopsFireWaterAir  = 17;
 
 private:
   void setNextStop(bool addAdvTime);
 
   Timer stopTimer{};
   pmode_t mode{};
-  uint8_t lastFiWaAi{};
+  uint8_t lastFireWaterAir{};
   uint8_t t{0};
 };
 
@@ -92,23 +92,23 @@ public:
   pmode_t getActive()        final { return pmode_t::toddler; }
 
 #ifdef TonUINO_Esp32
-  String getDescription()    final { return "Gesperrt"; }
+  String getDescription()    final { return "Locked"; }
 #endif
 
 };
 
-class KindergardenMode: public Modifier {
+class KindergartenMode: public Modifier {
 public:
-  KindergardenMode() {}
+  KindergartenMode() {}
   bool handleNext  (                           ) final;
   bool handleButton(command cmd                ) final;
   bool handleRFID  (const folderSettings &newCard) final;
 
-  pmode_t getActive (                          ) final { return pmode_t::kindergarden; }
+  pmode_t getActive (                          ) final { return pmode_t::kindergarten; }
   void   init       (pmode_t, uint8_t          ) final { cardQueued = false; }
 
 #ifdef TonUINO_Esp32
-  String getDescription() final { return "Kita Modus"; }
+  String getDescription() final { return "Kindergarten mode"; }
 #endif
 
 private:
@@ -124,7 +124,7 @@ public:
   pmode_t getActive    () final { return pmode_t::repeat_single; }
 
 #ifdef TonUINO_Esp32
-  String getDescription() final { return "Wiederhole Track"; }
+  String getDescription() final { return "Repeat track"; }
 #endif
 
 };
@@ -137,7 +137,7 @@ public:
   pmode_t getActive    () final { return pmode_t::pause_aft_tr; }
 
 #ifdef TonUINO_Esp32
-  String getDescription() final { return "Pause nach jedem Track"; }
+  String getDescription() final { return "Pause after every track"; }
 #endif
 
 };

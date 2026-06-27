@@ -253,7 +253,7 @@ TEST_F(tonuino_test_fixture, shutdown_in_pause) {
 // =================== shortcutx (idle, pause)
 TEST_F(tonuino_test_fixture, shortcutx_in_idle) {
 
-  folderSettings folder_settings = { 10, pmode_t::einzel, 3, 0 };
+  folderSettings folder_settings = { 10, pmode_t::single_track, 3, 0 };
   uint16_t track_count = 15;
 
   command cmd_list[] = { command::shortcut1, command::shortcut2, command::shortcut3 };
@@ -286,7 +286,7 @@ TEST_F(tonuino_test_fixture, shortcutx_in_idle) {
 
 TEST_F(tonuino_test_fixture, shortcutx_in_pause) {
 
-  folderSettings folder_settings = { 4, pmode_t::einzel, 3, 0 };
+  folderSettings folder_settings = { 4, pmode_t::single_track, 3, 0 };
   uint16_t track_count = 14;
 
   command cmd_list[] = { command::shortcut1, command::shortcut2, command::shortcut3 };
@@ -333,7 +333,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_idle) {
 
   for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
     uint8_t start_track = index+1;
-    folderSettings fs = { folder, pmode_t::album_vb, start_track, 99 };
+    folderSettings fs = { folder, pmode_t::album_from_to, start_track, 99 };
     goto_idle();
     Print::clear_output();
 
@@ -362,7 +362,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_idle) {
   // long press
   for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
     uint8_t start_track = Buttons3x3::numLevels+index+1;
-    folderSettings fs = { folder, pmode_t::album_vb, start_track, 99 };
+    folderSettings fs = { folder, pmode_t::album_from_to, start_track, 99 };
     goto_idle();
     Print::clear_output();
 
@@ -403,7 +403,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_pause) {
 
   for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
     uint8_t start_track = index+1;
-    folderSettings fs = { folder, pmode_t::album_vb, start_track, 99 };
+    folderSettings fs = { folder, pmode_t::album_from_to, start_track, 99 };
     goto_pause({ 4, pmode_t::album, 0, 0 });
     Print::clear_output();
 
@@ -432,7 +432,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_pause) {
   // long press
   for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
     uint8_t start_track = Buttons3x3::numLevels+index+1;
-    folderSettings fs = { folder, pmode_t::album_vb, start_track, 99 };
+    folderSettings fs = { folder, pmode_t::album_from_to, start_track, 99 };
     goto_pause({ 4, pmode_t::album, 0, 0 });
     Print::clear_output();
 
@@ -473,7 +473,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_play) {
 
   for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
     uint8_t start_track = index+1;
-    folderSettings fs = { folder, pmode_t::album_vb, start_track, 99 };
+    folderSettings fs = { folder, pmode_t::album_from_to, start_track, 99 };
     goto_play({ 4, pmode_t::album, 0, 0 });
     Print::clear_output();
 
@@ -502,7 +502,7 @@ TEST_F(tonuino_test_fixture, shortcut3x3_in_play) {
   // long press
   for (uint8_t index = 0; index < Buttons3x3::numLevels; ++index) {
     uint8_t start_track = Buttons3x3::numLevels+index+1;
-    folderSettings fs = { folder, pmode_t::album_vb, start_track, 99 };
+    folderSettings fs = { folder, pmode_t::album_from_to, start_track, 99 };
     goto_play({ 4, pmode_t::album, 0, 0 });
     Print::clear_output();
 
@@ -812,15 +812,15 @@ TEST_F(tonuino_test_fixture, pauseWhenCardRemoved_settings) {
 // =================== card out in play
 TEST_F(tonuino_test_fixture, pause_if_card_removed_works) {
   folderSettings test_data[] = {
-      { 1, pmode_t::hoerspiel    , 0, 0 },
+      { 1, pmode_t::audio_play    , 0, 0 },
       { 1, pmode_t::album        , 0, 0 },
       { 1, pmode_t::party        , 0, 0 },
-      { 1, pmode_t::einzel       , 1, 0 },
-      { 1, pmode_t::hoerbuch     , 0, 0 },
-      { 1, pmode_t::hoerspiel_vb , 1, 3 },
-      { 1, pmode_t::album_vb     , 2, 4 },
-      { 1, pmode_t::party_vb     , 5, 9 },
-      { 1, pmode_t::hoerbuch_1   , 0, 0 },
+      { 1, pmode_t::single_track       , 1, 0 },
+      { 1, pmode_t::audiobook     , 0, 0 },
+      { 1, pmode_t::audio_play_from_to , 1, 3 },
+      { 1, pmode_t::album_from_to     , 2, 4 },
+      { 1, pmode_t::party_from_to     , 5, 9 },
+      { 1, pmode_t::audiobook_single   , 0, 0 },
   };
 
   uint16_t track_count = 10;
@@ -950,8 +950,8 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
   card_data_2 test_data[] = {
       // folder
       {
-          { 1, pmode_t::hoerspiel   , 0, 0 },
-          { 2, pmode_t::hoerspiel   , 0, 0 }
+          { 1, pmode_t::audio_play   , 0, 0 },
+          { 2, pmode_t::audio_play   , 0, 0 }
       },
       {
           { 1, pmode_t::album       , 0, 0 },
@@ -965,48 +965,48 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
 
       // mode
       {
-          { 1, pmode_t::hoerspiel   , 0, 0 },
+          { 1, pmode_t::audio_play   , 0, 0 },
           { 1, pmode_t::album       , 0, 0 }
       },
       {
-          { 1, pmode_t::einzel      , 1, 0 },
-          { 1, pmode_t::hoerbuch    , 1, 0 }
+          { 1, pmode_t::single_track      , 1, 0 },
+          { 1, pmode_t::audiobook    , 1, 0 }
       },
 
       // special
       {
-          { 1, pmode_t::einzel      , 1, 0 },
-          { 1, pmode_t::einzel      , 2, 0 }
+          { 1, pmode_t::single_track      , 1, 0 },
+          { 1, pmode_t::single_track      , 2, 0 }
       },
       {
-          { 1, pmode_t::hoerspiel_vb, 1, 5 },
-          { 1, pmode_t::hoerspiel_vb, 3, 5 }
+          { 1, pmode_t::audio_play_from_to, 1, 5 },
+          { 1, pmode_t::audio_play_from_to, 3, 5 }
       },
       {
-          { 1, pmode_t::album_vb    , 3, 5 },
-          { 1, pmode_t::album_vb    , 4, 5 }
+          { 1, pmode_t::album_from_to    , 3, 5 },
+          { 1, pmode_t::album_from_to    , 4, 5 }
       },
       {
-          { 1, pmode_t::party_vb    , 3, 5 },
-          { 1, pmode_t::party_vb    , 5, 5 }
+          { 1, pmode_t::party_from_to    , 3, 5 },
+          { 1, pmode_t::party_from_to    , 5, 5 }
       },
       {
-          { 1, pmode_t::hoerbuch_vb , 1, 5 },
-          { 1, pmode_t::hoerbuch_vb , 6, 8 }
+          { 1, pmode_t::audiobook_from_to , 1, 5 },
+          { 1, pmode_t::audiobook_from_to , 6, 8 }
       },
 
       // special2
       {
-          { 1, pmode_t::hoerspiel_vb, 1, 2 },
-          { 1, pmode_t::hoerspiel_vb, 1, 3 }
+          { 1, pmode_t::audio_play_from_to, 1, 2 },
+          { 1, pmode_t::audio_play_from_to, 1, 3 }
       },
       {
-          { 1, pmode_t::album_vb    , 1, 3 },
-          { 1, pmode_t::album_vb    , 1, 4 }
+          { 1, pmode_t::album_from_to    , 1, 3 },
+          { 1, pmode_t::album_from_to    , 1, 4 }
       },
       {
-          { 1, pmode_t::party_vb    , 1, 2 },
-          { 1, pmode_t::party_vb    , 1, 5 }
+          { 1, pmode_t::party_from_to    , 1, 2 },
+          { 1, pmode_t::party_from_to    , 1, 5 }
       }
   };
 
@@ -1054,10 +1054,10 @@ TEST_F(tonuino_test_fixture, pause_if_card_removed_card_in_with_other) {
 }
 
 // =================== next/previous (play)
-TEST_F(tonuino_test_fixture, next_previous_in_play_hoerbuch_1) {
+TEST_F(tonuino_test_fixture, next_previous_in_play_audiobook_single) {
   const uint8_t folder = 5;
   uint8_t current_track = 2;
-  folderSettings card = { folder, pmode_t::hoerbuch_1, 0, 0 };
+  folderSettings card = { folder, pmode_t::audiobook_single, 0, 0 };
   getSettings().writeFolderSettingToFlash(folder, current_track);
   goto_play(card);
   EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
@@ -1096,10 +1096,10 @@ TEST_F(tonuino_test_fixture, next_previous_in_play_hoerbuch_1) {
 #endif
 }
 
-TEST_F(tonuino_test_fixture, next_previous_in_play_hoerbuch) {
+TEST_F(tonuino_test_fixture, next_previous_in_play_audiobook) {
   const uint8_t folder = 5;
   uint8_t current_track = 2;
-  folderSettings card = { folder, pmode_t::hoerbuch, 0, 0 };
+  folderSettings card = { folder, pmode_t::audiobook, 0, 0 };
   getSettings().writeFolderSettingToFlash(folder, current_track);
   goto_play(card);
   EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), current_track);
@@ -1139,11 +1139,11 @@ TEST_F(tonuino_test_fixture, next_previous_in_play_hoerbuch) {
 
 }
 
-// =================== end of hoerbuch
-TEST_F(tonuino_test_fixture, end_play_hoerbuch) {
+// =================== end of audiobook
+TEST_F(tonuino_test_fixture, end_play_audiobook) {
   const uint8_t folder = 5;
   uint8_t track_count = 10;
-  folderSettings card = { folder, pmode_t::hoerbuch, 0, 0 };
+  folderSettings card = { folder, pmode_t::audiobook, 0, 0 };
   getSettings().writeFolderSettingToFlash(folder, track_count); // last track
   goto_play(card, track_count);
   EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count);
@@ -1167,10 +1167,10 @@ TEST_F(tonuino_test_fixture, end_play_hoerbuch) {
   card_out();
 }
 
-TEST_F(tonuino_test_fixture, end_play_hoerbuch_1) {
+TEST_F(tonuino_test_fixture, end_play_audiobook_single) {
   const uint8_t folder = 5;
   uint8_t track_count = 10;
-  folderSettings card = { folder, pmode_t::hoerbuch_1, 0, 0 };
+  folderSettings card = { folder, pmode_t::audiobook_single, 0, 0 };
   getSettings().writeFolderSettingToFlash(folder, track_count); // last track
   goto_play(card, track_count);
   EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count);
@@ -1194,10 +1194,10 @@ TEST_F(tonuino_test_fixture, end_play_hoerbuch_1) {
   card_out();
 }
 
-TEST_F(tonuino_test_fixture, end_play_after_1_track_hoerbuch_1) {
+TEST_F(tonuino_test_fixture, end_play_after_1_track_audiobook_single) {
   const uint8_t folder = 5;
   uint8_t track_count = 10;
-  folderSettings card = { folder, pmode_t::hoerbuch_1, 0, 0 };
+  folderSettings card = { folder, pmode_t::audiobook_single, 0, 0 };
   getSettings().writeFolderSettingToFlash(folder, track_count-1); // 1 before last track
   goto_play(card, track_count);
   EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count-1);
@@ -1213,10 +1213,10 @@ TEST_F(tonuino_test_fixture, end_play_after_1_track_hoerbuch_1) {
   card_out();
 }
 
-TEST_F(tonuino_test_fixture, end_play_after_2_track_hoerbuch_1) {
+TEST_F(tonuino_test_fixture, end_play_after_2_track_audiobook_single) {
   const uint8_t folder = 5;
   uint8_t track_count = 10;
-  folderSettings card = { folder, pmode_t::hoerbuch_1, 1, 0 };
+  folderSettings card = { folder, pmode_t::audiobook_single, 1, 0 };
   getSettings().writeFolderSettingToFlash(folder, track_count-3); // 1 before last track
   goto_play(card, track_count);
   EXPECT_EQ(getSettings().readFolderSettingFromFlash(folder), track_count-3);
@@ -1247,10 +1247,10 @@ TEST_F(tonuino_test_fixture, end_play_after_2_track_hoerbuch_1) {
   card_out();
 }
 
-// =================== hoerbuch random folder
-TEST_F(tonuino_test_fixture, hoerbuch_rnd_shuffles) {
+// =================== audiobook random folder
+TEST_F(tonuino_test_fixture, audiobook_rnd_shuffles) {
   randomSeed(16);
-  folderSettings card = { 5, pmode_t::hoerbuch, 0, 5 };
+  folderSettings card = { 5, pmode_t::audiobook, 0, 5 };
   uint8_t track_count = 10;
 
   for (uint8_t i = card.folder; i <= card.folder + card.special2; ++i) {
@@ -1298,9 +1298,9 @@ TEST_F(tonuino_test_fixture, hoerbuch_rnd_shuffles) {
   EXPECT_EQ(getMp3().df_folder_track, 1);
 }
 
-TEST_F(tonuino_test_fixture, hoerbuch_rnd_test_resume) {
+TEST_F(tonuino_test_fixture, audiobook_rnd_test_resume) {
   randomSeed(16);
-  folderSettings card = { 1, pmode_t::hoerbuch, 0, 10 };
+  folderSettings card = { 1, pmode_t::audiobook, 0, 10 };
   folderSettings other_card = { 10, pmode_t::album, 0, 0 };
   uint8_t track_count = 10;
   uint8_t number_of_tracks_to_play = 5;

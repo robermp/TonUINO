@@ -7,7 +7,7 @@ namespace {
 
 //  ############### EEPROM ################################
 //  Address       Usage
-//    0- 99       Folder Settings (Hoerbuch Fortschritt)
+//    0- 99       Folder Settings (Audiobook progress)
 //  100-140       AdminSettings (41 Byte)
 //  141-155       reserved (15 Byte)
 //  156-255       extra Shortcuts (100 Byte, max. 25 Shortcuts)
