@@ -2,6 +2,7 @@
 
 #include "tonuino.hpp"
 #include "constants.hpp"
+#include "card_latency.hpp"
 
 namespace {
 
@@ -14,10 +15,19 @@ uint16_t Mp3Notify::lastTrackFinished = 0;
 void Mp3Notify::OnError(DfMp3&, uint16_t errorCode) {
   // see DfMp3_Error for code meaning
   LOG(mp3_log, s_error, F("DfPl Err: "), errorCode);
+  Tonuino::getTonuino().getMp3().notifyDfPlayerError(errorCode);
 }
 void Mp3Notify::OnPlaySourceOnline  (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("online"  )); }
-void Mp3Notify::OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("bereit"  )); }
-void Mp3Notify::OnPlaySourceRemoved (DfMp3&, DfMp3_PlaySources source) { PrintlnSourceAction(source, F("entfernt")); }
+void Mp3Notify::OnPlaySourceInserted(DfMp3&, DfMp3_PlaySources source) {
+  PrintlnSourceAction(source, F("bereit"));
+  if (source & DfMp3_PlaySources_Sd)
+    Tonuino::getTonuino().getMp3().invalidateTrackCountCache();
+}
+void Mp3Notify::OnPlaySourceRemoved (DfMp3&, DfMp3_PlaySources source) {
+  PrintlnSourceAction(source, F("entfernt"));
+  if (source & DfMp3_PlaySources_Sd)
+    Tonuino::getTonuino().getMp3().invalidateTrackCountCache();
+}
 void Mp3Notify::PrintlnSourceAction(DfMp3_PlaySources source, const __FlashStringHelper* action) {
   if (source & DfMp3_PlaySources_Sd   ) LOG(mp3_log, s_debug, F("SD card "), action);
   if (source & DfMp3_PlaySources_Usb  ) LOG(mp3_log, s_debug, F("USB "     ), action);
@@ -64,6 +74,8 @@ Mp3::Mp3(Settings &settings)
 }
 
 void Mp3::init() {
+  invalidateTrackCountCache();
+
   spkVolume = settings.spkInitVolume;
 #ifdef HPJACKDETECT
   hpVolume  = settings.hpInitVolume;
@@ -94,7 +106,12 @@ void Mp3::init() {
 }
 
 void Mp3::refreshIsPlaying() {
+  const bool was_playing = is_playing_cache;
   is_playing_cache = pin_is_active(dfPlayer_busyPin, dfPlayer_busyPinType);
+
+  if (!was_playing && is_playing_cache && CardLatency::isActive()) {
+    CardLatency::stop(99);
+  }
 }
 
 void Mp3::waitForTrackToFinish() {
@@ -279,6 +296,7 @@ void Mp3::playCurrent() {
   else { // play folder track
     uint8_t t = q.get(current_track);
     if (t != 0) {
+      CardLatency::mark(90);
       LOG(mp3_log, s_info, F("play "), current_folder, F("-"), t);
       Base::playFolderTrack(current_folder, t);
       isPause = false;
@@ -335,6 +353,12 @@ void Mp3::jumpTo(uint8_t track) {
 
 uint16_t Mp3::getFolderTrackCount(uint16_t folder)
 {
+    if (folder < trackCountCacheFolders && trackCountCacheValid.getBit(static_cast<uint8_t>(folder))) {
+      const uint16_t cached = trackCountCacheValue[folder];
+      LOG(mp3_log, s_debug, F("getFolderTrackCount cache: "), folder, F(" -> "), cached);
+      return cached;
+    }
+
     uint16_t ret = 0;
 
 #ifdef DFMiniMp3_T_CHIP_GD3200B
@@ -349,12 +373,29 @@ uint16_t Mp3::getFolderTrackCount(uint16_t folder)
     ret = Base::getFolderTrackCount(folder);
     LOG(mp3_log, s_debug, F("getFolderTrackCount return: "), ret);
 
+    if (folder < trackCountCacheFolders) {
+      // Track count is bounded by maxTracksInFolder (255), so uint8_t is enough.
+      trackCountCacheValue[folder] = min(ret, static_cast<uint16_t>(0xffu));
+      trackCountCacheValid.setBit(static_cast<uint8_t>(folder));
+    }
+
 #ifdef DFMiniMp3_T_CHIP_GD3200B
     Base::stop();
     Base::setVolume(*volume);
 #endif
 
     return ret;
+}
+
+void Mp3::invalidateTrackCountCache() {
+  trackCountCacheValid.setAll(0);
+}
+
+void Mp3::notifyDfPlayerError(uint16_t errorCode) {
+  // 6 = file mismatch/not playable on DFPlayer; recover quickly for folder queues.
+  if (errorCode == 6 && playing == play_folder) {
+    recoverFromFileErrorPending = true;
+  }
 }
 
 void Mp3::increaseVolume() {
@@ -477,6 +518,12 @@ void Mp3::loop() {
       LOG(mp3_log, s_info, F("isPlaying: "), is_playing);
     }
   } );
+
+  if (recoverFromFileErrorPending) {
+    recoverFromFileErrorPending = false;
+    LOG(mp3_log, s_info, F("recover after DfPl Err 6"));
+    Tonuino::getTonuino().nextTrack(1/*tracks*/, true/*fromOnPlayFinished*/);
+  }
 
   if (not isPause && playing != play_none && startTrackTimer.isExpired() && not isPlaying()) {
     if (not missingOnPlayFinishedTimer.isActive())

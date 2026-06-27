@@ -254,6 +254,8 @@ public:
   void jumpTo(uint8_t track);
   uint8_t getCurrentTrack() { return playing ? q.get(current_track) : 0; }
   uint16_t getFolderTrackCount(uint16_t folder);
+  void invalidateTrackCountCache();
+  void notifyDfPlayerError(uint16_t errorCode);
   uint8_t getCurrentFolder() { return current_folder; }
   bool isLastTrack() { return current_track+1 >= q.size(); }
 
@@ -335,6 +337,7 @@ private:
   play_type            playing{play_none};
   Timer                startTrackTimer{};
   Timer                missingOnPlayFinishedTimer{};
+  bool                 recoverFromFileErrorPending{};
   bool                 isPause{};
 #ifdef DFMiniMp3_IGNORE_ONPLAYFINISHED_FOR_ADV
   bool                 advPlaying{false};
@@ -344,6 +347,10 @@ private:
   bool                 headphoneJackDetect{};
   uint8_t              tempSpkOn{};
 #endif
+
+  static constexpr uint8_t trackCountCacheFolders{100};
+  bitfield<trackCountCacheFolders> trackCountCacheValid{};
+  uint8_t              trackCountCacheValue[trackCountCacheFolders]{};
 
 };
 

@@ -31,11 +31,11 @@ void setup()
 #endif
 
   // This notice must not be removed
-  LOG(init_log, s_error, F(""));
+  /*LOG(init_log, s_error, F(""));
   LOG(init_log, s_error, F(" _____         _____ _____ _____ _____ "));
   LOG(init_log, s_error, F("|_   _|___ ___|  |  |     |   | |     |"));
   LOG(init_log, s_error, F("  | | | . |   |  |  |-   -| | | |  |  |"));
-  LOG(init_log, s_error, F("  |_| |___|_|_|_____|_____|_|___|_____|"));
+  LOG(init_log, s_error, F("  |_| |___|_|_|_____|_____|_|___|_____|"));*/
   LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1, customized by RoberMP"));
   LOG(init_log, s_error, F(""));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));

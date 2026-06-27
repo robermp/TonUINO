@@ -16,6 +16,7 @@ advert/0323_standby_timer_off.mp3|Timer di spegnimento disattivato.
 advert/0324_standby_timer_on.mp3|Timer di spegnimento attivato.
 advert/0325_endless_off.mp3|Modalità infinita disattivata.
 advert/0326_endless_on.mp3|Modalità infinita attivata.
+mp3/0299_start.mp3|Iniziamo!
 mp3/0300_new_tag.mp3|Oh, una carta nuova!
 mp3/0301_select_folder.mp3|Ok, ora usa i pulsanti volume per selezionare una cartella per la carta.
 mp3/0309.mp3|Italiano

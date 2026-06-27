@@ -2,6 +2,7 @@
 
 #include "tonuino.hpp"
 #include "logger.hpp"
+#include "card_latency.hpp"
 
 class Admin_Entry;
 class Idle;
@@ -59,7 +60,7 @@ const __FlashStringHelper* str_abort                   () { return F(" abort") ;
 void selectNextLanguage() {
   if (++settings.language >= numLanguages)
     settings.language = 0;
-  settings.writeSettingsToFlash();
+  // Runtime language switch only; persistent startup language is changed in admin menu.
   mp3.enqueueMp3FolderTrack(languageNameMp3);
 }
 #endif
@@ -414,11 +415,10 @@ void ChNumAnswer::entry() {
   LOG(state_log, s_info, str_enter(), str_ChNumAnswer());
 
   numberOfOptions   = 5;
-  startMessage      = mp3Tracks::t_333_num_answer;
-  messageOffset     = mp3Tracks::t_333_num_answer;
-  preview           = false;
-  previewFromFolder = 0;
-
+  CardLatency::mark(80);
+  tonuino.playFolder();
+  timer.start(dfPlayer_timeUntilStarts);
+  waitForPlayFinish = false;
   VoiceMenu::entry();
 
   currentValue      = 0;
@@ -538,8 +538,12 @@ void WriteCard::react(command_e const &cmd_e) {
 // #######################################################
 
 bool Base::readCard() {
+  CardLatency::start(10);
   lastCardRead.mode = pmode_t::none;
-  switch(chip_card.readCard(lastCardRead)) {
+  const Chip_card::readCardEvent cardEvent = chip_card.readCard(lastCardRead);
+  CardLatency::mark(20);
+
+  switch(cardEvent) {
   case Chip_card::readCardEvent::none : return false;
 
   case Chip_card::readCardEvent::known:
@@ -558,7 +562,9 @@ bool Base::readCard() {
       }
 
       if (tonuino.specialCard(lastCardRead))
+      {
         return false;
+      }
     }
     break;
 
@@ -572,9 +578,12 @@ bool Base::readCard() {
   }
 
   if (tonuino.getActiveModifier().handleRFID(lastCardRead))
+  {
     return false;
+  }
 
   if (lastCardRead.folder != 0) {
+    CardLatency::mark(40);
     return true;
   }
 
@@ -650,6 +659,7 @@ void Base::handleReadCard() {
     }
 #endif // TEAPOT_GAME
     LOG(state_log, s_debug, str_Base(), str_to(), str_StartPlay());
+    CardLatency::mark(60);
     transitToStartPlay<Play>();
   }
 }
@@ -1043,12 +1053,16 @@ void Pause::react(card_e const &c_e) {
 template<class P> void StartPlay<P>::entry() {
   LOG(state_log, s_info, str_enter(), str_StartPlay());
   state_str = str_StartPlay();
-  mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
-  timer.stop();
+  CardLatency::mark(70);
+  CardLatency::mark(80);
+  tonuino.playFolder();
+  timer.start(dfPlayer_timeUntilStarts);
+  waitForPlayFinish = false;
 }
 
 template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
   commands.getCommand(cmd_e.cmd_raw, state_for_command::play);
+
   if (timer.isActive()) {
     if (timer.isExpired()) {
       LOG(state_log, s_debug, str_StartPlay(), str_to(), str_Play());
@@ -1058,10 +1072,6 @@ template<class P> void StartPlay<P>::react(command_e const &cmd_e) {
         transit<P>();
       return;
     }
-  }
-  else if (not mp3.isPlayingMp3()) {
-    tonuino.playFolder();
-    timer.start(dfPlayer_timeUntilStarts);
   }
 }
 

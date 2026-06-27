@@ -16,6 +16,7 @@ advert/0323_standby_timer_off.mp3|Temporizador de apagado desactivado.
 advert/0324_standby_timer_on.mp3|Temporizador de apagado activado.
 advert/0325_endless_off.mp3|Modo infinito desactivado.
 advert/0326_endless_on.mp3|Modo infinito activado.
+mp3/0299_start.mp3|¡Hola!
 mp3/0300_new_tag.mp3|¡Anda, una tarjeta nueva!
 mp3/0301_select_folder.mp3|Vale, ahora usa los botones de volumen para escoger una carpeta para la tarjeta.
 mp3/0309.mp3|Español

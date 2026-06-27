@@ -62,8 +62,9 @@ void Settings::resetSettings() {
   cookie               = cardCookie;
   version              =  3;
   spkMaxVolume         = 25;
-  spkMinVolume         =  5;
-  spkInitVolume        = 15;
+  // TODO(test-volume): restore defaults after tests (spkMin=5, spkInit=15)
+  spkMinVolume         =  1;
+  spkInitVolume        =  2;
   eq                   =  1;
   dummy                =  0;
   standbyTimer         =  0;
@@ -79,8 +80,9 @@ void Settings::resetSettings() {
   adminMenuPin[3]      =  1;
   pauseWhenCardRemoved =  0;
   hpMaxVolume          = 25;
-  hpMinVolume          =  5;
-  hpInitVolume         = 15;
+  // TODO(test-volume): restore defaults after tests (hpMin=5, hpInit=15)
+  hpMinVolume          =  1;
+  hpInitVolume         =  2;
 #ifdef LANGUAGE_SELECT
   language             =  0;  // idioma por defecto (ES)
 #endif
@@ -101,8 +103,9 @@ void Settings::loadSettingsFromFlash() {
 
   if (hpMaxVolume == 255 || hpMaxVolume == 0) {
     hpMaxVolume          = 25;
-    hpMinVolume          =  5;
-    hpInitVolume         = 15;
+    // TODO(test-volume): restore defaults after tests (hpMin=5, hpInit=15)
+    hpMinVolume          =  1;
+    hpInitVolume         =  2;
     writeSettingsToFlash();
   }
 

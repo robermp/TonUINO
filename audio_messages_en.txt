@@ -16,6 +16,7 @@ advert/0323_standby_timer_off.mp3|Standby timer switched off
 advert/0324_standby_timer_on.mp3|Standby timer switched on
 advert/0325_endless_off.mp3|The endless mode switched off
 advert/0326_endless_on.mp3|The endless mode switched on
+mp3/0299_start.mp3|Lets go!
 mp3/0300_new_tag.mp3|Oh, a new card!
 mp3/0301_select_folder.mp3|Ok, now use the volume keys to select a folder for the card.
 mp3/0309.mp3|English

@@ -123,6 +123,17 @@ bool Chip_card::auth(MFRC522::PICC_Type piccType) {
     status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(3, buffer, &size));
     if (status != MFRC522::STATUS_OK) {
       LOG(card_log, s_info, str_MIFARE_Read(), F("3"), str_failed(), printStatusCode(mfrc522, status));
+      // Retry once after reselecting the card, useful for transient RF collisions/noise.
+      stopCrypto1();
+      stopCard();
+      byte atqa[2];
+      byte atqaSize = sizeof(atqa);
+      mfrc522.PICC_WakeupA(atqa, &atqaSize);
+      mfrc522.PICC_Select(&mfrc522.uid);
+      size = sizeof(buffer);
+      status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(3, buffer, &size));
+      if (status != MFRC522::STATUS_OK)
+        LOG(card_log, s_info, str_MIFARE_Read(), F("3 retry"), str_failed(), printStatusCode(mfrc522, status));
     }
     else {
       switch (buffer[2]) {
@@ -251,34 +262,63 @@ Chip_card::readCardEvent Chip_card::readCard(folderSettings &nfcTag) {
 
 #ifdef DISNEY_CARDS
   // Tarjetas Disney (NFC ajenas): se detectan por SAK antes del flujo estandar.
-  if (const readCardEvent disney = readDisneyCard(nfcTag); disney == readCardEvent::known)
+  if (const readCardEvent disney = readDisneyCard(nfcTag); disney == readCardEvent::known) {
     return disney;
+  }
 #endif
 
   byte buffer[buffferSizeRead];
   MFRC522::StatusCode status = MFRC522::STATUS_ERROR;
 
-  if (not auth(piccType))
-    return readCardEvent::none;
+  auto recoverAndSelect = [this]() {
+    // Recover from transient RF errors without forcing the user to reinsert.
+    stopCrypto1();
+    stopCard();
+    byte atqa[2];
+    byte atqaSize = sizeof(atqa);
+    mfrc522.PICC_WakeupA(atqa, &atqaSize);
+    mfrc522.PICC_Select(&mfrc522.uid);
+  };
 
+  if (not auth(piccType)) {
+    recoverAndSelect();
+    if (not auth(piccType))
+      return readCardEvent::none;
+  }
   // Read data from the block
   if ((piccType == MFRC522::PICC_TYPE_MIFARE_MINI) ||
       (piccType == MFRC522::PICC_TYPE_MIFARE_1K  ) ||
       (piccType == MFRC522::PICC_TYPE_MIFARE_4K  ) )
   {
-    byte size = sizeof(buffer);
-    status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(4, buffer, &size));
-    if (status != MFRC522::STATUS_OK)
-      LOG(card_log, s_debug, str_MIFARE_Read(), F("4"), str_failed(), printStatusCode(mfrc522, status));
+    for (uint8_t attempt = 0; attempt < 3; ++attempt) {
+      byte size = sizeof(buffer);
+      status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(4, buffer, &size));
+      if (status == MFRC522::STATUS_OK)
+        break;
+
+      LOG(card_log, s_debug, str_MIFARE_Read(), F("4"), attempt == 0 ? F("") : F(" retry"), str_failed(), printStatusCode(mfrc522, status));
+      recoverAndSelect();
+      if (auth(piccType))
+        continue;
+      else
+        break;
+    }
   }
   else if (piccType == MFRC522::PICC_TYPE_MIFARE_UL ) {
     byte buffer2[buffferSizeRead];
 
     for (byte block = 8, bufpos = 0; block <= 11; ++block, bufpos += 4) {
-      byte size2 = sizeof(buffer2);
-      status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(block, buffer2, &size2));
+      for (uint8_t attempt = 0; attempt < 3; ++attempt) {
+        byte size2 = sizeof(buffer2);
+        status = static_cast<MFRC522::StatusCode>(mfrc522.MIFARE_Read(block, buffer2, &size2));
+        if (status == MFRC522::STATUS_OK)
+          break;
+
+        LOG(card_log, s_debug, str_MIFARE_Read(), block, attempt == 0 ? F("") : F(" retry"), str_failed(), printStatusCode(mfrc522, status));
+        recoverAndSelect();
+      }
+
       if (status != MFRC522::STATUS_OK) {
-        LOG(card_log, s_debug, str_MIFARE_Read(), block, str_failed(), printStatusCode(mfrc522, status));
         break;
       }
       memcpy(buffer+bufpos, buffer2, 4);

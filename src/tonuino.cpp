@@ -17,6 +17,7 @@
 #include "constants.hpp"
 #include "logger.hpp"
 #include "state_machine.hpp"
+#include "card_latency.hpp"
 
 namespace {
 
@@ -150,8 +151,8 @@ void Tonuino::setup() {
 
 #endif // SPECIAL_START_SHORTCUT
 
-    // play start track
-    SM_tonuino::dispatch(command_e(commandRaw::start));
+  // Play startup welcome track from mp3 folder.
+  mp3.enqueueMp3FolderTrack(299);
 }
 
 #ifdef USE_TIMER
@@ -316,11 +317,13 @@ void Tonuino::loop() {
 void Tonuino::playFolder() {
   LOG(play_log, s_debug, F("playFolder"));
   numTracksInFolder = mp3.getFolderTrackCount(myFolder.folder);
+  CardLatency::mark(83);
   LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), myFolder.folder);
   numTracksInFolder = min(numTracksInFolder, static_cast<uint16_t>(0xffu));
   mp3.clearAllQueue();
-  if (numTracksInFolder == 0)
+  if (numTracksInFolder == 0) {
     return;
+  }
 
   uint8_t first_track = 1;
   uint8_t last_track  = numTracksInFolder;
@@ -444,6 +447,7 @@ void Tonuino::playFolder() {
   }
   if (endless)
     mp3.setEndless();
+
 }
 
 void Tonuino::playTrackNumber () {
