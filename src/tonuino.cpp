@@ -20,7 +20,7 @@
 
 namespace {
 
-const __FlashStringHelper* str_bis      () { return F(" bis "); }
+const __FlashStringHelper* str_to      () { return F(" to "); }
 const __FlashStringHelper* str_Space()  { return F(" ") ; }
 
 } // anonymous namespace
@@ -49,7 +49,7 @@ void Tonuino::setup() {
   setup_timer();
 #endif
 
-#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT) or defined(POTI)
+#if defined(BUTTONS3X3) or defined(BAT_VOLTAGE_MEASUREMENT) or defined(POTENTIOMETER)
   setup_adc();
 #endif
 
@@ -327,84 +327,84 @@ void Tonuino::playFolder() {
 
   switch (myFolder.mode) {
 
-  case pmode_t::hoerspiel_vb:
-    // Spezialmodus Von-Bin: Hörspiel: eine zufällige Datei aus dem Ordner
+  case pmode_t::audio_play_from_to:
+    // Special from-to mode: audio play: one random file from the folder
     first_track = myFolder.special;
     last_track  = myFolder.special2;
     __attribute__ ((fallthrough));
     /* no break */
-  case pmode_t::hoerspiel:
-    // Hörspielmodus: eine zufällige Datei aus dem Ordner
-    LOG(play_log, s_debug, F("Hörspiel"));
-    LOG(play_log, s_debug, first_track, str_bis(), last_track);
+  case pmode_t::audio_play:
+    // Audio play mode: one random file from the folder
+    LOG(play_log, s_debug, F("Audio play"));
+    LOG(play_log, s_debug, first_track, str_to(), last_track);
     mp3.enqueueTrack(myFolder.folder, random(first_track, last_track + 1));
     break;
 
-  case pmode_t::album_vb:
-    // Spezialmodus Von-Bis: Album: alle Dateien zwischen Start und Ende spielen
+  case pmode_t::album_from_to:
+    // Special from-to mode: album: play all files between start and end
     first_track = myFolder.special;
     last_track  = myFolder.special2;
     __attribute__ ((fallthrough));
     /* no break */
   case pmode_t::album:
-    // Album Modus: kompletten Ordner spielen
+    // Album mode: play the complete folder
     LOG(play_log, s_debug, F("Album"));
-    LOG(play_log, s_debug, first_track, str_bis() , last_track);
+    LOG(play_log, s_debug, first_track, str_to() , last_track);
     mp3.enqueueTrack(myFolder.folder, first_track, last_track);
     break;
 
-  case pmode_t::party_vb:
-    // Spezialmodus Von-Bis: Party Ordner in zufälliger Reihenfolge
+  case pmode_t::party_from_to:
+    // Special from-to mode: party folder in random order
     first_track = myFolder.special;
     last_track  = myFolder.special2;
     __attribute__ ((fallthrough));
     /* no break */
   case pmode_t::party:
-    // Party Modus: Ordner in zufälliger Reihenfolge
+    // Party mode: folder in random order
     LOG(play_log, s_debug, F("Party"));
-    LOG(play_log, s_debug, first_track, str_bis(), last_track);
+    LOG(play_log, s_debug, first_track, str_to(), last_track);
     mp3.enqueueTrack(myFolder.folder, first_track, last_track);
     mp3.shuffleQueue();
     mp3.setEndless();
     break;
 
-  case pmode_t::einzel:
-    // Einzel Modus: eine Datei aus dem Ordner abspielen
-    LOG(play_log, s_debug, F("Einzel"));
+  case pmode_t::single_track:
+    // Single mode: play one file from the folder
+    LOG(play_log, s_debug, F("Single"));
     mp3.enqueueTrack(myFolder.folder, myFolder.special);
     break;
 
-  case pmode_t::hoerbuch_vb:
+  case pmode_t::audiobook_from_to:
     first_track = myFolder.special;
     last_track  = myFolder.special2;
     __attribute__ ((fallthrough));
     /* no break */
-  case pmode_t::hoerbuch:
-  case pmode_t::hoerbuch_1:
-  // Hörbuch Modus: kompletten Ordner spielen und Fortschritt merken (oder von-bis oder nur eine Datei)
+  case pmode_t::audiobook:
+  case pmode_t::audiobook_single:
+  // Audiobook mode: play the complete folder and remember progress (or from-to, or only one file)
   {
-    if ((myFolder.mode != pmode_t::hoerbuch_vb) && myFolder.special2 > 0) {
-#ifdef FOLDER_QUEUE_HOERBUCH
+    if ((myFolder.mode != pmode_t::audiobook_from_to) && myFolder.special2 > 0) {
+#ifdef FOLDER_QUEUE_AUDIOBOOK
       if (lastMyFolder == myFolder && SM_tonuino::startPlayFromPlay) {
         // same card again in Play state: reset progress to choose new folder
-        LOG(play_log, s_info, F("Hörbuch - selbe Karte"));
-        settings.writeFolderSettingToFlash(folderForHoerbuch, 1);
+        LOG(play_log, s_info, F("Audiobook - same card"));
+        settings.writeFolderSettingToFlash(folderForAudiobook, 1);
       }
       lastMyFolder = myFolder;
 #endif
-      folderForHoerbuch = 0;
+      folderForAudiobook = 0;
       for (uint8_t f = myFolder.folder; f <= myFolder.folder + myFolder.special2; ++f) {
           uint8_t start = settings.readFolderSettingFromFlash(f);
         if ((start > 1) && (start != 0xff)) {
-          folderForHoerbuch = f;
-          LOG(play_log, s_info, F("Hörbuch - not finished for folder: "), folderForHoerbuch);
+          folderForAudiobook = f;
+          LOG(play_log, s_info, F("Audiobook - not finished for folder: "), folderForAudiobook);
           break;
         }
       }
-#ifdef FOLDER_QUEUE_HOERBUCH
+#ifdef FOLDER_QUEUE_AUDIOBOOK
       if (folder_q.size() == 0) {
         for (uint8_t f = myFolder.folder; f < myFolder.folder + myFolder.special2+1; ++f) {
-          if (f != folderForHoerbuch)
+          if (f != folderForAudiobook)
             folder_q.push(f);
         }
         folder_q.shuffle();
@@ -414,27 +414,27 @@ void Tonuino::playFolder() {
         LOG(play_log, s_info, str_Space());
       }
 #endif
-      if (folderForHoerbuch == 0) {
-#ifdef FOLDER_QUEUE_HOERBUCH
-        folderForHoerbuch = folder_q.pop();
+      if (folderForAudiobook == 0) {
+#ifdef FOLDER_QUEUE_AUDIOBOOK
+        folderForAudiobook = folder_q.pop();
 #else
-        folderForHoerbuch = random(myFolder.folder, myFolder.folder + myFolder.special2+1);
+        folderForAudiobook = random(myFolder.folder, myFolder.folder + myFolder.special2+1);
 #endif
-        LOG(play_log, s_info, F("Hörbuch - select folder: "), folderForHoerbuch);
+        LOG(play_log, s_info, F("Audiobook - select folder: "), folderForAudiobook);
       }
-      numTracksInFolder = mp3.getFolderTrackCount(folderForHoerbuch);
+      numTracksInFolder = mp3.getFolderTrackCount(folderForAudiobook);
       last_track = numTracksInFolder;
-      LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), folderForHoerbuch);
+      LOG(play_log, s_warning, numTracksInFolder, F(" tr in folder "), folderForAudiobook);
     }
     else {
-      folderForHoerbuch = myFolder.folder;
+      folderForAudiobook = myFolder.folder;
     }
-    LOG(play_log, s_debug, F("Hörbuch"));
-    LOG(play_log, s_debug, first_track, str_bis(), last_track);
-    uint16_t startTrack = settings.readFolderSettingFromFlash(folderForHoerbuch);
+    LOG(play_log, s_debug, F("Audiobook"));
+    LOG(play_log, s_debug, first_track, str_to(), last_track);
+    uint16_t startTrack = settings.readFolderSettingFromFlash(folderForAudiobook);
     if ((startTrack < first_track) || (startTrack > last_track))
       startTrack = first_track;
-    mp3.enqueueTrack(folderForHoerbuch, first_track, last_track, startTrack-first_track);
+    mp3.enqueueTrack(folderForAudiobook, first_track, last_track, startTrack-first_track);
   }
     break;
 
@@ -453,13 +453,13 @@ void Tonuino::playTrackNumber () {
 }
 
 
-// Leider kann das Modul selbst keine Queue abspielen, daher müssen wir selbst die Queue verwalten
+// The module cannot play a queue itself, so we have to manage the queue ourselves
 void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   LOG(play_log, s_debug, F("nextTrack"));
-  if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
+  if (fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::audiobook || myFolder.mode == pmode_t::audiobook_single || myFolder.mode == pmode_t::audiobook_from_to)) {
     const uint8_t trackToSave = (mp3.getCurrentTrack() < numTracksInFolder) ? mp3.getCurrentTrack()+1 : 1;
-    settings.writeFolderSettingToFlash(folderForHoerbuch, trackToSave);
-    if (myFolder.mode == pmode_t::hoerbuch_1) {
+    settings.writeFolderSettingToFlash(folderForAudiobook, trackToSave);
+    if (myFolder.mode == pmode_t::audiobook_single) {
       if (myFolder.special > 0)
         --myFolder.special;
       else
@@ -469,8 +469,8 @@ void Tonuino::nextTrack(uint8_t tracks, bool fromOnPlayFinished) {
   if (mp3.isPlayingFolder() && activeModifier->handleNext())
     return;
   mp3.playNext(tracks, fromOnPlayFinished);
-  if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
-    settings.writeFolderSettingToFlash(folderForHoerbuch, mp3.getCurrentTrack());
+  if (not fromOnPlayFinished && mp3.isPlayingFolder() && (myFolder.mode == pmode_t::audiobook || myFolder.mode == pmode_t::audiobook_single || myFolder.mode == pmode_t::audiobook_from_to)) {
+    settings.writeFolderSettingToFlash(folderForAudiobook, mp3.getCurrentTrack());
   }
 }
 
@@ -479,16 +479,16 @@ void Tonuino::previousTrack(uint8_t tracks) {
   if (activeModifier->handlePrevious())
     return;
   mp3.playPrevious(tracks);
-  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
-    settings.writeFolderSettingToFlash(folderForHoerbuch, mp3.getCurrentTrack());
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::audiobook || myFolder.mode == pmode_t::audiobook_single || myFolder.mode == pmode_t::audiobook_from_to)) {
+    settings.writeFolderSettingToFlash(folderForAudiobook, mp3.getCurrentTrack());
   }
 }
 
 void Tonuino::jumpToTrack(uint8_t track) {
   LOG(play_log, s_debug, F("jumpToTrack"));
   mp3.jumpTo(track);
-  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::hoerbuch || myFolder.mode == pmode_t::hoerbuch_1 || myFolder.mode == pmode_t::hoerbuch_vb)) {
-    settings.writeFolderSettingToFlash(folderForHoerbuch, mp3.getCurrentTrack());
+  if (mp3.isPlayingFolder() && (myFolder.mode == pmode_t::audiobook || myFolder.mode == pmode_t::audiobook_single || myFolder.mode == pmode_t::audiobook_from_to)) {
+    settings.writeFolderSettingToFlash(folderForAudiobook, mp3.getCurrentTrack());
   }
 }
 
@@ -541,7 +541,7 @@ void Tonuino::shutdown() {
   pin_set_active(shutdownPin, shutdownPinType);
   delay(500);
 
-#if defined(USE_POLOLU_SHUTDOWN) or defined(USE_TRAEGER_PLATINE_SHUTDOWN)
+#if defined(USE_POLOLU_SHUTDOWN) or defined(USE_CARRIER_BOARD_SHUTDOWN)
   return;
 #endif
 
@@ -598,7 +598,7 @@ void Tonuino::switchStandbyTimerOnOff() {
 }
 
 void Tonuino::switchEndlessOnOff() {
-  if (((myFolder.mode == pmode_t::party) || (myFolder.mode == pmode_t::party_vb)) && mp3.isEndless())
+  if (((myFolder.mode == pmode_t::party) || (myFolder.mode == pmode_t::party_from_to)) && mp3.isEndless())
     endless = true;
 
   endless = not endless;
@@ -640,8 +640,8 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               activeModifier = &danceGame;
                               break;
 
-  case pmode_t::fi_wa_ai:     LOG(card_log, s_info, F("act. FeWaLu"));
-                              mp3.playAdvertisement(advertTracks::t_303_fi_wa_ai         , false/*onlyIfIsPlaying*/);
+  case pmode_t::fire_water_air:     LOG(card_log, s_info, F("act. FireWaterAir"));
+                              mp3.playAdvertisement(advertTracks::t_303_fire_water_air         , false/*onlyIfIsPlaying*/);
                               activeModifier = &danceGame;
                               break;
 
@@ -650,9 +650,9 @@ bool Tonuino::specialCard(const folderSettings &nfcTag) {
                               activeModifier = &toddlerMode;
                               break;
 
-  case pmode_t::kindergarden: LOG(card_log, s_info, F("act. kindergarden"));
-                              mp3.playAdvertisement(advertTracks::t_305_kindergarden     , false/*onlyIfIsPlaying*/);
-                              activeModifier = &kindergardenMode;
+  case pmode_t::kindergarten: LOG(card_log, s_info, F("act. kindergarten"));
+                              mp3.playAdvertisement(advertTracks::t_305_kindergarten     , false/*onlyIfIsPlaying*/);
+                              activeModifier = &kindergartenMode;
                               break;
 
   case pmode_t::repeat_single:LOG(card_log, s_info, F("act. repeatSingle"));

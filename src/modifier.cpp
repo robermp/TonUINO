@@ -12,7 +12,7 @@ Mp3            &mp3       = tonuino.getMp3();
 
 const __FlashStringHelper* str_SleepTimer             () { return F("SleepTimer")  ; }
 const __FlashStringHelper* str_danceGame              () { return F("DanceGame")   ; }
-const __FlashStringHelper* str_KindergardenMode       () { return F("Kita")        ; }
+const __FlashStringHelper* str_KindergartenMode       () { return F("Kindergtn")        ; }
 const __FlashStringHelper* str_RepeatSingleModifier   () { return F("RepeatSingle"); }
 #ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
 const __FlashStringHelper* str_PauseAfterTrack        () { return F("PauseAftTr")  ; }
@@ -97,10 +97,10 @@ String SleepTimer::getDescription() {
   String descr = "Sleep-Timer";
   descr += " (";
   if (stopAfterTrackFinished)
-    descr += "Track wird beendet, ";
+    descr += "Track will finish, ";
   char buffer[20];
   sprintf(buffer, "%ld:%02ld", remaining/60, remaining%60);
-  descr += String("übrig: ") + sign + buffer + " Min.)";
+  descr += String("remaining: ") + sign + buffer + " Min.)";
   return descr;
 }
 #endif
@@ -108,7 +108,7 @@ String SleepTimer::getDescription() {
 void DanceGame::init(pmode_t a_mode, uint8_t a_t) {
   LOG(modifier_log, s_debug, str_danceGame(), F("t : "), a_t);
   mode = a_mode;
-  if (mode == pmode_t::fi_wa_ai) lastFiWaAi = random(0, 3);
+  if (mode == pmode_t::fire_water_air) lastFireWaterAir = random(0, 3);
   setNextStop(true /*addAdvTime*/);
   t = a_t;
   if (t > 2) t = 2;
@@ -127,10 +127,10 @@ void DanceGame::loop() {
         mp3.playAdvertisement(advertTracks::t_301_freeze_freeze);
         setNextStop(true /*addAdvTime*/);
         break;
-      case pmode_t::fi_wa_ai:
+      case pmode_t::fire_water_air:
         LOG(modifier_log, s_debug, str_danceGame(), F(" -> Action! "));
-        lastFiWaAi = (lastFiWaAi+random(1, 3))%3;
-        mp3.playAdvertisement(static_cast<uint16_t>(advertTracks::t_306_fire)+lastFiWaAi);
+        lastFireWaterAir = (lastFireWaterAir+random(1, 3))%3;
+        mp3.playAdvertisement(static_cast<uint16_t>(advertTracks::t_306_fire)+lastFireWaterAir);
         setNextStop(true /*addAdvTime*/);
         break;
       default:
@@ -147,7 +147,7 @@ void DanceGame::setNextStop(bool addAdvTime) {
   uint16_t seconds = random(minSecondsBetweenStops[t], maxSecondsBetweenStops[t] + 1);
   if (addAdvTime) {
     switch (mode) {
-      case pmode_t::fi_wa_ai    : seconds += addSecondsBetweenStopsFiWaAi ; break;
+      case pmode_t::fire_water_air    : seconds += addSecondsBetweenStopsFireWaterAir ; break;
       case pmode_t::freeze_dance: seconds += addSecondsBetweenStopsFreezeD; break;
       default:                                                              break;
     }
@@ -158,17 +158,17 @@ void DanceGame::setNextStop(bool addAdvTime) {
 
 #ifdef TonUINO_Esp32
 String DanceGame::getDescription() {
-  String descr = mode == pmode_t::freeze_dance ? "Stopptanz"         :
-                 mode == pmode_t::fi_wa_ai     ? "Feuer-Wasser-Luft" :
+  String descr = mode == pmode_t::freeze_dance ? "Freeze dance"         :
+                 mode == pmode_t::fire_water_air     ? "Fire-Water-Air" :
                                                  "?"                 ;
-  descr += " (Pausen: " + String(minSecondsBetweenStops[t]) + " - " + String(maxSecondsBetweenStops[t]) + ")";
+  descr += " (Breaks: " + String(minSecondsBetweenStops[t]) + " - " + String(maxSecondsBetweenStops[t]) + ")";
   return descr;
 }
 #endif
 
-bool KindergardenMode::handleNext() {
+bool KindergartenMode::handleNext() {
   if (cardQueued) {
-    LOG(modifier_log, s_debug, str_KindergardenMode(), F(" -> NEXT"));
+    LOG(modifier_log, s_debug, str_KindergartenMode(), F(" -> NEXT"));
     cardQueued = false;
 
     tonuino.setMyFolder(nextCard, true /*myFolderIsCard*/);
@@ -179,21 +179,21 @@ bool KindergardenMode::handleNext() {
   }
   return false;
 }
-bool KindergardenMode::handleRFID(const folderSettings &newCard) {
+bool KindergartenMode::handleRFID(const folderSettings &newCard) {
   if (!mp3.isPlaying())
     return false;
 
   if (!cardQueued) {
-    LOG(modifier_log, s_debug, str_KindergardenMode(), F(" -> queued!"));
+    LOG(modifier_log, s_debug, str_KindergartenMode(), F(" -> queued!"));
     nextCard = newCard;
     cardQueued = true;
   }
   return true;
 }
 
-bool KindergardenMode::handleButton(command cmd) {
+bool KindergartenMode::handleButton(command cmd) {
   if (cmd != command::pause) {
-    LOG(modifier_log, s_debug, F("KindergardenMode::NextButton -> LOCKED!"));
+    LOG(modifier_log, s_debug, F("KindergartenMode::NextButton -> LOCKED!"));
     return true;
   }
   return false;
@@ -297,7 +297,7 @@ bool JukeboxModifier::handleButton(command cmd) {
 #ifdef TonUINO_Esp32
 String JukeboxModifier::getDescription() {
   String descr = "Jukebox";
-  descr += " (" + String(cards.size()) + " Karten in der Queue)";
+  descr += " (" + String(cards.size()) + " cards in the queue)";
   return descr;
 }
 #endif

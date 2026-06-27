@@ -109,7 +109,7 @@ const char topnav_html[] PROGMEM = R"rawliteral(
     <div class="bar3"></div>
   </a>
   <a id="f_right1" class="icon_right" onclick="f_right1()">
-  </a> 
+  </a>
 </div>
 <script>
 function show_hide_nav(i) {
@@ -243,34 +243,34 @@ const char main_html[] PROGMEM = R"rawliteral(
 %SERVICE%
 
 <form class="service1" id="card">
-<br><label for="mode"              >Karte:              </label><select size=1       name="mode"             id="mode">      
-                                                                  <option>Hörspiel</option>                                    
-                                                                  <option>Album</option>                                       
-                                                                  <option>Party</option>                                       
-                                                                  <option>Einzel</option>                                      
-                                                                  <option>Hörbuch</option>                                     
-                                                                  <option>Hörspiel von bis</option>                            
-                                                                  <option>Album von bis</option>                               
-                                                                  <option>Party von bis</option>                               
-                                                                  <option>Hörbuch einzel</option>                              
-                                                                  <option>Wiederhole</option>                                  
-                                                                  <option>Quiz Spiel</option>                                  
-                                                                  <option>Memory Spiel</option>                                
-                                                                  <option>Bluetooth ein/aus</option>                                
-                                                                  <option>Teekesselchen Spiel</option>                                  
-                                                                  <option>Hörbuch von bis</option>                               
-                                                                </select>                                                      
-<br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder" value="1" min="1" max="99">  
+<br><label for="mode"              >Card:              </label><select size=1       name="mode"             id="mode">
+                                                                  <option>Audio play</option>
+                                                                  <option>Album</option>
+                                                                  <option>Party</option>
+                                                                  <option>Single</option>
+                                                                  <option>Audiobook</option>
+                                                                  <option>Audio play from-to</option>
+                                                                  <option>Album from-to</option>
+                                                                  <option>Party from-to</option>
+                                                                  <option>Single audiobook</option>
+                                                                  <option>Repeat</option>
+                                                                  <option>Quiz game</option>
+                                                                  <option>Memory game</option>
+                                                                  <option>Bluetooth on/off</option>
+                                                                  <option>Teapot game</option>
+                                                                  <option>Audiobook from-to</option>
+                                                                </select>
+<br><label for="folder"         >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="folder"             id="folder" value="1" min="1" max="99">
                                                                   <span class="tooltiptext">Folder</span></div>
                                                               / <div class="tooltip"><input type="number" name="special1"           id="special1" value="0" min="0" max="255">
-                                                                  <span class="tooltiptext">Einzel: Track
-                                                                                        <br>* von bis: erster Track
-                                                                                        <br>Hörbuch einzel: Anzahl der Tracks - 1
-                                                                                        <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>
+                                                                  <span class="tooltiptext">Single: Track
+                                                                                        <br>* from-to: first track
+                                                                                        <br>Single audiobook: Number of tracks - 1
+                                                                                        <br>Quiz: Number of answers (0, 2 or 4)</span></div>
                                                               / <div class="tooltip"><input type="number" name="special2"           id="special2" value="0" min="0" max="255">
-                                                                  <span class="tooltiptext">* von bis: letzter Track
-                                                                                        <br>Hörbuch (einzel): Anzahl der Folder
-                                                                                        <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>
+                                                                  <span class="tooltiptext">* from-to: last track
+                                                                                        <br>Audiobook (single): Number of folders
+                                                                                        <br>Quiz: Number of solutions (0 or 1)</span></div>
 <br>
 <button onclick="return submit_form(this, 'card', 'card_action', 'start');">Start</button>
 <button onclick="return submit_form(this, 'card', 'card_action', 'write' );">Schreibe</button>
@@ -280,20 +280,20 @@ const char main_html[] PROGMEM = R"rawliteral(
 <form class="service1" id="modifier">
 <br><label for="mod_mode"    >Modifier:  </label><select size=1 name="mod_mode" id="mod_mode" onchange="mod_mode_changed(this)">
                                                    <option>Sleep-Timer           </option>
-                                                   <option>Stopptanz             </option>
-                                                   <option>Feuer-Wasser-Luft     </option>
-                                                   <option>Gesperrt              </option>
-                                                   <option>Kita Modus            </option>
-                                                   <option>Wiederhole Track      </option>
+                                                   <option>Freeze dance             </option>
+                                                   <option>Fire-Water-Air     </option>
+                                                   <option>Locked              </option>
+                                                   <option>Kindergarten mode            </option>
+                                                   <option>Repeat track      </option>
                                                    <option>Jukebox               </option>
-                                                   <option>Pause nach jedem Track</option>
+                                                   <option>Pause after every track</option>
                                                    <option>Standby Timer Off     </option>
                                                    <option>Endless switch        </option>
                                                  </select>
 <br><label for="mod_special" >Parameter  </label><div class="tooltip"><input type="number" name="mod_special" id="mod_special" value="1" min="-127" max="127">
-                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: Tr. wird beendet)
-                                                                         <br>Feuer-Wasser-Luft/
-                                                                         <br>Stopptanz: Zeit zw. Pausen (min/max)
+                                                   <span class="tooltiptext">Sleep-Timer: Timeout in min [1..127] (neg.: track will finish)
+                                                                         <br>Fire-Water-Air/
+                                                                         <br>Freeze dance: Zeit zw. Pausen (min/max)
                                                                          <br>0: 15/30, 1: 25/40, 2: 35/50</span></div>
 <br>
 <button onclick="return submit_form(this, 'modifier', 'mod_action', 'activate'    );">Activate/Deact.</button>
@@ -308,7 +308,7 @@ const char main_html[] PROGMEM = R"rawliteral(
       mod_special.min = -127;
       mod_special.max =  127;
     }
-    else if (el.value == "Feuer-Wasser-Luft" || el.value == "Stopptanz") {
+    else if (el.value == "Fire-Water-Air" || el.value == "Freeze dance") {
       mod_special.min = 0;
       mod_special.max = 2;
     }
@@ -319,7 +319,7 @@ const char main_html[] PROGMEM = R"rawliteral(
     }
   }
   document.getElementById("nav_hostname").innerHTML = '%HOSTNAME%';
-  var f_right1_html = 
+  var f_right1_html =
    '<svg fill="#FFF" width="24px" height="24px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z"></path></g></svg>';
   document.getElementById("f_right1").innerHTML = f_right1_html;
   document.getElementById("f_right1").style.display = "block";
@@ -373,21 +373,21 @@ const char settings_html[] PROGMEM = R"rawliteral(
 
   <form action='update_settings' method='post' id='mainConfigForm' accept-charset='utf-8' >
   <div id="form">
-    <br><label for="max"             >Lautstärke          </label><div class='as_input_number' id='max' >max </div>
+    <br><label for="max"             >Volume          </label><div class='as_input_number' id='max' >max </div>
                                                                   <div class='as_input_number' id='min' >min </div>
                                                                   <div class='as_input_number' id='init'>init</div>
-    <br><label for="spkMaxVolume"    >Lautsprecher:       </label><div class="tooltip"><input type="number" name="spkMaxVolume"        id="spkMaxVolume">
-                                                                    <span class="tooltiptext">Maximale Lautstärke (Lautsprecher) [0...25]</span></div>
+    <br><label for="spkMaxVolume"    >Speaker:       </label><div class="tooltip"><input type="number" name="spkMaxVolume"        id="spkMaxVolume">
+                                                                    <span class="tooltiptext">Maximum volume (Speaker) [0...25]</span></div>
                                                                   <div class="tooltip"><input type="number" name="spkMinVolume"        id="spkMinVolume">
-                                                                    <span class="tooltiptext">Minimale Lautstärke (Lautsprecher) [0...max]</span></div>
+                                                                    <span class="tooltiptext">Minimum volume (Speaker) [0...max]</span></div>
                                                                   <div class="tooltip"><input type="number" name="spkInitVolume"       id="spkInitVolume">
-                                                                    <span class="tooltiptext">Initiale Lautstärke (Lautsprecher) [min...max]</span></div>
-    <br><label for="hpMaxVolume"     >Kopfhörer:          </label><div class="tooltip"><input type="number" name="hpMaxVolume"         id="hpMaxVolume">
-                                                                    <span class="tooltiptext">Maximale Lautstärke (Kopfhörer) [0...25]</span></div>
+                                                                    <span class="tooltiptext">Initial volume (Speaker) [min...max]</span></div>
+    <br><label for="hpMaxVolume"     >Headphones:          </label><div class="tooltip"><input type="number" name="hpMaxVolume"         id="hpMaxVolume">
+                                                                    <span class="tooltiptext">Maximum volume (Headphones) [0...25]</span></div>
                                                                   <div class="tooltip"><input type="number" name="hpMinVolume"         id="hpMinVolume">
-                                                                    <span class="tooltiptext">Minimale Lautstärke (Kopfhörer) [0...max]</span></div>
+                                                                    <span class="tooltiptext">Minimum volume (Headphones) [0...max]</span></div>
                                                                   <div class="tooltip"><input type="number" name="hpInitVolume"        id="hpInitVolume">
-                                                                    <span class="tooltiptext">Initiale Lautstärke (Kopfhörer) [min...max]</span></div>
+                                                                    <span class="tooltiptext">Initial volume (Headphones) [min...max]</span></div>
     <br>
     <br><label for="eq"              >Equalizer:          </label><select size=1       name="eq"                  id="eq">
                                                                     <option>Normal</option>
@@ -399,17 +399,17 @@ const char settings_html[] PROGMEM = R"rawliteral(
                                                                   </select>
     <br>
     <br><label for="standbyTimer"    >Standby Timer:      </label><div class="tooltip"><input type="number" name="standbyTimer"        id="standbyTimer">
-                                                                    <span class="tooltiptext">Timeout für Ausschalten in min [0...60] (0: deaktiviert)</span></div>
+                                                                    <span class="tooltiptext">Shutdown timeout in min [0...60] (0: disabled)</span></div>
     <br>
     <br><label for="invertVolButtons">Inv. Volume Buttons:</label><input type="checkbox" name="invertVolumeButtons" id="invertVolumeButtons">
     <br>
-    <br><label for="adminMenuLocked" >Admin-Menü Lock:    </label><select size=1       name="adminMenuLocked"     id="adminMenuLocked">
-                                                                    <option>kein Lock</option>
-                                                                    <option>nur Karte</option>
+    <br><label for="adminMenuLocked" >Admin menu lock:    </label><select size=1       name="adminMenuLocked"     id="adminMenuLocked">
+                                                                    <option>no lock</option>
+                                                                    <option>card only</option>
                                                                     <option>Pin</option>
                                                                   </select>
     <br>
-    <br><label for="adminMenuPin1"   >Admin-Menü Pin:     </label><div class="tooltip"><input type="number" name="adminMenuPin1"       id="adminMenuPin1">
+    <br><label for="adminMenuPin1"   >Admin menu PIN:     </label><div class="tooltip"><input type="number" name="adminMenuPin1"       id="adminMenuPin1">
                                                                     <span class="tooltiptext">1: Pause, 2: Next, 3: Prev</span></div>
                                                                   <div class="tooltip"><input type="number" name="adminMenuPin2"       id="adminMenuPin2">
                                                                     <span class="tooltiptext">1: Pause, 2: Next, 3: Prev</span></div>
@@ -432,33 +432,33 @@ const char settings_html[] PROGMEM = R"rawliteral(
   var form_shortcut =
   '<br><label for="sc_mode_n_"      >Shortcut_t_:         </label><select size=1       name="sc_mode_n_"         id="sc_mode_n_">    '
  +'                                                                  <option>--------</option>                                       '
- +'                                                                  <option>Hörspiel</option>                                       '
+ +'                                                                  <option>Audio play</option>                                       '
  +'                                                                  <option>Album</option>                                          '
  +'                                                                  <option>Party</option>                                          '
- +'                                                                  <option>Einzel</option>                                         '
- +'                                                                  <option>Hörbuch</option>                                        '
- +'                                                                  <option>Hörspiel von bis</option>                               '
- +'                                                                  <option>Album von bis</option>                                  '
- +'                                                                  <option>Party von bis</option>                                  '
- +'                                                                  <option>Hörbuch einzel</option>                                 '
- +'                                                                  <option>Wiederhole</option>                                     '
- +'                                                                  <option>Quiz Spiel</option>                                     '
- +'                                                                  <option>Memory Spiel</option>                                   '
- +'                                                                  <option>Bluetooth ein/aus</option>                              '
- +'                                                                  <option>Teekesselchen Spiel</option>                            '
- +'                                                                  <option>Hörbuch von bis</option>                                '
+ +'                                                                  <option>Single</option>                                         '
+ +'                                                                  <option>Audiobook</option>                                        '
+ +'                                                                  <option>Audio play from-to</option>                               '
+ +'                                                                  <option>Album from-to</option>                                  '
+ +'                                                                  <option>Party from-to</option>                                  '
+ +'                                                                  <option>Single audiobook</option>                                 '
+ +'                                                                  <option>Repeat</option>                                     '
+ +'                                                                  <option>Quiz game</option>                                     '
+ +'                                                                  <option>Memory game</option>                                   '
+ +'                                                                  <option>Bluetooth on/off</option>                              '
+ +'                                                                  <option>Teapot game</option>                            '
+ +'                                                                  <option>Audiobook from-to</option>                                '
  +'                                                                </select>                                                         '
- +'<br><label for="sc_folder_n_"   >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="sc_folder_n_"      id="sc_folder_n_">  '  
+ +'<br><label for="sc_folder_n_"   >Folder / Sp1 / Sp2     </label><div class="tooltip"><input type="number" name="sc_folder_n_"      id="sc_folder_n_">  '
  +'                                                                 <span class="tooltiptext">Folder</span></div>                                         '
  +'                                                              / <div class="tooltip"><input type="number" name="sc_special1_n_"    id="sc_special1_n_">'
- +'                                                                 <span class="tooltiptext">Einzel: Track                                               '
- +'                                                                                       <br>* von bis: erster Track                                     '
- +'                                                                                       <br>Hörbuch einzel: Anzahl der Tracks                           '
- +'                                                                                       <br>Quiz: Anzahl der Antworten (0, 2 oder 4)</span></div>       '
+ +'                                                                 <span class="tooltiptext">Single: Track                                               '
+ +'                                                                                       <br>* from-to: first track                                     '
+ +'                                                                                       <br>Single audiobook: Number of tracks                           '
+ +'                                                                                       <br>Quiz: Number of answers (0, 2 or 4)</span></div>       '
  +'                                                              / <div class="tooltip"><input type="number" name="sc_special2_n_"    id="sc_special2_n_">'
- +'                                                                 <span class="tooltiptext">* von bis: letzter Track                                    '
- +'                                                                                       <br>Hörbuch (einzel): Anzahl der Folder                            '
- +'                                                                                       <br>Quiz: Anzahl der Lösungen (0 oder 1)</span></div>           '
+ +'                                                                 <span class="tooltiptext">* from-to: last track                                    '
+ +'                                                                                       <br>Audiobook (single): Number of folders                            '
+ +'                                                                                       <br>Quiz: Number of solutions (0 or 1)</span></div>           '
  +'<br>';
 
   function pageLoad() {
@@ -575,7 +575,7 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   <br><br>
 </div>
 <form id='wifisave' class='wifi'>
-  
+
   <div id='networks'></div>
   <br><br>
   <label for='ssid'>SSID</label><input id='ssid' name='ssid' type='text' maxlength='32' autocorrect='off' autocapitalize='none' value='%SSID%'>
@@ -609,9 +609,9 @@ const char wifi_html[] PROGMEM = R"rawliteral(
   <button onclick='return save()'>Save</button>
 </form>
 <dialog id="dialog">
-    <p>Die WLAN Daten wurden gespeichert. Falls Reboot nicht ausgewählt, 
-       starte den TonUINO neu. Verbinde dich mit dem jetzt gespeicherten WLAN 
-       und drücke dann Ok. Du wirst nach 5 Sekunden auf die TonUINO 
+    <p>The WLAN data has been saved. If reboot is not selected,
+       starte den TonUINO neu. Verbinde dich mit dem jetzt gespeicherten WLAN
+       and then press OK. You will be redirected to the TonUINO
        Seite umgeleitet</p>
     <p><button id="ok">Ok</button></p>
 </dialog>
@@ -732,13 +732,13 @@ const char info_html[] PROGMEM = R"rawliteral(
 <dt>Chip ID</dt><dd>%chipid%</dd>
 <dt>Chip rev</dt><dd>%chiprev%</dd>
 <dt>CPU frequency</dt><dd>%cpufreq%MHz</dd>
-<dt>Flash size</dt><dd>%idesize% bytes</dd> 
-<dt>Memory - PSRAM</dt><dd>MinFree / Used / Total bytes<br>%minfreepsram% / %usedpsram% / %psram%      
-<br><progress value='%usedpsram%' max='%psram%'></progress></dd>      
+<dt>Flash size</dt><dd>%idesize% bytes</dd>
+<dt>Memory - PSRAM</dt><dd>MinFree / Used / Total bytes<br>%minfreepsram% / %usedpsram% / %psram%
+<br><progress value='%usedpsram%' max='%psram%'></progress></dd>
 <dt>Memory - Heap</dt><dd>MinFree / Used / Total bytes<br>%minfreeheap% / %usedheap% / %heap%
-<br><progress value='%usedheap%' max='%heap%'></progress></dd>      
+<br><progress value='%usedheap%' max='%heap%'></progress></dd>
 <dt>Memory - Sketch</dt><dd>Used / Total bytes<br>%memsketch1% / %memsketch2%
-<br><progress value='%memsketch1%' max='%memsketch2%'></progress></dd>      
+<br><progress value='%memsketch1%' max='%memsketch2%'></progress></dd>
 <dt>Temperature</dt><dd>%temp1% C&deg;</dd>
 <br><h3>WiFi</h3><hr>
 <dt>Mode</dt><dd>%wifihead%</dd>

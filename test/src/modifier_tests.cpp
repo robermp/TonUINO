@@ -95,7 +95,7 @@ TEST_F(tonuino_test_fixture, SleepTimer_in_idle) {
 
 constexpr uint8_t maxSecondsBetweenStops        = DanceGame::maxSecondsBetweenStops[0];
 constexpr uint8_t addSecondsBetweenStopsFreezeD = DanceGame::addSecondsBetweenStopsFreezeD;
-constexpr uint8_t addSecondsBetweenStopsFiWaAi  = DanceGame::addSecondsBetweenStopsFiWaAi;
+constexpr uint8_t addSecondsBetweenStopsFireWaterAir  = DanceGame::addSecondsBetweenStopsFireWaterAir;
 
 TEST_F(tonuino_test_fixture, FreezeDance) {
 
@@ -142,17 +142,17 @@ TEST_F(tonuino_test_fixture, FreezeDance) {
 // Test Fire, Water, Air
 // =======================================================
 
-TEST_F(tonuino_test_fixture, FiWaAi) {
+TEST_F(tonuino_test_fixture, FireWaterAir) {
 
   goto_play({ 2, pmode_t::album, 0, 0 });
   card_out();
   Print::clear_output();
 
-  card_in({ 0, pmode_t::fi_wa_ai, 0, 0 });
+  card_in({ 0, pmode_t::fire_water_air, 0, 0 });
 
-  EXPECT_EQ(getModifier().getActive(), pmode_t::fi_wa_ai);
+  EXPECT_EQ(getModifier().getActive(), pmode_t::fire_water_air);
   EXPECT_TRUE(getMp3().is_playing_adv());
-  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_303_fi_wa_ai));
+  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_303_fire_water_air));
   card_out();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
@@ -160,7 +160,7 @@ TEST_F(tonuino_test_fixture, FiWaAi) {
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
   int loop_count = 0;
-  while (getMp3().is_playing_folder() && ++loop_count < (maxSecondsBetweenStops+addSecondsBetweenStopsFiWaAi) * 1000 / cycleTime) {
+  while (getMp3().is_playing_folder() && ++loop_count < (maxSecondsBetweenStops+addSecondsBetweenStopsFireWaterAir) * 1000 / cycleTime) {
     execute_cycle();
   }
   EXPECT_TRUE(getMp3().is_playing_adv());
@@ -175,7 +175,7 @@ TEST_F(tonuino_test_fixture, FiWaAi) {
   EXPECT_EQ(getMp3().df_folder, 2);
   EXPECT_EQ(getMp3().df_folder_track, 1);
 
-  card_in({ 0, pmode_t::fi_wa_ai, 0, 0 });
+  card_in({ 0, pmode_t::fire_water_air, 0, 0 });
   card_out();
 
   EXPECT_EQ(getModifier().getActive(), pmode_t::none);
@@ -215,7 +215,7 @@ TEST_F(tonuino_test_fixture, ToddlerMode_in_idle) {
   button_for_command(command::admin, state_for_command::idle_pause);
   EXPECT_TRUE(SM_tonuino::is_in_state<Idle>());
 
-  card_in({ 3, pmode_t::einzel, 4, 0 });
+  card_in({ 3, pmode_t::single_track, 4, 0 });
   EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
   leave_start_play();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
@@ -290,7 +290,7 @@ TEST_F(tonuino_test_fixture, ToddlerMode_in_play) {
   button_for_command(command::admin, state_for_command::play);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
 
-  card_in({ 3, pmode_t::einzel, 4, 0 });
+  card_in({ 3, pmode_t::single_track, 4, 0 });
   EXPECT_TRUE(SM_tonuino::is_in_state<StartPlay<Play>>());
   leave_start_play();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
@@ -309,20 +309,20 @@ TEST_F(tonuino_test_fixture, ToddlerMode_in_play) {
 }
 
 // =======================================================
-// Test KindergardenMode
+// Test KindergartenMode
 // =======================================================
 
-TEST_F(tonuino_test_fixture, KindergardenMode) {
+TEST_F(tonuino_test_fixture, KindergartenMode) {
 
   goto_play({ 2, pmode_t::album, 0, 0 });
   card_out();
   Print::clear_output();
 
-  card_in({ 0, pmode_t::kindergarden, 0, 0 });
+  card_in({ 0, pmode_t::kindergarten, 0, 0 });
 
-  EXPECT_EQ(getModifier().getActive(), pmode_t::kindergarden);
+  EXPECT_EQ(getModifier().getActive(), pmode_t::kindergarten);
   EXPECT_TRUE(getMp3().is_playing_adv());
-  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_305_kindergarden));
+  EXPECT_EQ(getMp3().df_adv_track, static_cast<uint16_t>(advertTracks::t_305_kindergarten));
   card_out();
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
@@ -372,7 +372,7 @@ TEST_F(tonuino_test_fixture, KindergardenMode) {
   button_for_command(command::admin, state_for_command::play);
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
 
-  card_in({ 3, pmode_t::einzel, 4, 0 });
+  card_in({ 3, pmode_t::single_track, 4, 0 });
   EXPECT_TRUE(SM_tonuino::is_in_state<Play>());
   EXPECT_TRUE(getMp3().is_playing_folder());
   EXPECT_EQ(getMp3().df_folder, 2);
@@ -386,7 +386,7 @@ TEST_F(tonuino_test_fixture, KindergardenMode) {
   EXPECT_EQ(getMp3().df_folder_track, 4);
   card_out();
 
-  card_in({ 0, pmode_t::kindergarden, 0, 0 });
+  card_in({ 0, pmode_t::kindergarten, 0, 0 });
   card_out();
 
   EXPECT_EQ(getModifier().getActive(), pmode_t::none);

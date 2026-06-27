@@ -169,28 +169,28 @@ public:
     }
     // button select --> select folder
     button_for_command(command::select, state_for_command::admin);
-    if (card.mode == pmode_t::hoerspiel || card.mode == pmode_t::album ||
+    if (card.mode == pmode_t::audio_play || card.mode == pmode_t::album ||
         card.mode == pmode_t::party                                      ) {
       EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
       ASSERT_EQ(SM_setupCard::folder, card);
       return;
     }
-    if (card.mode == pmode_t::einzel)
+    if (card.mode == pmode_t::single_track)
       EXPECT_TRUE(SM_setupCard::is_in_state<ChTrack>());
-    else if (card.mode == pmode_t::hoerbuch || card.mode == pmode_t::hoerbuch_1)
+    else if (card.mode == pmode_t::audiobook || card.mode == pmode_t::audiobook_single)
       EXPECT_TRUE(SM_setupCard::is_in_state<ChLastFolder>());
     else
       EXPECT_TRUE(SM_setupCard::is_in_state<ChFirstTrack>());
     execute_cycle_for_ms(time_check_play);
     EXPECT_TRUE(getMp3().is_playing_mp3());
-    if (card.mode == pmode_t::einzel)
+    if (card.mode == pmode_t::single_track)
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_327_select_file));
-    else if (card.mode == pmode_t::hoerbuch || card.mode == pmode_t::hoerbuch_1)
+    else if (card.mode == pmode_t::audiobook || card.mode == pmode_t::audiobook_single)
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_302_select_last_folder));
     else
       EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_328_select_first_file));
 
-    if (card.mode == pmode_t::hoerbuch || card.mode == pmode_t::hoerbuch_1) {
+    if (card.mode == pmode_t::audiobook || card.mode == pmode_t::audiobook_single) {
       // ===== select last folder
       for (uint8_t folder = card.folder; folder <= card.folder+card.special2; ++folder) {
         // button up --> play folder number and track
@@ -210,12 +210,12 @@ public:
       }
       // button select --> finish
       button_for_command(command::select, state_for_command::admin);
-      if (card.mode == pmode_t::hoerbuch) {
+      if (card.mode == pmode_t::audiobook) {
         EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
         EXPECT_EQ(SM_setupCard::folder.special, card.special);
         return;
       }
-      if (card.mode == pmode_t::hoerbuch_1) {
+      if (card.mode == pmode_t::audiobook_single) {
         EXPECT_TRUE(SM_setupCard::is_in_state<ChNumTracks>());
         execute_cycle_for_ms(time_check_play);
         EXPECT_EQ(getMp3().df_mp3_track, static_cast<uint16_t>(mp3Tracks::t_340_num_tracks));
@@ -240,7 +240,7 @@ public:
     for (uint8_t track = 1; track <= card.special; ++track) {
       // button up --> play track number and track
       button_for_command(command::next, state_for_command::admin);
-      if (card.mode == pmode_t::einzel)
+      if (card.mode == pmode_t::single_track)
         EXPECT_TRUE(SM_setupCard::is_in_state<ChTrack>());
       else
         EXPECT_TRUE(SM_setupCard::is_in_state<ChFirstTrack>());
@@ -258,7 +258,7 @@ public:
     }
     // button select --> select last track
     button_for_command(command::select, state_for_command::admin);
-    if (card.mode == pmode_t::einzel) {
+    if (card.mode == pmode_t::single_track) {
       EXPECT_TRUE(SM_setupCard::is_in_state<finished_setupCard>());
       ASSERT_EQ(SM_setupCard::folder, card);
       return;
@@ -491,16 +491,16 @@ TEST_F(admin_test_fixture, Admin_NewCard) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
-      { 7, pmode_t::album_vb    , 2, 3 },
-      { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_from_to, 1, 2 },
+      { 7, pmode_t::album_from_to    , 2, 3 },
+      { 8, pmode_t::party_from_to    , 4, 5 },
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_from_to , 3, 7 }
   };
 
   Print::clear_output();
@@ -731,9 +731,9 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
   pmode_t modes[] = {
       pmode_t::sleep_timer  ,
       pmode_t::freeze_dance ,
-      pmode_t::fi_wa_ai     ,
+      pmode_t::fire_water_air     ,
       pmode_t::toddler      ,
-      pmode_t::kindergarden ,
+      pmode_t::kindergarten ,
       pmode_t::repeat_single,
   };
   uint8_t timer_set = 4;
@@ -786,7 +786,7 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
       // button select --> select timer
       button_for_command(command::select, state_for_command::admin);
     }
-    if (mode == pmode_t::freeze_dance || mode == pmode_t::fi_wa_ai) {
+    if (mode == pmode_t::freeze_dance || mode == pmode_t::fire_water_air) {
       // select time
       execute_cycle_for_ms(time_check_play);
       EXPECT_TRUE(getMp3().is_playing_mp3());
@@ -809,7 +809,7 @@ TEST_F(admin_test_fixture, Admin_ModCard) {
     folderSettings card_expected = { 0, mode , 0, 0 };
     if (mode == pmode_t::sleep_timer)
       card_expected.special = special_expect;
-    if (mode == pmode_t::freeze_dance || mode == pmode_t::fi_wa_ai)
+    if (mode == pmode_t::freeze_dance || mode == pmode_t::fire_water_air)
       card_expected.special = dance_time_set-1;
 
     EXPECT_EQ(card_expected, card_decode());
@@ -829,16 +829,16 @@ TEST_F(admin_test_fixture, Admin_ShortCut) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
-      { 7, pmode_t::album_vb    , 2, 3 },
-      { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_from_to, 1, 2 },
+      { 7, pmode_t::album_from_to    , 2, 3 },
+      { 8, pmode_t::party_from_to    , 4, 5 },
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_from_to , 3, 7 }
   };
 
   Print::clear_output();
@@ -889,16 +889,16 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
-      { 7, pmode_t::album_vb    , 2, 3 },
-      { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_from_to, 1, 2 },
+      { 7, pmode_t::album_from_to    , 2, 3 },
+      { 8, pmode_t::party_from_to    , 4, 5 },
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_from_to , 3, 7 }
   };
 
   Print::clear_output();
@@ -953,16 +953,16 @@ TEST_F(admin_test_fixture, Admin_ShortCut_extButtons_longPress) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
-      { 7, pmode_t::album_vb    , 2, 3 },
-      { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_from_to, 1, 2 },
+      { 7, pmode_t::album_from_to    , 2, 3 },
+      { 8, pmode_t::party_from_to    , 4, 5 },
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_from_to , 3, 7 }
   };
 
   Print::clear_output();
@@ -1022,16 +1022,16 @@ TEST_F(admin_test_fixture, New_Card) {
   folderSettings cards[] = {
       { 0, pmode_t::admin       , 0, 0 },
       { 0, pmode_t::repeat_last , 0, 0 },
-      { 1, pmode_t::hoerspiel   , 0, 0 },
+      { 1, pmode_t::audio_play   , 0, 0 },
       { 2, pmode_t::album       , 0, 0 },
       { 3, pmode_t::party       , 0, 0 },
-      { 4, pmode_t::einzel      , 1, 0 },
-      { 5, pmode_t::hoerbuch    , 0, 0 },
-      { 6, pmode_t::hoerspiel_vb, 1, 2 },
-      { 7, pmode_t::album_vb    , 2, 3 },
-      { 8, pmode_t::party_vb    , 4, 5 },
-      { 9, pmode_t::hoerbuch_1  , 4, 0 },
-      {10, pmode_t::hoerbuch_vb , 3, 7 }
+      { 4, pmode_t::single_track      , 1, 0 },
+      { 5, pmode_t::audiobook    , 0, 0 },
+      { 6, pmode_t::audio_play_from_to, 1, 2 },
+      { 7, pmode_t::album_from_to    , 2, 3 },
+      { 8, pmode_t::party_from_to    , 4, 5 },
+      { 9, pmode_t::audiobook_single  , 4, 0 },
+      {10, pmode_t::audiobook_from_to , 3, 7 }
   };
 
   Print::clear_output();
@@ -1229,7 +1229,7 @@ TEST_F(admin_test_fixture, Admin_CardsForFolder) {
 
     write_card();
 
-    folderSettings card_expected = { folder, pmode_t::einzel , track, 0 };
+    folderSettings card_expected = { folder, pmode_t::single_track , track, 0 };
     EXPECT_EQ(card_expected, card_decode());
   }
 
@@ -1351,8 +1351,8 @@ TEST_F(admin_test_fixture, Admin_ResetEeprom) {
       false         ,//bool        invertVolumeButtons;
       {{
           { 1, pmode_t::album   , 0, 0 },
-          { 2, pmode_t::album_vb, 1, 2 },
-          { 3, pmode_t::hoerbuch, 0, 0 },
+          { 2, pmode_t::album_from_to, 1, 2 },
+          { 3, pmode_t::audiobook, 0, 0 },
           { 4, pmode_t::party   , 0, 0 }
       }}            ,//shortCuts_t shortCuts;
       0             ,//uint8_t     adminMenuLocked;

@@ -6,7 +6,7 @@
 #include "buttons.hpp"
 #include "buttons3x3.hpp"
 #include "rotary_encoder.hpp"
-#include "poti.hpp"
+#include "potentiometer.hpp"
 #include "serial_input.hpp"
 #include "mp3.hpp"
 #include "modifier.hpp"
@@ -118,8 +118,8 @@ private:
 #ifdef ROTARY_ENCODER
   RotaryEncoder        rotaryEncoder       {settings};
 #endif
-#ifdef POTI
-  Poti                 poti                {mp3};
+#ifdef POTENTIOMETER
+  Potentiometer                 potentiometer                {mp3};
 #endif
 #ifdef TonUINO_Esp32
   Webservice           webservice          {settings, mp3};
@@ -136,8 +136,8 @@ private:
 #ifdef ROTARY_ENCODER
                                           , &rotaryEncoder
 #endif
-#ifdef POTI
-                                          , &poti
+#ifdef POTENTIOMETER
+                                          , &potentiometer
 #endif
 #ifdef TonUINO_Esp32
                                           , &webservice
@@ -157,7 +157,7 @@ private:
   SleepTimer           sleepTimer          {};
   DanceGame            danceGame           {};
   ToddlerMode          toddlerMode         {};
-  KindergardenMode     kindergardenMode    {};
+  KindergartenMode     kindergartenMode    {};
   RepeatSingleModifier repeatSingleModifier{};
 #ifdef MODIFICATION_CARD_PAUSE_AFTER_TRACK
   PauseAfterTrack      pauseAfterTrack     {};
@@ -173,8 +173,8 @@ private:
   folderSettings       myFolder            {};
   bool                 myFolderIsCard      {};
   uint16_t             numTracksInFolder   {};
-  uint8_t              folderForHoerbuch   {};
-#ifdef FOLDER_QUEUE_HOERBUCH
+  uint8_t              folderForAudiobook   {};
+#ifdef FOLDER_QUEUE_AUDIOBOOK
   typedef queue<uint8_t, 99> folder_queue;
   folder_queue         folder_q            {};
   folderSettings       lastMyFolder        {};

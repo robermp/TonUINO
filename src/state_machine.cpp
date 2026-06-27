@@ -246,19 +246,19 @@ void ChFolder::react(command_e const &cmd_e) {
       return;
     }
 #endif
-    if (folder.mode == pmode_t::einzel) {
+    if (folder.mode == pmode_t::single_track) {
       transit<ChTrack>();
       return;
     }
-    if (  ( folder.mode == pmode_t::hoerbuch  )
-        ||( folder.mode == pmode_t::hoerbuch_1)){
+    if (  ( folder.mode == pmode_t::audiobook  )
+        ||( folder.mode == pmode_t::audiobook_single)){
       transit<ChLastFolder>();
       return;
     }
-    if (  ( folder.mode == pmode_t::hoerspiel_vb)
-        ||( folder.mode == pmode_t::album_vb    )
-        ||( folder.mode == pmode_t::party_vb    )
-        ||( folder.mode == pmode_t::hoerbuch_vb )) {
+    if (  ( folder.mode == pmode_t::audio_play_from_to)
+        ||( folder.mode == pmode_t::album_from_to    )
+        ||( folder.mode == pmode_t::party_from_to    )
+        ||( folder.mode == pmode_t::audiobook_from_to )) {
       transit<ChFirstTrack>();
       return;
     }
@@ -298,7 +298,7 @@ void ChLastFolder::react(command_e const &cmd_e) {
     folder.special2 = currentValue - folder.folder;
     LOG(state_log, s_debug, str_ChLastFolder(), F(": "), currentValue);
 
-    if (folder.mode == pmode_t::hoerbuch_1) {
+    if (folder.mode == pmode_t::audiobook_single) {
       transit<ChNumTracks>();
       return;
     }
@@ -803,7 +803,7 @@ void Idle::react(command_e const &cmd_e) {
 #endif
 #ifdef SPECIAL_START_SHORTCUT
     case command::specialStart:
-      tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::einzel, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
+      tonuino.setMyFolder({specialStartShortcutFolder, pmode_t::single_track, specialStartShortcutTrack, 0}, true /*myFolderIsCard*/);
       LOG(state_log, s_debug, str_Idle(), str_to(), str_StartPlay());
       transitToStartPlay<Play>();
       break;
@@ -863,7 +863,7 @@ void Play::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, F("Pause Taste"));
+    LOG(state_log, s_debug, F("Pause button"));
     LOG(state_log, s_debug, str_Play(), str_to(), str_Pause());
     transit<Pause>();
     return;
@@ -1138,7 +1138,7 @@ void Quiz::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, F("Pause Taste"));
+    LOG(state_log, s_debug, F("Pause button"));
 
     switch (quizState) {
     case QuizState::playQuestion:
@@ -1344,7 +1344,7 @@ void Memory::react(command_e const &cmd_e) {
     }
     return;
   case command::pause:
-    LOG(state_log, s_debug, F("Pause Taste"));
+    LOG(state_log, s_debug, F("Pause button"));
     if (first == 0) {
       mp3.enqueueMp3FolderTrack(mp3Tracks::t_523_memory_game_1);
     }
@@ -1497,7 +1497,7 @@ void Teapot::react(command_e const &cmd_e) {
     }
     return;
   case command::track:
-    LOG(state_log, s_debug, F("Track Taste"));
+    LOG(state_log, s_debug, F("Track button"));
 
     switch (playState) {
     case PlayState::startNext:
@@ -1860,11 +1860,11 @@ void Admin_Entry::react(command_e const &cmd_e) {
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_LockAdmin());
              transit<Admin_LockAdmin>();
              return;
-    case 13: // Pause, wenn Karte entfernt wird
+    case 13: // Pause when card is removed
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_PauseIfCardRemoved());
              transit<Admin_PauseIfCardRemoved>();
              return;
-    case 14: // Memory Spiel Karten
+    case 14: // Memory game Karten
 //#ifdef MEMORY_GAME
              LOG(state_log, s_debug, str_Admin_Entry(), str_to(), str_Admin_MemoryGameCards());
              transit<Admin_MemoryGameCards>();
@@ -2084,7 +2084,7 @@ void Admin_ModCard::react(command_e const &cmd_e) {
         VoiceMenu::entry();
         current_subState = get_sleeptime_timer;
       }
-      else if (folder.mode == pmode_t::freeze_dance || folder.mode == pmode_t::fi_wa_ai) {
+      else if (folder.mode == pmode_t::freeze_dance || folder.mode == pmode_t::fire_water_air) {
         numberOfOptions   = 3;
         startMessage      = mp3Tracks::t_966_dance_pause_intro;
         messageOffset     = mp3Tracks::t_966_dance_pause_intro;
@@ -2260,7 +2260,7 @@ void Admin_CardsForFolder::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_CardsForFolder());
   state_str = str_Admin_CardsForFolder();
 
-  folder.mode = pmode_t::einzel;
+  folder.mode = pmode_t::single_track;
 
   current_subState = start_setupCard;
 }
@@ -2278,7 +2278,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
   switch (current_subState) {
   case start_setupCard:
     SM_setupCard::current_state_ptr = &tinyfsm::_state_instance< ChFolder >::value;
-    SM_setupCard::folder.mode = pmode_t::album_vb;
+    SM_setupCard::folder.mode = pmode_t::album_from_to;
     SM_setupCard::enter();
     current_subState = run_setupCard;
     break;
@@ -2311,7 +2311,7 @@ void Admin_CardsForFolder::react(command_e const &cmd_e) {
       folder.special = special;
       mp3.enqueueMp3FolderTrack(special, true/*playAfter*/);
       timer.start(dfPlayer_timeUntilStarts);
-      LOG(card_log, s_info, special, F("-te Karte auflegen"));
+      LOG(card_log, s_info, special, F("th card on reader"));
       current_subState = start_writeCard;
     }
     break;
@@ -2556,7 +2556,7 @@ void Admin_MemoryGameCards::react(command_e const &cmd_e) {
       }
       mp3.enqueueMp3FolderTrack(folder.special, true/*playAfter*/);
       timer.start(dfPlayer_timeUntilStarts);
-      LOG(card_log, s_info, folder.special, F("-te Karte auflegen"));
+      LOG(card_log, s_info, folder.special, F("th card on reader"));
       current_subState = start_writeCard;
     }
     break;

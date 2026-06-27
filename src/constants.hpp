@@ -16,7 +16,7 @@
  * 3x3 Button Board        | P | U | D | A |   |   |   |   |   |   |   |   |   |   |   |   |
  * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
  * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |   |   |   |   |
- * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
+ * Potentiometer                    |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |
  * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   |   |   |(x)|   | x |   |   |   |
  * Speaker off             |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |
  * Shutdown                |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |   |
@@ -40,7 +40,7 @@
  * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
  * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |
  * Rotary encoder          |   |   |   |   |   |   |   |   |   |   |   |   |   |CLK| DT|   |CLK| DT|   |
- * Poti                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
+ * Potentiometer                    |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | x |
  * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |(x)|   |   |   |   |   |   |   |   |   |
  * Speaker off             |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |
  * Shutdown                |   |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
@@ -58,7 +58,7 @@
  * 3x3 Button Board        | P |   | A | D | U |   |   |   |   |   |   |   |
  * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |
  * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |
- * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |
+ * Potentiometer                    |   |   |   | x |   |   |   |   |   |   |   |   |
  * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   | x |   |   |   |
  * Speaker off             |   |   |   |   |   |   |   |   |   |   |   | x |
  * Shutdown                |   |   |   |   |   |   |   |   |   |   | x |   |
@@ -76,7 +76,7 @@
  * 3x3 Button Board        | P | U | D | A |   |   |   |   |   |   |   |   |   |   |
  * Open pin for random     |   |   |   |   |   |   |   | x |   |   |   |   |   |   |
  * Rotary encoder          |   |   |   |CLK| DT|   |   |   |   |   |   |   |   |   |
- * Poti                    |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
+ * Potentiometer                    |   |   |   | x |   |   |   |   |   |   |   |   |   |   |
  * Neo Ring/LED animat.    |   |   |   |   |   |   |   |   |   |   | x |   |   |   |
  * Speaker off             |   |   |   |   |   |   |   |   |   |   |   | x |   |   |
  * Shutdown                |   |   |   |   |   |   |   |   |   |   |   |   | x |   |
@@ -90,9 +90,7 @@
 // ####### variant and feature configuration ############################
 // ######################################################################
 
-/* Select the right PCB by uncommenting one of the following lines
- * Bitte die passende Platine durch entfernen der Kommentare in einer der folgenden Zeilen auswählen
- */
+/* Select the right PCB by uncommenting one of the following lines */
 //#define TonUINO_Classic
 //#define TonUINO_Every
 //#define TonUINO_Every_4808
@@ -121,12 +119,11 @@ DECL_PCB(5)
 #if defined(TonUINO_Esp32)
 DECL_PCB(6)
 #endif
-static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.). Bitte genau eine der Zeilen zur Definition einer Platine einkommentieren (TonUINO_Classic, TonUINO_Every, etc.).");
+static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (TonUINO_Classic, TonUINO_Every, etc.).");
 
 // ######################################################################
 
 /* uncomment one of the below lines to enable special button support
- * um die Tasten zu konfigurieren, bitte eine der nächsten Zeilen auskommentieren
  * default: THREEBUTTONS for classic/every
  *          FIVEBUTTONS  for AiO and AiO+
  */
@@ -136,26 +133,22 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
 
 // ######################################################################
 
-/* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following lines
- * Wenn der Nano Every verwendet wird und Rx/Tx vom DfPlayer mit D0/D1 verbunden ist, den Kommentare der folgenden Zeile entfernen
- */
+/* If using Nano Every with connected DfPlayer Rx/Tx to D0/D1 uncomment the following line */
 //#define DFPlayerUsesHardwareSerial
 
 // ######################################################################
 
 /* uncomment the below line to enable serial input as additional command source
- * um den Serial Monitor als zusätzliche Kommandoquelle zu haben bitte in der nächste Zeile den Kommentar entfernen
  * -7:             -8: up         -9: upLong
  * -4: allLong     -5: pause      -6: pauseLong
  * -1: up/downLong -2: down       -3: downLong
- * number n > 0: Springe im Voice Menü zum n-ten Eintrag und selektiere ihn
+ * number n > 0: Jump to the nth voice menu entry and select it
  */
 //#define SerialInputAsCommand
 
 // ######################################################################
 
 /* uncomment one of the below lines to support a special chip on the DfMiniMp3 player
- * um einen speziellen Chip auf dem DfMiniMp3 Player zu ünterstützen bitte in eine der nächste Zeilen den Kommentar entfernen
  *
  * GD3200B:     bad behavior of getFolderTrackCount() - ignores the parameter folder
  *              bad behavior of callback OnPlayFinished - it is also called on advertise tracks
@@ -174,29 +167,23 @@ static_assert(SUM_PCB == 1 , "Please uncomment exactly one of the PCB lines (Ton
 
 // ######################################################################
 
-/* uncomment the below line to disable shutdown via button (long press play/pause)
- * um ein Shutdown via Taste (long press Play/Pause) zu unterdrücken bitte in der nächste Zeile den Kommentar entfernen
- */
+/* uncomment the below line to disable shutdown via button (long press play/pause) */
 //#define DISABLE_SHUTDOWN_VIA_BUTTON
 
 // ######################################################################
 
-/* uncomment the below line to enable the rotary encoder for volume setting
- * um den Drehgeber zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
- */
+/* uncomment the below line to enable the rotary encoder for volume setting */
 //#define ROTARY_ENCODER
-/* uncomment the below line to enable the rotary encoder also for next and previous (only one click in one second)
- * um den Drehgeber auch für vor und zurück zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
- */
+/* uncomment the below line to enable the rotary encoder also for next and previous (only one click in one second) */
 //#define ROTARY_ENCODER_LONGPRESS
 
 #ifdef ROTARY_ENCODER
 #ifdef ALLinONE_Plus
-// if using Rotary Encoder Buchse
+// if using rotary encoder socket
 //inline constexpr uint8_t   rotaryEncoderClkPin    = 31; // PE1
 //inline constexpr uint8_t   rotaryEncoderDtPin     = 32; // PE2
 
-// if using Opt Leiste (Male)
+// if using optional male header
 inline constexpr uint8_t   rotaryEncoderClkPin    = 36; // PF2
 inline constexpr uint8_t   rotaryEncoderDtPin     = 37; // PF3
 
@@ -215,29 +202,25 @@ inline constexpr bool      rotaryEncoderPullUp    = false;
 
 // ######################################################################
 
-/* uncomment the below line to enable the poti for volume setting
- * um den Poti zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
- */
-//#define POTI
+/* uncomment the below line to enable the potentiometer for volume setting */
+//#define POTENTIOMETER
 
-#ifdef POTI
+#ifdef POTENTIOMETER
 #ifdef ALLinONE_Plus
-inline constexpr uint8_t   potiPin    = A14; // AiO+ PF4
+inline constexpr uint8_t   potentiometerPin    = A14; // AiO+ PF4
 
 #elif TonUINO_Esp32 == 200
-inline constexpr uint8_t   potiPin    = 27 ; // (D27)
+inline constexpr uint8_t   potentiometerPin    = 27 ; // (D27)
 
 #else
-inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
+inline constexpr uint8_t   potentiometerPin    = A3 ; // AiO/Classic A3
 #endif // ALLinONE_Plus
-#endif // POTI
+#endif // POTENTIOMETER
 
 // ######################################################################
 
-/* uncomment the below line to enable the neo ring
+/* uncomment the below line to enable the NeoPixel ring
  * To have more features (show volume setting) uncomment also NEO_RING_EXT
- * um den Neo Ring zu unterstützen bitte in der nächste Zeile den Kommentar entfernen
- * um weitere Features einzuschalten, auch den Kommentar für NEO_RING_EXT entfernen
  */
 //#define NEO_RING
 //#define NEO_RING_EXT
@@ -245,7 +228,7 @@ inline constexpr uint8_t   potiPin    = A3 ; // AiO/Classic A3
 
 #ifdef NEO_RING
 #ifdef ALLinONE_Plus
-inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus (Erweiterungsleiste (Female))
+inline constexpr uint8_t neoPixelRingPin = 10; // PB2 on AiOplus (extension header, female)
 
 #elif TonUINO_Esp32 == 200
 inline constexpr uint8_t neoPixelRingPin =  2; // GPIO02 (D2) on ESP32 Wroom 32
@@ -258,7 +241,7 @@ inline constexpr uint8_t neoPixelNumber  = 24; // Total Number of Pixels
 
 #ifdef NEO_RING_2
 #ifdef ALLinONE_Plus
-inline constexpr uint8_t neoPixelRingPin2= 14; // PC0 on AiOplus (Erweiterungsleiste (Female))
+inline constexpr uint8_t neoPixelRingPin2= 14; // PC0 on AiOplus (extension header, female)
 
 #else
 inline constexpr uint8_t neoPixelRingPin2= D2; // D2 on AiO/Classic (only Every)
@@ -270,11 +253,8 @@ inline constexpr uint8_t neoPixelNumber2 = 24; // Total Number of Pixels
 
 // ######################################################################
 
-/* uncomment the below line to enable the Speaker on/off for Classic to suppress noise
+/* uncomment the below line to enable the speaker on/off switch for Classic to suppress noise
  * on startup and shutdown (automatically enabled on AiO and AiOplus)
- * um den Lautsprecher ein/aus Schalter für die Classic Variante zu unterstützen bitte
- * in der nächste Zeile den Kommentar entfernen (zur Unterdrückung der Ein- und Ausschaltgeräusche)
- * (automatisch eingeschaltet für AiO und AiOplus)
  */
 //#define SPKONOFF
 
@@ -291,10 +271,7 @@ inline constexpr levelType     ampEnablePinType = levelType::activeLow;
 
 // ######################################################################
 
-/* uncomment the below line to enable the Headphone Jack detection (automatically enabled on AiOplus)
- * um die Kopfhörer Erkennung einzuschalten bitte in der nächste Zeile den Kommentar entfernen
- * (automatisch eingeschaltet für AiOplus)
- */
+/* uncomment the below line to enable the headphone jack detection (automatically enabled on AiOplus) */
 //#define HPJACKDETECT
 
 #ifdef HPJACKDETECT
@@ -310,47 +287,34 @@ inline constexpr levelType      dfPlayer_noHeadphoneJackDetectType = levelType::
 
 // ######################################################################
 
-/* uncomment the below line to ignore the RFID if it is already playing
- * um die selbe RFID zu ignorieren, wenn die bereits spielt, in der nächste
- * Zeile den Kommentar entfernen
- */
+/* uncomment the below line to ignore the RFID if it is already playing */
 //#define DONT_ACCEPT_SAME_RFID_TWICE
 
 /* uncomment the below line to resume playback if the RFID that started the
  * playback is detected again
- * um die Wiedergabe fortzusetzen, wenn die selbe RFID erkannt wird, die bereits
- * abgespielt wird, in der nächste Zeile den Kommentar entfernen
  */
 //#define RESUME_ON_SAME_RFID
 
 /* uncomment the below line to replay the last card or short cut if pressed play/pause
  * in Idle state
- * um die letzte Karte oder den letzten Short Cut wieder abzuspielen, wenn die Play/Pause Taste
- * im Idle State gedrückt wird, in der nächste Zeile den Kommentar entfernen
  */
 //#define REPLAY_ON_PLAY_BUTTON
 
 // ######################################################################
 
-/* uncomment the below line(s) to enable the quiz, memory teapot game
- * um das Quiz, Memory oder Teekesselchen Spiel zu aktivieren, in der nächste Zeile(n) den Kommentar entfernen
- */
+/* uncomment the below line(s) to enable the quiz, memory or teapot game */
 //#define QUIZ_GAME
 //#define MEMORY_GAME
 //#define TEAPOT_GAME
 
 // ######################################################################
 
-/* uncomment the below line to store the last played card in EEPROM
- * um die letzte Karte im EEPROM zu speichern, in der nächste Zeile den Kommentar entfernen
- */
+/* uncomment the below line to store the last played card in EEPROM */
 //#define STORE_LAST_CARD
 
 // ######################################################################
 
-/* uncomment the below line to enable special shortcut on startup via GPIO
- * um den spezial Shortcut beim Start via GPIO zu aktivieren, in der nächste Zeile den Kommentar entfernen
- */
+/* uncomment the below line to enable special shortcut on startup via GPIO */
 //#define SPECIAL_START_SHORTCUT
 
 #ifdef SPECIAL_START_SHORTCUT
@@ -371,9 +335,7 @@ inline constexpr uint8_t   specialStartShortcutTrack   = 1;
 
 // ######################################################################
 
-/* uncomment the below line to enable support for BT module
- * um die Unterstützung des BT Modules zu aktivieren, in der nächste Zeile den Kommentar entfernen
- */
+/* uncomment the below line to enable support for BT module */
 //#define BT_MODULE
 
 #ifdef BT_MODULE
@@ -393,10 +355,7 @@ inline constexpr unsigned long btModulePairingPulse    = 500;
 
 // ######################################################################
 
-/* uncomment the below line to enable battery voltage measurement (not for ALLinONE, not recommended for TonUINO_Classic)
- * um die Batterie Spannungsmessung zu aktivieren, in der nächste Zeile den Kommentar entfernen
- * (nicht für ALLinONE, nicht empfohlen für TonUINO_Classic)
- */
+/* uncomment the below line to enable battery voltage measurement (not for ALLinONE, not recommended for TonUINO_Classic) */
 //#define BAT_VOLTAGE_MEASUREMENT
 
 #ifdef BAT_VOLTAGE_MEASUREMENT
@@ -408,19 +367,19 @@ inline constexpr uint8_t voltageMeasurementPin         = 35; // (D35)
 #endif // ALLinONE_Plus
 
 #ifdef ALLinONE_Plus
-inline constexpr float   voltageMeasurementCorrection  = 2.075; // Spannungsteiler 100k/100k
+inline constexpr float   voltageMeasurementCorrection  = 2.075; // voltage divider 100k/100k
 #endif
 #ifdef TonUINO_Classic
-inline constexpr float   voltageMeasurementCorrection  = 1.960; // Spannungsteiler 100k/100k
+inline constexpr float   voltageMeasurementCorrection  = 1.960; // voltage divider 100k/100k
 #endif
 #ifdef TonUINO_Every
-inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
+inline constexpr float   voltageMeasurementCorrection  = 2.007; // voltage divider 100k/100k
 #endif
 #ifdef TonUINO_Every_4808
-inline constexpr float   voltageMeasurementCorrection  = 2.007; // Spannungsteiler 100k/100k
+inline constexpr float   voltageMeasurementCorrection  = 2.007; // voltage divider 100k/100k
 #endif
 #ifdef TonUINO_Esp32
-inline constexpr float   voltageMeasurementCorrection  = 0.710; // Spannungsteiler 100k/100k
+inline constexpr float   voltageMeasurementCorrection  = 0.710; // voltage divider 100k/100k
 #endif
 
 // for Li-Ion
@@ -433,17 +392,13 @@ inline constexpr float   batVoltageEmpty               = 2.90;
 
 // ######################################################################
 
-/* uncomment the below lines if you use Pololu Powerswitch or Traeger Platine for shutdown
- * wenn der Pololu Powerswitch oder die Traeger Platine für das Shutdown verwendet wird, in den nächsten Zeile den Kommentar entfernen
- */
+/* uncomment the below lines if you use Pololu Powerswitch or carrier board for shutdown */
 //#define USE_POLOLU_SHUTDOWN
-//#define USE_TRAEGER_PLATINE_SHUTDOWN
+//#define USE_CARRIER_BOARD_SHUTDOWN
 
 // ######################################################################
 
-/* uncomment one of the below lines if you want to change the antenna gain of the MFRC522 module
- * wenn die Antennenverstärkung des MFRC522 Modules verändert werden soll, in der nächsten Zeilen einen Kommentar entfernen
- */
+/* uncomment one of the below lines if you want to change the antenna gain of the MFRC522 module */
 //#define MRFC522_RX_GAIN RxGain_18dB
 //#define MRFC522_RX_GAIN RxGain_23dB
 //#define MRFC522_RX_GAIN RxGain_33dB // default
@@ -479,9 +434,7 @@ inline constexpr uint16_t languageNameMp3 = 309;   // pista que dice el nombre d
 
 // ######################################################################
 
-/* uncomment the below lines if you want to have the Jukebox modification card
- * wenn du die Jukebox haben willst, in den nächsten Zeile den Kommentar entfernen
- */
+/* uncomment the below lines if you want to have the Jukebox modification card */
 //#define MODIFICATION_CARD_JUKEBOX
 
 #ifdef MODIFICATION_CARD_JUKEBOX
@@ -490,9 +443,7 @@ inline constexpr uint8_t jukebox_max_cards  = 10;
 
 // ######################################################################
 
-/* uncomment the below lines if you want to have the Pause after Track modification card
- * wenn du die Pause nach jedem Track Modifikationskarte haben willst, in den nächsten Zeile den Kommentar entfernen
- */
+/* uncomment the below lines if you want to have the Pause after Track modification card */
 //#define MODIFICATION_CARD_PAUSE_AFTER_TRACK
 
 // ######################################################################
@@ -509,19 +460,6 @@ inline constexpr uint8_t jukebox_max_cards  = 10;
  *
  * Use a series resistor (e.g. 1KΩ) per LED to limit current.
  *
- * ----------------------------------------------------------------------
- *
- * Nachfolgenden Kommentar entfernen, um animierte LED-Tasten über den LedManager zu nutzen.
- *
- * LED-Verhalten:
- * - Beim Start:          Alle LEDs blinken nacheinander.
- * - Wartet auf Eingabe:  Alle LEDs blinken synchron.
- * - Wiedergabe läuft:    Alle LEDs leuchten dauerhaft.
- * - Wiedergabe pausiert: Nur die Play/Pause-LED blinkt.
- * - Abschaltung:         Alle LEDs werden ausgeschalten.
- * - Bei einem gültigen Tastendruck blinken alle LEDs einmal, indem ihr aktueller Zustand invertiert wird.
- *
- * Verwende einen Widerstand (z.B. 1KΩ) in Reihe zu jeder LED zur Strombegrenzung.
  */
 
 //#define USE_LED_BUTTONS
@@ -542,11 +480,10 @@ inline constexpr uint8_t power_hold_ready_pin        = D2;
 inline constexpr levelType power_hold_ready_pin_type = levelType::activeHigh;
 #endif
 
-//#define FOLDER_QUEUE_HOERBUCH
+//#define FOLDER_QUEUE_AUDIOBOOK
 
 /* #################################################################################################
- * ##### normally, you don't have to edit lines below                   ############################
- * ##### mormalerweise müssen die folgende Zeilen nicht editiert werden ############################
+ * ##### normally, the following lines do not have to be edited             ############################
  * #################################################################################################
  */
 
@@ -634,7 +571,7 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = 7;
-#ifdef USE_TRAEGER_PLATINE_SHUTDOWN
+#ifdef USE_CARRIER_BOARD_SHUTDOWN
 inline constexpr levelType     shutdownPinType  = levelType::activeLow;
 #else
 inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
@@ -837,7 +774,7 @@ inline constexpr unsigned long dfPlayer_timeUntilStarts = 1200;
 // ####### tonuino #####################################
 
 inline constexpr uint8_t       shutdownPin      = D7;
-#ifdef USE_TRAEGER_PLATINE_SHUTDOWN
+#ifdef USE_CARRIER_BOARD_SHUTDOWN
 inline constexpr levelType     shutdownPinType  = levelType::activeLow;
 #else
 inline constexpr levelType     shutdownPinType  = levelType::activeHigh;
