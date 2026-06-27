@@ -1,5 +1,5 @@
+#include <Arduino.h>
 #include "src/tonuino.hpp"
-
 #include "src/settings.hpp"
 #include "src/mp3.hpp"
 #include "src/buttons.hpp"
@@ -12,7 +12,7 @@
   |_   _|___ ___|  |  |     |   | |     |
     | | | . |   |  |  |-   -| | | |  |  |
     |_| |___|_|_|_____|_____|_|___|_____|
-    TonUINO Version 3.x - refactored by Boerge1
+    TonUINO Version 3.x - refactored by Boerge1, customized by RoberMP
 
     created by Thorsten Voß and licensed under GNU/GPL.
     Information and contribution at https://tonuino.de.
@@ -36,7 +36,7 @@ void setup()
   LOG(init_log, s_error, F("|_   _|___ ___|  |  |     |   | |     |"));
   LOG(init_log, s_error, F("  | | | . |   |  |  |-   -| | | |  |  |"));
   LOG(init_log, s_error, F("  |_| |___|_|_|_____|_____|_|___|_____|"));
-  LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1"));
+  LOG(init_log, s_error, F("TonUINO Version 3.x - refactored by Boerge1, customized by RoberMP"));
   LOG(init_log, s_error, F(""));
   LOG(init_log, s_error, F("created by Thorsten Voß and licensed under GNU/GPL."));
   LOG(init_log, s_error, F("Information and contribution at https://tonuino.de."));
