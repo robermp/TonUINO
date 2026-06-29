@@ -218,7 +218,8 @@ Chip_card::readCardEvent Chip_card::readDisneyCard(folderSettings &nfcTag) {
     mfrc522.PICC_Select(&mfrc522.uid);
 
     if (hasNdefCC) {
-      // Audiocuentos Disney UL_A: byte 0 del bloque 2 mapeado a pista fija.
+      // Audiocuentos Disney UL_A / Cuentos de Mickey y sus amigos:
+      // byte 0 de la pagina 2 mapeado a pista fija.
       size = sizeof(buffer);
       if (mfrc522.MIFARE_Read(2, buffer, &size) != MFRC522::STATUS_OK)
         return readCardEvent::none;
@@ -227,6 +228,7 @@ Chip_card::readCardEvent Chip_card::readDisneyCard(folderSettings &nfcTag) {
         case 0x7E: id =  1; break;
         case 0x6C: id =  2; break;
         case 0x5F: id =  3; break;
+        case 0x38: id =  4; break;
         case 0x34: id = 19; break;
         default  : id =  0; break;
       }
@@ -513,4 +515,3 @@ cardEvent Chip_card::getCardEvent() {
   }
   return cardEvent::none;
 }
-

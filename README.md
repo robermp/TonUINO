@@ -101,6 +101,18 @@ Una guía para ello se encuentra [aquí](https://discourse.voss.earth/t/tonuino-
 
 La tarjeta SD (carpetas mp3 y advert) ha cambiado respecto a la versión 3.3.2. Aquí se pueden descargar los archivos: [tonuino.github.io/TonUINO-TNG/sd-card.zip](https://tonuino.github.io/TonUINO-TNG/sd-card.zip)
 
+# Conversión de tarjetas Disney Ultralight
+
+Cuando se compila con `DISNEY_CARDS`, las tarjetas Ultralight A de "Cuentos de Mickey y sus amigos" se detectan por SAK `0x00`, ATQA `0x0044` y la Capability Container `E1:10:12:00` en la página `03`. La conversión usa el primer byte de la página `02` para seleccionar la pista de la carpeta fija `96`.
+
+| Tarjeta | Pista | UID | Página 02 | Clave de conversión |
+| --- | ---: | --- | --- | --- |
+| A | 1 | `53:CF:9A:2D:52:00:01` | `7E:48:00:00` | `0x7E` |
+| B | 2 | `53:0E:9B:5F:32:00:01` | `6C:48:00:00` | `0x6C` |
+| C | 3 | `53:D6:BD:05:2D:73:00:01` | `5F:48:00:00` | `0x5F` |
+| D | 4 | `53:A0:D8:09:98:A1:00:01` | `38:48:00:00` | `0x38` |
+| R | 19 | `53:87:30:C6:06:33:00:01` | `34:48:00:00` | `0x34` |
+
 # Notas sobre la configuración WLAN del ESP32
 
 Si se está conectado exclusivamente al AP de TonUINO con el SSID "TonUINO", se accede a la página web con 
@@ -365,6 +377,5 @@ Si además se está conectado a Internet, hay que usar la dirección IP: "http:/
 - digint.ch/tinyfsm - free PD (código modificado)
 - circuitcode/AsyncWebSerial - MIT (código modificado)
 - tuniii/LogRingBuffer - GPL V3+ (código modificado)
-
 
 
