@@ -67,7 +67,7 @@ void Settings::resetSettings() {
   spkInitVolume        =  2;
   eq                   =  1;
   dummy                =  0;
-  standbyTimer         =  0;
+  standbyTimer         =  2;
   invertVolumeButtons  =  1;
   shortCuts[0]         =  { 0, pmode_t::none, 0, 0 };
   shortCuts[1]         =  { 0, pmode_t::none, 0, 0 };

@@ -2231,7 +2231,7 @@ void Admin_StandbyTimer::entry() {
   LOG(state_log, s_info, str_enter(), str_Admin_StandbyTimer());
   state_str = str_Admin_StandbyTimer();
 
-  numberOfOptions   = 5;
+  numberOfOptions   = 6;
   startMessage      = mp3Tracks::t_960_timer_intro;
   messageOffset     = mp3Tracks::t_960_timer_intro;
   preview           = false;
@@ -2253,11 +2253,12 @@ void Admin_StandbyTimer::react(command_e const &cmd_e) {
 
   if (Commands::isSelect(cmd) && (currentValue != 0)) {
     switch (currentValue) {
-    case 1: settings.standbyTimer =  5; break;
-    case 2: settings.standbyTimer = 15; break;
-    case 3: settings.standbyTimer = 30; break;
-    case 4: settings.standbyTimer = 60; break;
-    case 5: settings.standbyTimer =  0; break;
+    case 1: settings.standbyTimer =  2; break;
+    case 2: settings.standbyTimer =  5; break;
+    case 3: settings.standbyTimer = 15; break;
+    case 4: settings.standbyTimer = 30; break;
+    case 5: settings.standbyTimer = 60; break;
+    case 6: settings.standbyTimer =  0; break;
     }
     saveAndTransit();
     return;
