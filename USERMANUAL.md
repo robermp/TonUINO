@@ -1,747 +1,583 @@
-# TonUINO — Manual de usuario / User manual
+# TonUINO Arduino Nano — Manual de usuario / User Manual
 
 - [Español](#manual-de-usuario-en-español)
 - [English](#user-manual-in-english)
 
-> TonUINO is a DIY project. The available controls and functions depend on the
-> board, button layout, connected accessories, and firmware options selected by
-> the person who built it.
+> Este manual corresponde a la compilación **TonUINO_Custom**: Arduino Nano
+> ATmega328P, seis botones, mensajes en español/italiano/inglés y compatibilidad
+> con determinadas tarjetas Disney.
+>
+> This manual covers the **TonUINO_Custom** build: Arduino Nano ATmega328P, six
+> buttons, Spanish/Italian/English prompts, and selected Disney-card support.
 
 ---
 
 # Manual de usuario en español
 
-## 1. Qué es TonUINO
+## 1. Descripción
 
-TonUINO es un reproductor de audio manejado principalmente mediante tarjetas
-RFID/NFC. Cada tarjeta puede iniciar una carpeta, una pista, un audiolibro, un
-juego o una función especial. Los mensajes de voz guían la configuración, por
-lo que no es necesaria una pantalla.
+TonUINO reproduce audio desde una tarjeta microSD. Las tarjetas RFID/NFC
+indican qué carpeta o pista debe reproducirse y de qué forma. Los mensajes de
+voz permiten manejar y configurar la caja sin pantalla.
 
-Este manual describe todas las funciones disponibles en el software. Es
-posible que algunas no estén activadas en tu unidad. Consulta a quien instaló
-el firmware si un menú o accesorio descrito aquí no aparece.
+Esta versión usa exactamente seis botones:
 
-## 2. Antes del primer uso
+1. **Reproducir/Pausa**
+2. **Siguiente**
+3. **Anterior**
+4. **Volumen +**
+5. **Volumen −**
+6. **Idioma**
 
-### Tarjeta microSD
+No incluye los juegos Concurso, Memoria o Palabras polisémicas, Bluetooth,
+Jukebox, placa 3 × 3, aro NeoPixel ni interfaz web ESP32.
 
-La microSD debe contener:
+## 2. Preparar la microSD
 
-- `mp3/`: mensajes de voz, números y sonidos del sistema.
-- `advert/`: avisos que se reproducen sobre el audio actual.
-- Carpetas de contenido numeradas de `01` a `99`, con las pistas en el orden
-  deseado. Usa nombres numéricos de tres cifras, por ejemplo `001.mp3`,
-  `002.mp3`, etc.
+Para aprovechar los tres idiomas, copia el contenido de
+`sd-card-multilang` en la raíz de la microSD. Debe conservar:
 
-Puedes usar el paquete de idioma correspondiente incluido en este repositorio
-(`sd-card-spanish`, `sd-card-english`, etc.) o el paquete
-`sd-card-multilang`. No cambies los nombres de los archivos del sistema.
+- `mp3/`: mensajes, números y sonidos del sistema en los tres idiomas.
+- `advert/`: avisos del sistema en los tres idiomas.
+- Carpetas de contenido `01` a `99`.
 
-### Encendido
+Guarda el contenido del usuario en carpetas de dos cifras (`01`, `02`, etc.) y
+ordena sus pistas con nombres numéricos de tres cifras:
 
-1. Inserta la microSD antes de encender.
-2. Enciende la caja.
-3. Espera el saludo y el sonido de inicio.
-4. Acerca una tarjeta configurada al lector para reproducirla.
+```text
+01/
+├── 001.mp3
+├── 002.mp3
+└── 003.mp3
+```
 
-**Atención:** mantener pulsados simultáneamente los tres botones principales
-durante el arranque borra los ajustes guardados.
+No cambies los nombres de los archivos del sistema. Inserta siempre la microSD
+antes de encender.
 
-### Apagado
+## 3. Encendido, idioma y apagado
 
-Con la caja en reposo o en pausa, mantén pulsado **Reproducir/Pausa** durante
-aproximadamente un segundo. También puede apagarse por el temporizador de
-espera, una tarjeta de temporizador, batería agotada o la interfaz web ESP32.
-Algunas instalaciones desactivan el apagado mediante botón.
+### Encender
 
-## 3. Botones y controles
+1. Inserta la microSD.
+2. Enciende TonUINO.
+3. Espera el saludo.
+4. Acerca una tarjeta configurada para empezar.
+
+**Atención:** mantener pulsados simultáneamente
+**Reproducir/Pausa + Siguiente + Anterior** durante el arranque borra todos los
+ajustes guardados.
+
+### Cambiar el idioma
+
+Pulsa **Idioma** para cambiar en este orden:
+
+**Español → Italiano → Inglés → Español**
+
+El sistema anuncia el idioma seleccionado. El cambio se aplica inmediatamente
+a los menús, números y avisos, tanto en reposo como durante la reproducción o
+la pausa. El botón Idioma no actúa dentro del menú de administración.
+
+El cambio con el botón es temporal. Tras reiniciar se recupera el **idioma
+inicial** guardado en la opción 15 del menú de administración.
+
+Las tarjetas Disney compatibles que dependen del idioma también usan el idioma
+activo en el momento de leerlas.
+
+### Apagar
+
+En reposo o pausa, mantén **Reproducir/Pausa** durante aproximadamente un
+segundo. También puede apagarse automáticamente mediante el temporizador de
+espera o una tarjeta de temporizador.
+
+## 4. Guía de los seis botones
 
 Una pulsación larga dura aproximadamente un segundo.
 
-### Funciones comunes
-
-| Acción | En reproducción | En reposo o pausa | En un menú |
+| Botón/acción | En reproducción | En reposo o pausa | En menús |
 | --- | --- | --- | --- |
-| Reproducir/Pausa | Pausar o continuar | Continuar, si hay contenido pausado | Confirmar |
-| Reproducir/Pausa, pulsación larga | Anunciar el número de pista | Apagar | Cancelar/salir |
-| Siguiente + Anterior, pulsación larga | Ir al principio de la cola | Acceso directo 1 | — |
-| Los tres botones principales, pulsación larga | Solicitar acceso al menú de administración | Solicitar acceso al menú de administración | — |
+| Reproducir/Pausa | Pausar o continuar | Continuar el audio pausado | Confirmar |
+| Reproducir/Pausa, larga | Anunciar pista actual | Apagar | Cancelar/salir |
+| Siguiente | Pista siguiente | — | Opción siguiente |
+| Siguiente, larga | Saltar 10 pistas | Acceso directo 2 | Avanzar 10 opciones |
+| Anterior | Pista anterior | — | Opción anterior |
+| Anterior, larga | Retroceder 10 pistas | Acceso directo 3 | Retroceder 10 opciones |
+| Volumen + | Subir volumen | Subir volumen | Opción siguiente |
+| Volumen − | Bajar volumen | Bajar volumen | Opción anterior |
+| Idioma | Cambiar idioma | Cambiar idioma | Sin función en administración |
+| Siguiente + Anterior, larga | Volver a la primera pista de la cola | Acceso directo 1 | — |
 
-Al pausar retirando una tarjeta, no se puede continuar hasta volver a colocarla
-si está activada la opción **Pausa al retirar la tarjeta**.
+Mantener **Reproducir/Pausa + Siguiente + Anterior** o
+**Reproducir/Pausa + Volumen + + Volumen −** abre el menú de administración
+cuando su protección lo permite.
 
-### Versión de tres botones
+La opción «Invertir botones de volumen» del menú no altera esta versión de
+cinco botones de reproducción más el botón de idioma.
 
-Los botones laterales tienen dos configuraciones posibles:
+## 5. Tarjetas RFID/NFC
 
-| Configuración | Pulsación corta Arriba/Abajo | Pulsación larga Arriba/Abajo |
-| --- | --- | --- |
-| Invertida (ajuste inicial del firmware) | Subir/bajar volumen | Siguiente/anterior |
-| No invertida | Siguiente/anterior | Subir/bajar volumen continuamente |
+### Reproducir
 
-En reposo o pausa:
-
-- Pulsación larga en **Arriba**: acceso directo 2.
-- Pulsación larga en **Abajo**: acceso directo 3.
-
-### Versión de cinco botones
-
-- **Siguiente/Anterior**: cambia una pista; una pulsación larga salta diez.
-- **Volumen +/−**: cambia el volumen; mantenlo pulsado para repetir el cambio.
-- La inversión de botones no afecta a la versión de cinco botones.
-- En reposo, Siguiente/Anterior puede ajustar el brillo del aro NeoPixel.
-- En reposo o pausa, una pulsación larga en Siguiente o Anterior inicia los
-  accesos directos 2 o 3.
-
-### Menús de voz
-
-- **Siguiente/Anterior**: avanzar o retroceder una opción.
-- **Pulsación larga**: avanzar o retroceder diez opciones cuando proceda.
-- **Reproducir/Pausa**: confirmar.
-- **Reproducir/Pausa, pulsación larga**: cancelar.
-
-La caja anuncia cada valor. Al elegir una carpeta o pista también puede
-reproducir una vista previa.
-
-### Controles opcionales
-
-- **Placa 3 × 3:** ofrece 18 botones adicionales configurables como accesos
-  directos.
-- **Encoder giratorio:** normalmente controla el volumen; una configuración
-  alternativa permite cambiar de pista.
-- **Potenciómetro:** fija el volumen dentro de los límites configurados.
-- **Botón de idioma:** en el firmware personalizado multilingüe cambia en
-  tiempo real entre español, italiano e inglés.
-
-## 4. Uso de tarjetas RFID/NFC
-
-### Reproducir una tarjeta
-
-1. Acerca una tarjeta configurada.
-2. TonUINO lee de ella la carpeta, el modo y sus parámetros.
+1. Coloca una tarjeta configurada sobre el lector.
+2. TonUINO lee la carpeta, el modo y sus parámetros.
 3. La reproducción empieza automáticamente.
-4. Acercar otra tarjeta válida cambia el contenido. Presentar de nuevo la misma
-   tarjeta durante su reproducción normalmente no reinicia el audio.
+4. Otra tarjeta válida cambia el contenido.
 
-Se admiten tarjetas MIFARE Mini, Classic 1K/4K y
-Ultralight/NTAG213/215/216. La compatibilidad puede depender del lector.
+La misma tarjeta presentada durante su propia reproducción normalmente se
+ignora. Se admiten MIFARE Mini, Classic 1K/4K y
+Ultralight/NTAG213/215/216.
 
 ### Configurar una tarjeta vacía
 
-Al detectar una tarjeta vacía, TonUINO inicia automáticamente el asistente:
+Al detectar una tarjeta vacía, el asistente se inicia automáticamente:
 
 1. Retira la tarjeta cuando se solicite.
-2. Elige el modo de reproducción.
-3. Elige la carpeta y los parámetros adicionales solicitados.
-4. Confirma cada paso con **Reproducir/Pausa**.
+2. Elige el modo con Siguiente/Anterior o Volumen +/−.
+3. Confirma con **Reproducir/Pausa**.
+4. Elige la carpeta `01`–`99` y los parámetros solicitados.
 5. Vuelve a colocar la tarjeta cuando oigas «Pon la tarjeta».
-6. Retírala después de la confirmación.
+6. No la muevas hasta la confirmación y después retírala.
 
-La tarjeta debe permanecer quieta mientras se escribe. Un mensaje de error
-indica que la escritura falló; vuelve a intentarlo con la tarjeta centrada.
+Una pulsación larga en Reproducir/Pausa cancela el proceso. Si se anuncia un
+error, vuelve a intentarlo manteniendo la tarjeta centrada y quieta.
 
-### Pausa al retirar la tarjeta
+### Pausa al retirar
 
-Si está habilitada en administración, retirar la tarjeta que inició el audio
-pone la caja en pausa y volver a colocar la misma tarjeta continúa la
-reproducción. Si está deshabilitada, el audio continúa aunque se retire.
+La opción 13 de administración controla este comportamiento:
 
-### Tarjetas Disney opcionales
+- **Sí:** retirar la tarjeta que inició el audio pone la caja en pausa. Solo se
+  reanuda al volver a colocar esa tarjeta.
+- **No:** el contenido sigue sonando después de retirarla.
 
-Un firmware compilado con esta función puede reconocer determinadas tarjetas
-Disney sin reescribirlas. Las tarjetas FUDAN usan carpetas dependientes del
-idioma (`97`–`99`) y las Ultralight compatibles usan la carpeta `96`. Solo se
-admiten los modelos y códigos configurados en el firmware.
+### Tarjetas Disney compatibles
 
-## 5. Modos de reproducción
+Esta compilación reconoce determinadas tarjetas Disney sin reescribirlas:
 
-| Modo | Funcionamiento | Datos que se eligen |
-| --- | --- | --- |
-| Aleatorio | Reproduce una pista al azar de la carpeta y termina. | Carpeta |
-| Álbum | Reproduce toda la carpeta en orden. | Carpeta |
-| Fiesta | Reproduce todas las pistas en orden aleatorio y vuelve a barajarlas indefinidamente. | Carpeta |
-| Individual | Reproduce una pista concreta. | Carpeta y pista |
-| Audiolibro | Reproduce en orden y recuerda la siguiente pista para la próxima vez. Guarda la pista, no la posición dentro del archivo. | Primera y última carpeta |
-| Aleatorio De–A | Reproduce una pista al azar dentro de un intervalo. | Carpeta, primera y última pista |
-| Álbum De–A | Reproduce en orden solo un intervalo. | Carpeta, primera y última pista |
-| Fiesta De–A | Reproduce aleatoriamente y en bucle solo un intervalo. | Carpeta, primera y última pista |
-| Audiolibro individual | Continúa el progreso y reproduce una cantidad configurada de pistas (hasta 30 por activación). | Intervalo de carpetas y cantidad |
-| Repetir última tarjeta | Vuelve a iniciar la última tarjeta o acceso directo válido. | Ninguno |
-| Audiolibro De–A | Como Audiolibro, limitado a un intervalo de pistas. | Carpeta, primera y última pista |
-| Concurso | Inicia el juego de preguntas. | Carpeta y formato de respuestas |
-| Memoria | Inicia el juego de parejas. | Carpeta |
-| Palabras polisémicas | Inicia el juego de adivinanzas. | Carpeta |
-| Cambiar Bluetooth | Activa o desactiva el módulo Bluetooth opcional. | Ninguno |
-| Administración | Convierte la tarjeta en llave del menú de administración. | Ninguno |
+- Algunas tarjetas FUDAN usan las carpetas `97`, `98` o `99`, según el idioma
+  activo.
+- Las tarjetas Ultralight A reconocidas usan la carpeta fija `96`; el modelo
+  de tarjeta determina la pista.
 
-Una carpeta vacía o con nombres que el reproductor no pueda reconocer vuelve al
-reposo sin reproducir contenido.
+Estas carpetas deben contener los audios correspondientes. No todas las
+tarjetas Disney son compatibles.
+
+## 6. Modos de reproducción disponibles
+
+Al crear una tarjeta o acceso directo, el asistente anuncia dieciséis modos.
+En esta compilación deben usarse los siguientes:
+
+| Nº | Modo | Funcionamiento |
+| ---: | --- | --- |
+| 1 | Aleatorio | Reproduce una pista al azar de la carpeta y termina. |
+| 2 | Álbum | Reproduce toda la carpeta en orden. |
+| 3 | Fiesta | Reproduce todas las pistas al azar y vuelve a barajarlas indefinidamente. |
+| 4 | Individual | Reproduce una pista concreta de la carpeta. |
+| 5 | Audiolibro | Reproduce en orden y recuerda la siguiente pista para otro día. |
+| 6 | Administración | Crea una tarjeta que abre el menú de administración. |
+| 7 | Aleatorio De–A | Reproduce una pista al azar entre la primera y la última elegidas. |
+| 8 | Álbum De–A | Reproduce en orden el intervalo elegido. |
+| 9 | Fiesta De–A | Reproduce al azar y en bucle el intervalo elegido. |
+| 10 | Audiolibro individual | Continúa el progreso y reproduce una cantidad elegida de pistas, hasta 30 por uso. |
+| 11 | Repetir última tarjeta | Vuelve a iniciar la última tarjeta o acceso directo válido. |
+| 16 | Audiolibro De–A | Audiolibro con progreso limitado a un intervalo de pistas. |
+
+Los modos 12–15 (Concurso, Memoria, Bluetooth y Palabras polisémicas) no están
+habilitados en `TonUINO_Custom`.
 
 ### Progreso de audiolibros
 
-El progreso se guarda por carpeta. Al finalizar una pista se memoriza la
-siguiente; al saltar manualmente se memoriza la pista elegida. Al terminar la
-última, la siguiente sesión comienza de nuevo por la primera. Las variantes con
-varias carpetas eligen una carpeta pendiente dentro del intervalo configurado.
+Se memoriza la pista, no el segundo exacto dentro del archivo. Al terminar una
+pista se guarda la siguiente; al saltar manualmente se guarda la elegida. Tras
+la última pista, el siguiente uso empieza por la primera.
 
-## 6. Juegos opcionales
+### Carpetas y rangos
 
-Los juegos solo aparecen si fueron activados al compilar el firmware.
+- La carpeta debe estar entre `01` y `99`.
+- El modo Individual pide una pista.
+- Los modos De–A piden primera y última pista.
+- Audiolibro y Audiolibro individual permiten seleccionar un intervalo de
+  carpetas.
+- Audiolibro individual también pide cuántas pistas reproducir.
 
-### Concurso
+## 7. Tarjetas de modificación disponibles
 
-Cada bloque de archivos de la carpeta debe contener:
+Una tarjeta de modificación cambia temporalmente el comportamiento. Presenta
+de nuevo la tarjeta activa para desactivarla.
 
-1. una pregunta;
-2. cero, dos o cuatro respuestas;
-3. opcionalmente, una explicación/solución.
+| Nº | Modificación | Efecto |
+| ---: | --- | --- |
+| 1 | Temporizador | Apaga tras 5, 15, 30 o 60 minutos. Puede hacerlo al vencer o esperar al final de la pista, con un máximo de diez minutos extra. |
+| 2 | Baile congelado | Interrumpe la música al azar. Intervalos disponibles: 15–30, 25–40 o 35–50 segundos. |
+| 3 | Fuego, agua y viento | Anuncia una acción al azar con los mismos intervalos. |
+| 4 | Modo bebé | Bloquea los seis botones; las tarjetas siguen funcionando. |
+| 5 | Modo guardería | Solo permite Pausa y deja una nueva tarjeta en espera hasta que termine la pista actual. |
+| 6 | Repetir pista | Repite indefinidamente la pista actual. |
+| 10 | Desactivar espera | Activa o desactiva temporalmente el temporizador general. |
+| 11 | Modo infinito | Activa o desactiva la repetición de la cola actual. |
 
-Durante el juego:
+Las opciones 7–9 (Bluetooth, Jukebox y pausa después de cada pista) no están
+habilitadas en esta compilación.
 
-- Pulsa **Reproducir/Pausa** para obtener una pregunta aleatoria. No se repite
-  hasta completar la ronda.
-- Usa Siguiente, Anterior y, si están disponibles, Volumen +/− para escuchar
-  respuestas.
-- Pulsa **Reproducir/Pausa** para comprobar la respuesta elegida.
-- En el modo pulsador, esos cuatro botones identifican al jugador más rápido y
-  **Reproducir/Pausa** reproduce después la solución.
-- Mantén Siguiente + Anterior para salir.
-
-El juego termina tras unos cinco minutos sin interacción, salvo que esté
-desactivado temporalmente el temporizador de espera.
-
-### Memoria
-
-Primero crea las tarjetas de memoria desde el menú de administración.
-
-1. Inicia una tarjeta configurada en modo Memoria.
-2. Presenta la primera tarjeta de pareja y después la segunda.
-3. Pulsa **Reproducir/Pausa** para comprobar si coinciden.
-4. El sistema considera pareja las pistas consecutivas `1–2`, `3–4`, etc.
-5. Mantén Siguiente + Anterior para terminar.
-
-Una pulsación larga en Reproducir/Pausa vuelve a escuchar la última tarjeta.
-
-### Palabras polisémicas
-
-Cada concepto usa seis pistas: palabra, cuatro descripciones y solución.
-
-- Mantén **Reproducir/Pausa** para iniciar un concepto o revelar la solución.
-- Usa los cinco controles para volver a escuchar las descripciones disponibles.
-- Mantén Siguiente + Anterior para salir.
-
-## 7. Tarjetas de modificación
-
-Estas tarjetas cambian temporalmente el comportamiento de la caja. Acercar de
-nuevo la tarjeta de modificación activa la desactiva.
-
-| Modificación | Efecto |
-| --- | --- |
-| Temporizador de apagado | Apaga después de 5, 15, 30 o 60 minutos. Puede apagar inmediatamente al vencer o esperar a que termine la pista (máximo diez minutos adicionales). |
-| Baile congelado | Interrumpe aleatoriamente la música para jugar. Intervalos: 15–30, 25–40 o 35–50 segundos. |
-| Fuego, agua y viento | Anuncia al azar una de las tres acciones usando los mismos intervalos. |
-| Modo bebé | Bloquea todos los botones; las tarjetas siguen funcionando. |
-| Modo guardería | Solo permite Pausa y deja una nueva tarjeta en espera hasta que termine la pista actual. |
-| Repetir pista | Repite indefinidamente la pista actual. |
-| Jukebox | Encola hasta diez tarjetas o accesos directos; anuncia su posición. Un sonido avisa si la cola está llena. |
-| Pausa tras cada pista | Pone la reproducción en pausa después de cada pista. |
-| Desactivar espera | Activa o desactiva temporalmente el temporizador de apagado general. |
-| Modo infinito | Activa o desactiva la repetición infinita de la cola actual. |
-| Bluetooth | Activa o desactiva el módulo Bluetooth. |
-
-Jukebox, pausa tras cada pista y Bluetooth son funciones opcionales del
-firmware.
+**Modo bebé:** como bloquea también el botón Idioma, vuelve a presentar su
+tarjeta de modificación para salir.
 
 ## 8. Accesos directos
 
-Los accesos directos reproducen contenido sin tarjeta y se configuran en
-administración con el mismo asistente de modos.
+Los accesos directos ejecutan contenido sin tarjeta:
 
-- **Acceso 1:** pulsación larga simultánea en Siguiente + Anterior.
-- **Acceso 2:** pulsación larga en Siguiente estando en reposo o pausa.
-- **Acceso 3:** pulsación larga en Anterior estando en reposo o pausa.
-- **Placa 3 × 3:** hasta 18 accesos adicionales.
+- **Acceso 1:** mantén Siguiente + Anterior.
+- **Acceso 2:** mantén Siguiente en reposo o pausa.
+- **Acceso 3:** mantén Anterior en reposo o pausa.
 
-Los accesos directos normales se inician cuando no se está reproduciendo nada.
-Con Jukebox activo, un acceso puede añadirse a la cola.
+Se configuran en la opción 7 de administración. El cuarto destino «Al
+arrancar» aparece en el menú, pero esta compilación no genera la orden necesaria
+para ejecutarlo; utiliza los accesos 1–3.
 
 ## 9. Menú de administración
 
-### Entrar y salir
+### Acceso y navegación
 
-Para entrar:
+Para solicitar acceso:
 
-- mantén pulsados los tres botones principales; o
-- acerca una tarjeta de administración.
+- mantén **Reproducir/Pausa + Siguiente + Anterior**; o
+- mantén **Reproducir/Pausa + Volumen + + Volumen −**; o
+- presenta una tarjeta de administración.
 
-Para salir o cancelar en cualquier nivel, mantén pulsado
-**Reproducir/Pausa**. Retira cualquier tarjeta del lector antes de navegar; si
-no, TonUINO pedirá retirarla.
+Retira cualquier tarjeta del lector antes de navegar.
+
+- Siguiente o Volumen +: opción siguiente.
+- Anterior o Volumen −: opción anterior.
+- Pulsación larga en Siguiente/Anterior o Volumen +/−: salto de diez.
+- Reproducir/Pausa: confirmar.
+- Reproducir/Pausa larga: cancelar o salir.
 
 ### Protección
 
-Hay tres opciones reales:
+1. **Sin protección:** se permiten las combinaciones de botones.
+2. **Solo tarjeta:** únicamente una tarjeta de administración abre el menú.
+3. **PIN:** introduce cuatro pulsaciones usando Reproducir/Pausa = 1,
+   Siguiente = 2 y Anterior = 3.
 
-1. **Sin protección:** se permite la combinación de botones.
-2. **Solo tarjeta:** solo una tarjeta de administración permite entrar.
-3. **PIN:** introduce cuatro pulsaciones; Reproducir/Pausa = 1, Siguiente = 2 y
-   Anterior = 3.
-
-### Opciones
+### Opciones útiles en esta versión
 
 | Nº | Opción | Uso |
 | ---: | --- | --- |
-| 1 | Configurar tarjeta | Crea o reconfigura una tarjeta de contenido o administración. |
-| 2 | Volumen máximo | Fija el límite superior. |
-| 3 | Volumen mínimo | Fija el límite inferior. |
-| 4 | Volumen inicial | Fija el volumen usado al encender. |
+| 1 | Configurar tarjeta | Crear o reconfigurar una tarjeta. |
+| 2 | Volumen máximo | Fijar el límite superior. |
+| 3 | Volumen mínimo | Fijar el límite inferior. |
+| 4 | Volumen inicial | Fijar el volumen al encender. |
 | 5 | Ecualizador | Normal, Pop, Rock, Jazz, Clásica o Graves. |
-| 6 | Tarjeta de modificación | Elige una modificación y escribe la tarjeta. |
-| 7 | Acceso directo | Elige el acceso y configura su contenido. |
-| 8 | Temporizador de espera | Apagado tras 5, 15, 30 o 60 minutos en reposo/pausa, o desactivado. |
-| 9 | Tarjetas individuales por carpeta | Escribe consecutivamente una tarjeta por pista dentro del intervalo elegido. |
-| 10 | Invertir botones | Intercambia volumen y cambio de pista en la versión de tres botones. |
-| 11 | Borrar ajustes | Borra de inmediato ajustes, accesos y progreso de audiolibros, y restaura valores iniciales. |
-| 12 | Proteger administración | Selecciona sin protección, solo tarjeta o PIN. |
-| 13 | Pausa al retirar tarjeta | Activa o desactiva esta conducta. |
-| 14 | Crear tarjetas de memoria | Escribe tarjetas numeradas para el juego; una pulsación corta en Pausa finaliza. |
-| 15 | Idioma inicial | Solo en firmware multilingüe; elige español, italiano o inglés. |
+| 6 | Tarjeta de modificación | Crear una de las modificaciones disponibles. |
+| 7 | Acceso directo | Configurar los accesos 1–3. |
+| 8 | Temporizador de espera | Apagar tras 5, 15, 30 o 60 minutos en reposo/pausa, o no apagar. |
+| 9 | Tarjetas por carpeta | Crear consecutivamente una tarjeta Individual por cada pista del intervalo. |
+| 11 | Borrar ajustes | Borrar ajustes, accesos y progreso de audiolibros, y restaurar valores iniciales. |
+| 12 | Proteger administración | Elegir sin protección, solo tarjeta o PIN. |
+| 13 | Pausa al retirar | Activar o desactivar esta conducta. |
+| 15 | Idioma inicial | Elegir Español, Italiano o Inglés para cada arranque. |
 
-Después de guardar una opción, TonUINO vuelve al menú principal de
-administración.
+Las opciones 10 (invertir botones) y 14 (tarjetas de Memoria) aparecen en el
+menú común, pero no aportan una función utilizable en esta compilación: hay
+botones de volumen separados y el juego Memoria está deshabilitado.
 
 ### Escritura por lotes
 
-Retira cada tarjeta después de la confirmación y presenta la siguiente cuando
-TonUINO anuncie su número. En tarjetas por carpeta, una pulsación larga en
-Reproducir/Pausa cancela. En tarjetas de Memoria, una pulsación corta termina
-el proceso; Siguiente/Anterior cambia el número que se va a escribir.
+En la opción 9, selecciona carpeta, primera y última pista. TonUINO anuncia cada
+número antes de pedir una tarjeta. Retira cada tarjeta tras la confirmación y
+presenta la siguiente. Mantén Reproducir/Pausa para cancelar.
 
-## 10. Indicadores y accesorios opcionales
-
-- **Aro NeoPixel:** indica arranque, reposo, reproducción, pausa,
-  administración, temporizador y apagado mediante colores/animaciones; en
-  reposo se puede cambiar el brillo con Siguiente/Anterior.
-- **LED de botones:** secuencia al arrancar, parpadeo conjunto en reposo, todos
-  encendidos al reproducir, solo Pausa parpadeando durante la pausa y apagados
-  al desconectar.
-- **Auriculares:** las placas compatibles apagan el altavoz automáticamente y
-  usan límites de volumen independientes.
-- **Medición de batería:** un sonido periódico avisa de nivel bajo; un nivel
-  crítico mantenido provoca el apagado.
-- **Bluetooth:** una pulsación larga en Reproducir/Pausa durante la reproducción
-  solicita reconexión/emparejamiento cuando Bluetooth está activo.
-
-## 11. Interfaz web ESP32
-
-Las versiones ESP32 incluyen una interfaz web.
-
-### Conexión
-
-1. Si no hay una red guardada o la conexión falla, busca la red Wi-Fi
-   **TonUINO**.
-2. Conéctate y abre una dirección con al menos un punto, por ejemplo
-   `http://tonuino.t`.
-3. Si el dispositivo con el que navegas también tiene Internet, usa
-   `http://192.168.4.1`.
-4. Si TonUINO se conectó a tu red doméstica, abre su dirección IP o su nombre
-   de host.
-
-Mantener **Siguiente** al arrancar fuerza un punto de acceso abierto para
-recuperar la configuración Wi-Fi.
-
-### Funciones web
-
-La página principal muestra el estado y permite:
-
-- usar botones virtuales;
-- iniciar una carpeta/modo y escribir su configuración en una tarjeta;
-- activar o escribir modificadores;
-- apagar la caja.
-
-La página de ajustes permite modificar volúmenes de altavoz y auriculares,
-ecualizador, temporizador, inversión de botones, protección de administración,
-PIN, pausa al retirar y accesos directos. También hay páginas de Wi-Fi, sistema,
-registro y actualización de firmware. Reinicia después de cambiar la red si no
-se seleccionó el reinicio automático.
-
-Protege la red de acceso y cambia las credenciales de actualización
-predeterminadas antes de exponer el dispositivo a una red que no sea de
-confianza.
-
-## 12. Solución de problemas
+## 10. Solución de problemas
 
 | Problema | Qué comprobar |
 | --- | --- |
-| No se oye nada | microSD insertada, carpetas `mp3` y `advert`, nombres numéricos, volumen, altavoz/auriculares y alimentación. |
-| Una carpeta no reproduce | Debe estar entre `01` y `99`, contener pistas numéricas consecutivas y coincidir con la carpeta grabada en la tarjeta. |
-| No lee una tarjeta | Céntrala, mantenla quieta, prueba otra tarjeta compatible y separa el lector de metal o fuentes de interferencia. |
-| No escribe una tarjeta | Retírala cuando se pida, vuelve a colocarla centrada y no la muevas hasta la confirmación. |
-| No continúa tras una pausa | Si está activa la pausa al retirar, vuelve a colocar la tarjeta original. |
-| No puedo abrir administración | Prueba la tarjeta de administración o el PIN configurado. En modo «solo tarjeta», la combinación de botones está bloqueada. |
-| Un modo/juego/modificador no aparece | Esa función probablemente no fue incluida en la compilación instalada. |
-| Se apaga solo | Revisa el temporizador general, una modificación de apagado y el nivel de batería. |
-| ESP32 no aparece en la red | Mantén Siguiente durante el arranque, conéctate al AP `TonUINO` y revisa la configuración Wi-Fi. |
-| La tarjeta da error o se ignora | Puede ser incompatible, estar dañada, contener datos de otra versión o haber fallado la lectura. |
+| No se oye nada | microSD insertada, paquete `sd-card-multilang`, carpetas `mp3` y `advert`, volumen, altavoz y alimentación. |
+| Solo funciona un idioma | Usa el contenido completo de `sd-card-multilang`; los mensajes de los tres idiomas deben estar en la misma microSD. |
+| El idioma cambia tras reiniciar | El botón Idioma es temporal; guarda el idioma inicial con la opción 15. |
+| Una carpeta no reproduce | Debe ser `01`–`99`, contener pistas numéricas consecutivas y coincidir con la tarjeta. |
+| No se lee o escribe una tarjeta | Céntrala, mantenla quieta, sepárala de metal y prueba otra tarjeta compatible. |
+| No continúa después de pausar | Si está activa la pausa al retirar, vuelve a colocar la tarjeta original. |
+| No abre administración | Usa la tarjeta o el PIN configurados. En «solo tarjeta», las combinaciones están bloqueadas. |
+| Un modo anunciado no funciona | No uses los modos 12–15 ni los modificadores 7–9 en esta compilación. |
+| Se apaga solo | Revisa el temporizador de espera y la tarjeta de temporizador activa. |
 
 ---
 
 # User manual in English
 
-## 1. What TonUINO is
+## 1. Overview
 
-TonUINO is an audio player controlled mainly with RFID/NFC cards. Each card can
-start a folder, track, audiobook, game, or special function. Spoken prompts
-guide configuration, so no screen is required.
+TonUINO plays audio from a microSD card. RFID/NFC cards select the folder or
+track and determine how it is played. Spoken prompts make the box usable and
+configurable without a screen.
 
-This manual describes every feature available in the software. Some may not be
-enabled on your unit. Ask the firmware installer if a menu or accessory
-described here is missing.
+This version has exactly six buttons:
 
-## 2. Before first use
+1. **Play/Pause**
+2. **Next**
+3. **Previous**
+4. **Volume +**
+5. **Volume −**
+6. **Language**
 
-### microSD card
+It does not include the Quiz, Memory, or Teapot games, Bluetooth, Jukebox,
+3 × 3 keypad, NeoPixel ring, or ESP32 web interface.
 
-The microSD card must contain:
+## 2. Preparing the microSD card
 
-- `mp3/`: spoken prompts, numbers, and system sounds.
-- `advert/`: announcements played over current audio.
-- Content folders numbered `01` through `99`, with tracks in the desired
-  order. Use three-digit numeric names such as `001.mp3`, `002.mp3`, and so on.
+To use all three languages, copy `sd-card-multilang` to the root of the
+microSD card. Keep:
 
-Use the matching language package in this repository (`sd-card-english`,
-`sd-card-spanish`, etc.) or `sd-card-multilang`. Do not rename system files.
+- `mp3/`: prompts, numbers, and system sounds in all three languages.
+- `advert/`: system announcements in all three languages.
+- Content folders `01` through `99`.
+
+Store user content in two-digit folders (`01`, `02`, etc.) and use three-digit
+numeric track names:
+
+```text
+01/
+├── 001.mp3
+├── 002.mp3
+└── 003.mp3
+```
+
+Do not rename system files. Always insert the microSD card before power-on.
+
+## 3. Power, language, and shutdown
 
 ### Power on
 
-1. Insert the microSD card before switching on.
-2. Switch the box on.
-3. Wait for the greeting and startup sound.
-4. Place a configured card on the reader.
+1. Insert the microSD card.
+2. Switch TonUINO on.
+3. Wait for the greeting.
+4. Present a configured card to begin.
 
-**Warning:** holding all three main buttons together during startup erases the
-saved settings.
+**Warning:** holding **Play/Pause + Next + Previous** together during startup
+erases all saved settings.
 
-### Power off
+### Changing language
 
-While idle or paused, hold **Play/Pause** for about one second. TonUINO may also
-shut down because of the standby timer, a sleep modifier, an empty battery, or
-the ESP32 web interface. Some installations disable button shutdown.
+Press **Language** to cycle:
 
-## 3. Buttons and controls
+**Spanish → Italian → English → Spanish**
+
+TonUINO announces the selected language. The change immediately applies to
+menus, numbers, and announcements while idle, playing, or paused. The Language
+button has no effect inside the admin menu.
+
+The button changes language temporarily. After a restart, TonUINO restores the
+**startup language** saved with admin option 15.
+
+Compatible language-dependent Disney cards also use the language active when
+they are read.
+
+### Shutdown
+
+While idle or paused, hold **Play/Pause** for about one second. The standby
+timer or a sleep-timer card can also shut TonUINO down.
+
+## 4. Six-button reference
 
 A long press takes about one second.
 
-### Common functions
-
-| Action | While playing | Idle or paused | In a menu |
+| Button/action | While playing | Idle or paused | In menus |
 | --- | --- | --- | --- |
-| Play/Pause | Pause or resume | Resume paused content | Confirm |
-| Long Play/Pause | Announce track number | Shut down | Cancel/exit |
-| Long Next + Previous | Jump to the start of the queue | Shortcut 1 | — |
-| Long press all three main buttons | Request admin access | Request admin access | — |
+| Play/Pause | Pause or resume | Resume paused audio | Confirm |
+| Long Play/Pause | Announce current track | Shut down | Cancel/exit |
+| Next | Next track | — | Next option |
+| Long Next | Skip 10 tracks | Shortcut 2 | Move 10 options forward |
+| Previous | Previous track | — | Previous option |
+| Long Previous | Go back 10 tracks | Shortcut 3 | Move 10 options back |
+| Volume + | Increase volume | Increase volume | Next option |
+| Volume − | Decrease volume | Decrease volume | Previous option |
+| Language | Change language | Change language | No function in admin |
+| Long Next + Previous | Return to first queue track | Shortcut 1 | — |
 
-If **Pause when card is removed** caused the pause, playback cannot resume
-until the card is placed back on the reader.
+Hold **Play/Pause + Next + Previous** or
+**Play/Pause + Volume + + Volume −** to open the admin menu when its protection
+allows button access.
 
-### Three-button version
+The “Invert volume buttons” setting does not change this five playback-button
+plus language-button version.
 
-The side buttons have two possible configurations:
+## 5. RFID/NFC cards
 
-| Configuration | Short Up/Down | Long Up/Down |
-| --- | --- | --- |
-| Inverted (firmware default) | Volume up/down | Next/previous track |
-| Not inverted | Next/previous track | Continuous volume up/down |
-
-While idle or paused:
-
-- Long **Up**: shortcut 2.
-- Long **Down**: shortcut 3.
-
-### Five-button version
-
-- **Next/Previous:** move one track; hold to skip ten.
-- **Volume +/−:** change volume; hold for repeated changes.
-- Button inversion does not affect the five-button version.
-- While idle, Next/Previous may adjust optional NeoPixel brightness.
-- While idle or paused, long Next or Previous starts shortcut 2 or 3.
-
-### Voice menus
-
-- **Next/Previous:** move one option.
-- **Long press:** move ten options where applicable.
-- **Play/Pause:** confirm.
-- **Long Play/Pause:** cancel.
-
-TonUINO announces every value. Folder and track selection may also play a
-preview.
-
-### Optional controls
-
-- **3 × 3 board:** provides 18 additional configurable shortcut buttons.
-- **Rotary encoder:** normally controls volume; an alternate setup changes
-  tracks.
-- **Potentiometer:** sets volume within the configured limits.
-- **Language button:** the custom multilingual firmware cycles between Spanish,
-  Italian, and English at runtime.
-
-## 4. Using RFID/NFC cards
-
-### Playing a card
+### Playback
 
 1. Place a configured card on the reader.
 2. TonUINO reads its folder, mode, and parameters.
 3. Playback starts automatically.
-4. Another valid card changes the content. Presenting the same card again
-   during playback normally does not restart it.
+4. Another valid card changes the content.
 
-Supported tags include MIFARE Mini, Classic 1K/4K, and
-Ultralight/NTAG213/215/216. Compatibility can depend on the reader.
+Presenting the same card during its own playback is normally ignored. Supported
+tags include MIFARE Mini, Classic 1K/4K, and
+Ultralight/NTAG213/215/216.
 
 ### Configuring a blank card
 
 A blank card starts the setup assistant automatically:
 
 1. Remove the card when asked.
-2. Choose the playback mode.
-3. Choose the folder and requested extra parameters.
-4. Confirm each step with **Play/Pause**.
-5. Place the card back when prompted.
-6. Remove it after confirmation.
+2. Select a mode with Next/Previous or Volume +/−.
+3. Confirm with **Play/Pause**.
+4. Select folder `01`–`99` and any requested parameters.
+5. Replace the card when prompted.
+6. Keep it still until confirmation, then remove it.
 
-Keep the card still while it is written. If the generic error prompt plays,
-retry with the card centered on the reader.
+Long Play/Pause cancels. If an error is announced, retry with the card centered
+and held still.
 
-### Pause when card is removed
+### Pause on removal
 
-When enabled in the admin menu, removing the card that started playback pauses
-the box, and placing that same card back resumes it. When disabled, playback
-continues after card removal.
+Admin option 13 controls this behavior:
 
-### Optional Disney cards
+- **Yes:** removing the card that started the audio pauses the box. It resumes
+  only when that card is replaced.
+- **No:** playback continues after removing the card.
 
-Firmware compiled with this feature can recognize selected Disney cards
-without rewriting them. FUDAN cards use language-specific folders `97`–`99`;
-compatible Ultralight cards use folder `96`. Only models and codes configured
-in the firmware are supported.
+### Compatible Disney cards
 
-## 5. Playback modes
+This build recognizes selected Disney cards without rewriting them:
 
-| Mode | Behavior | Selected data |
-| --- | --- | --- |
-| Random episode | Plays one random track and stops. | Folder |
-| Album | Plays the entire folder in order. | Folder |
-| Party | Plays all tracks in random order and reshuffles forever. | Folder |
-| Single | Plays one selected track. | Folder and track |
-| Audiobook | Plays in order and remembers the next track. It saves the track, not a position within the file. | First and last folder |
-| Random from–to | Plays one random track within a selected range. | Folder, first and last track |
-| Album from–to | Plays only a selected range in order. | Folder, first and last track |
-| Party from–to | Shuffles and loops only a selected range. | Folder, first and last track |
-| Single audiobook | Resumes progress and plays a configured number of tracks, up to 30 per activation. | Folder range and count |
-| Repeat last card | Restarts the last valid card or shortcut. | None |
-| Audiobook from–to | Audiobook behavior limited to a track range. | Folder, first and last track |
-| Quiz | Starts the question game. | Folder and answer format |
-| Memory | Starts the matching game. | Folder |
-| Teapot/polysemy | Starts the word guessing game. | Folder |
-| Switch Bluetooth | Toggles the optional Bluetooth module. | None |
-| Admin | Makes the card an admin-menu key. | None |
+- Some FUDAN cards use folder `97`, `98`, or `99` according to the active
+  language.
+- Recognized Ultralight A cards use fixed folder `96`; the card model selects
+  the track.
 
-An empty folder, or files the player cannot recognize, returns to idle without
-playing content.
+Those folders must contain the matching audio. Not every Disney card is
+supported.
+
+## 6. Available playback modes
+
+The setup assistant announces sixteen modes. Use these in this build:
+
+| No. | Mode | Behavior |
+| ---: | --- | --- |
+| 1 | Random | Plays one random folder track and stops. |
+| 2 | Album | Plays the complete folder in order. |
+| 3 | Party | Plays all tracks randomly and reshuffles forever. |
+| 4 | Single | Plays one selected folder track. |
+| 5 | Audiobook | Plays in order and remembers the next track for later. |
+| 6 | Admin | Creates a card that opens the admin menu. |
+| 7 | Random from–to | Plays one random track between selected limits. |
+| 8 | Album from–to | Plays the selected range in order. |
+| 9 | Party from–to | Randomly loops the selected range. |
+| 10 | Single audiobook | Resumes progress and plays a selected count, up to 30 tracks per use. |
+| 11 | Repeat last card | Restarts the last valid card or shortcut. |
+| 16 | Audiobook from–to | Audiobook progress within a selected track range. |
+
+Modes 12–15 (Quiz, Memory, Bluetooth, and Teapot) are not enabled in
+`TonUINO_Custom`.
 
 ### Audiobook progress
 
-Progress is saved per folder. Finishing a track stores the next one; skipping
-manually stores the selected track. After the final track, the next session
-starts from the first. Multi-folder variants select unfinished content within
-the configured range.
+TonUINO stores the track number, not the exact position within the file.
+Finishing a track stores the next one; manually skipping stores the selected
+one. After the final track, the next session starts from the first.
 
-## 6. Optional games
+### Folders and ranges
 
-Games are available only when enabled in the installed firmware.
+- Folders must be `01`–`99`.
+- Single mode asks for one track.
+- From–to modes ask for first and last tracks.
+- Audiobook and Single audiobook allow a folder range.
+- Single audiobook also asks how many tracks to play.
 
-### Quiz
+## 7. Available modifier cards
 
-Each group of files in the folder contains:
+A modifier card temporarily changes TonUINO behavior. Present the active
+modifier card again to disable it.
 
-1. one question;
-2. zero, two, or four answers;
-3. optionally, one explanation/solution.
+| No. | Modifier | Effect |
+| ---: | --- | --- |
+| 1 | Sleep timer | Shuts down after 5, 15, 30, or 60 minutes, either immediately or after the track finishes, with at most ten extra minutes. |
+| 2 | Freeze dance | Randomly interrupts music. Intervals: 15–30, 25–40, or 35–50 seconds. |
+| 3 | Fire, water, air | Calls a random action using the same intervals. |
+| 4 | Toddler mode | Locks all six buttons; cards continue to work. |
+| 5 | Kindergarten mode | Allows only Pause and queues one new card until the current track ends. |
+| 6 | Repeat track | Repeats the current track forever. |
+| 10 | Disable standby | Temporarily toggles the general standby timer. |
+| 11 | Endless switch | Toggles repetition of the current queue. |
 
-During play:
+Options 7–9 (Bluetooth, Jukebox, and pause after each track) are not enabled in
+this build.
 
-- Press **Play/Pause** for a random question. Questions do not repeat until the
-  round is complete.
-- Use Next, Previous, and Volume +/− when available to hear answers.
-- Press **Play/Pause** to check the selected answer.
-- In buzzer mode, those four buttons identify the fastest player;
-  **Play/Pause** then plays the solution.
-- Hold Next + Previous to exit.
-
-The game exits after about five minutes without input unless standby
-suppression is active.
-
-### Memory
-
-First create the memory cards through the admin menu.
-
-1. Start a card configured in Memory mode.
-2. Present the first matching card and then the second.
-3. Press **Play/Pause** to check the pair.
-4. Consecutive tracks `1–2`, `3–4`, etc. are treated as pairs.
-5. Hold Next + Previous to exit.
-
-Long Play/Pause replays the most recently presented card.
-
-### Teapot/polysemy
-
-Each term uses six tracks: term, four descriptions, and solution.
-
-- Hold **Play/Pause** to start a term or reveal its solution.
-- Use the five controls to replay the available descriptions.
-- Hold Next + Previous to exit.
-
-## 7. Modifier cards
-
-Modifier cards temporarily change the box behavior. Present the active modifier
-card again to disable it.
-
-| Modifier | Effect |
-| --- | --- |
-| Sleep timer | Shuts down after 5, 15, 30, or 60 minutes. It can stop immediately or finish the current track first, with a maximum ten-minute grace period. |
-| Freeze dance | Interrupts music at random for the game. Intervals: 15–30, 25–40, or 35–50 seconds. |
-| Fire, water, air | Calls one of the three actions at random using the same interval choices. |
-| Toddler mode | Locks every button; cards still work. |
-| Kindergarten mode | Allows only Pause and queues one newly presented card until the current track ends. |
-| Repeat track | Repeats the current track forever. |
-| Jukebox | Queues up to ten cards or shortcuts and announces their positions. A chime indicates a full queue. |
-| Pause after each track | Pauses playback after every track. |
-| Disable standby | Temporarily toggles the general standby timer. |
-| Endless switch | Toggles endless repetition of the current queue. |
-| Bluetooth | Toggles the Bluetooth module. |
-
-Jukebox, pause-after-track, and Bluetooth depend on firmware options.
+**Toddler mode:** because it also locks Language, present its modifier card
+again to leave the mode.
 
 ## 8. Shortcuts
 
-Shortcuts play configured content without a card and use the same mode setup
-assistant as RFID cards.
+Shortcuts play configured content without a card:
 
-- **Shortcut 1:** hold Next + Previous together.
-- **Shortcut 2:** long Next while idle or paused.
-- **Shortcut 3:** long Previous while idle or paused.
-- **3 × 3 board:** up to 18 additional shortcuts.
+- **Shortcut 1:** hold Next + Previous.
+- **Shortcut 2:** hold Next while idle or paused.
+- **Shortcut 3:** hold Previous while idle or paused.
 
-Normal shortcuts start when nothing is playing. With Jukebox active, a shortcut
-can be added to the queue.
+Configure them with admin option 7. The fourth “At startup” target is announced,
+but this build does not generate the command required to run it; use shortcuts
+1–3.
 
 ## 9. Admin menu
 
-### Entering and leaving
+### Access and navigation
 
-To enter:
+To request access:
 
-- hold all three main buttons; or
+- hold **Play/Pause + Next + Previous**; or
+- hold **Play/Pause + Volume + + Volume −**; or
 - present an admin card.
 
-Long-press **Play/Pause** to cancel or leave at any level. Remove any card from
-the reader before navigating; otherwise TonUINO asks you to remove it.
+Remove any card from the reader before navigating.
+
+- Next or Volume +: next option.
+- Previous or Volume −: previous option.
+- Long Next/Previous or Volume +/−: move ten options.
+- Play/Pause: confirm.
+- Long Play/Pause: cancel or exit.
 
 ### Protection
 
-Three protection choices are operational:
+1. **No protection:** button combinations are allowed.
+2. **Card only:** only an admin card opens the menu.
+3. **PIN:** enter four presses using Play/Pause = 1, Next = 2, Previous = 3.
 
-1. **No protection:** the button combination is allowed.
-2. **Card only:** only an admin card grants access.
-3. **PIN:** enter four button presses; Play/Pause = 1, Next = 2, Previous = 3.
-
-### Options
+### Useful options in this build
 
 | No. | Option | Purpose |
 | ---: | --- | --- |
-| 1 | Configure card | Creates or reconfigures a content or admin card. |
-| 2 | Maximum volume | Sets the upper limit. |
-| 3 | Minimum volume | Sets the lower limit. |
-| 4 | Startup volume | Sets the power-on volume. |
+| 1 | Configure card | Create or reconfigure a card. |
+| 2 | Maximum volume | Set the upper limit. |
+| 3 | Minimum volume | Set the lower limit. |
+| 4 | Startup volume | Set the power-on volume. |
 | 5 | Equalizer | Normal, Pop, Rock, Jazz, Classic, or Bass. |
-| 6 | Modifier card | Selects a modifier and writes its card. |
-| 7 | Shortcut | Selects a shortcut and configures its content. |
-| 8 | Standby timer | Shut down after 5, 15, 30, or 60 idle/paused minutes, or disable it. |
-| 9 | Single cards for folder | Writes one single-track card for each track in the selected range. |
-| 10 | Invert buttons | Swaps volume and track functions on the three-button version. |
-| 11 | Delete settings | Immediately clears settings, shortcuts, and audiobook progress and restores defaults. |
-| 12 | Protect admin menu | Selects no protection, card only, or PIN. |
-| 13 | Pause when card removed | Enables or disables this behavior. |
-| 14 | Create memory cards | Writes numbered game cards; short Play/Pause finishes. |
-| 15 | Startup language | Multilingual firmware only; selects Spanish, Italian, or English. |
+| 6 | Modifier card | Create one of the available modifiers. |
+| 7 | Shortcut | Configure shortcuts 1–3. |
+| 8 | Standby timer | Shut down after 5, 15, 30, or 60 idle/paused minutes, or never. |
+| 9 | Folder cards | Sequentially create one Single card per track in a selected range. |
+| 11 | Delete settings | Clear settings, shortcuts, and audiobook progress and restore defaults. |
+| 12 | Protect admin | Choose no protection, card only, or PIN. |
+| 13 | Pause on removal | Enable or disable this behavior. |
+| 15 | Startup language | Select Spanish, Italian, or English for every startup. |
 
-After saving an option, TonUINO returns to the main admin menu.
+Options 10 (invert buttons) and 14 (Memory cards) remain in the common menu but
+provide no useful function in this build: it has separate volume buttons and
+the Memory game is disabled.
 
 ### Batch writing
 
-Remove each card after confirmation and present the next when TonUINO announces
-its number. For folder cards, long Play/Pause cancels. For Memory cards, short
-Play/Pause ends the process; Next/Previous changes the number to write.
+In option 9, select the folder and first/last tracks. TonUINO announces each
+number before requesting a card. Remove each card after confirmation and
+present the next one. Hold Play/Pause to cancel.
 
-## 10. Optional indicators and accessories
-
-- **NeoPixel ring:** uses colors/animations for startup, idle, playback, pause,
-  admin, sleep countdown, and shutdown; Next/Previous changes brightness while
-  idle.
-- **Button LEDs:** run in sequence at startup, blink together while idle, stay
-  on during playback, blink only Play while paused, and turn off at shutdown.
-- **Headphones:** compatible boards turn the speaker off automatically and use
-  separate volume limits.
-- **Battery measurement:** a periodic chime warns of low voltage; sustained
-  critical voltage shuts down the box.
-- **Bluetooth:** long Play/Pause during playback requests reconnection/pairing
-  while Bluetooth is active.
-
-## 11. ESP32 web interface
-
-ESP32 variants include a web interface.
-
-### Connecting
-
-1. If there is no saved network or connection fails, join the Wi-Fi network
-   **TonUINO**.
-2. Open an address containing at least one dot, such as
-   `http://tonuino.t`.
-3. If the browsing device also has Internet access, use
-   `http://192.168.4.1`.
-4. If TonUINO joined your home network, open its IP address or hostname.
-
-Holding **Next** during startup forces an open access point for Wi-Fi recovery.
-
-### Web features
-
-The home page shows status and can:
-
-- operate virtual buttons;
-- start a folder/mode and write that setup to a card;
-- activate or write modifiers;
-- shut the box down.
-
-The settings page controls speaker/headphone volumes, equalizer, standby
-timer, button inversion, admin protection, PIN, pause-on-removal, and
-shortcuts. Wi-Fi, system, log, and firmware-upgrade pages are also available.
-Restart after changing the network unless automatic restart was selected.
-
-Protect the access-point network and change default firmware-update
-credentials before exposing the device to an untrusted network.
-
-## 12. Troubleshooting
+## 10. Troubleshooting
 
 | Problem | Check |
 | --- | --- |
-| No sound | Inserted microSD, `mp3` and `advert` folders, numeric filenames, volume, speaker/headphones, and power. |
-| A folder will not play | It must be `01`–`99`, contain consecutively numbered tracks, and match the folder stored on the card. |
-| A card is not read | Center it, hold it still, try another supported card, and keep the reader away from metal/interference. |
-| A card is not written | Remove it when prompted, replace it centrally, and do not move it before confirmation. |
+| No sound | Inserted microSD, complete `sd-card-multilang` package, `mp3` and `advert` folders, volume, speaker, and power. |
+| Only one language works | The same microSD must contain all three language sets from `sd-card-multilang`. |
+| Language changes after restart | The Language button is temporary; save startup language with option 15. |
+| A folder will not play | It must be `01`–`99`, contain consecutively numbered tracks, and match the card. |
+| A card will not read or write | Center it, hold it still, keep it away from metal, and try another supported card. |
 | Playback will not resume | If pause-on-removal is enabled, replace the original card. |
-| Cannot open the admin menu | Use the configured admin card or PIN. The button combination is disabled in card-only mode. |
-| A mode/game/modifier is missing | The feature was probably not included in the installed firmware. |
-| Unexpected shutdown | Check the standby timer, sleep modifier, and battery level. |
-| ESP32 is not reachable | Hold Next during startup, join the `TonUINO` AP, and review Wi-Fi settings. |
-| A card errors or is ignored | It may be incompatible, damaged, contain data from another version, or have failed to read. |
+| Admin will not open | Use the configured card or PIN. Button combinations are blocked in card-only mode. |
+| An announced mode does not work | Do not use modes 12–15 or modifiers 7–9 in this build. |
+| Unexpected shutdown | Check the standby timer and active sleep-timer card. |
