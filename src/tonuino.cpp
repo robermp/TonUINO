@@ -42,6 +42,9 @@ ISR(TIMER1_COMPA_vect){
 #endif
 
 void Tonuino::setup() {
+#ifdef LANGUAGE_SELECT
+  musicMode = false;
+#endif
 #ifdef USE_LED_BUTTONS
   ledManager.begin();
 #endif
@@ -313,6 +316,37 @@ void Tonuino::loop() {
   if (stop_cycle-start_cycle < cycleTime)
     delay(cycleTime - (stop_cycle - start_cycle));
 }
+
+#ifdef LANGUAGE_SELECT
+void Tonuino::toggleContentMode() {
+  musicMode = not musicMode;
+  LOG(play_log, s_info, F("Content: "), musicMode ? F("music") : F("stories"));
+  if (mp3.isPlayingFolder())
+    mp3.playAdvertisement(advertTracks::t_262_pling, false);
+  else
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_262_pling);
+}
+
+bool Tonuino::resolveContentFolder(folderSettings &folder) const {
+  if (not musicMode || folder.folder == 0 || folder.folder > 99 ||
+      folder.mode == pmode_t::none || folder.mode == pmode_t::admin ||
+      folder.mode == pmode_t::repeat_last)
+    return true;
+
+  if ((folder.mode == pmode_t::audiobook || folder.mode == pmode_t::audiobook_single) &&
+      folder.special2 > 0 &&
+      (folder.folder == 50 ||
+       static_cast<uint16_t>(folder.folder) + folder.special2 > (folder.folder < 50 ? 49 : 99))) {
+    LOG(play_log, s_error, F("Content folder range crosses bank"));
+    return false;
+  }
+  // Folder 50 is shared; the remaining folders form pairs separated by 50.
+  if (folder.folder == 50)
+    return true;
+  folder.folder = folder.folder < 50 ? folder.folder + 50 : folder.folder - 50;
+  return true;
+}
+#endif
 
 void Tonuino::playFolder() {
   LOG(play_log, s_debug, F("playFolder"));

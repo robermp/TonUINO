@@ -57,6 +57,11 @@ public:
   const folderSettings& getMyFolder() const     { return myFolder; }
   uint8_t getFolder()                           { return myFolder.folder; }
   bool playingCard()                            { return myFolderIsCard; }
+#ifdef LANGUAGE_SELECT
+  bool isMusicMode() const { return musicMode; }
+  void toggleContentMode();
+  bool resolveContentFolder(folderSettings &folder) const;
+#endif
 
   Mp3&      getMp3      () { return mp3      ; }
   Commands& getCommands () { return commands ; }
@@ -189,6 +194,9 @@ private:
 
   bool                 standbyTimerOff     {};
   bool                 endless             {};
+#ifdef LANGUAGE_SELECT
+  bool                 musicMode           {};
+#endif
 };
 
 #endif /* SRC_TONUINO_HPP_ */

@@ -93,6 +93,38 @@ TEST_F(buttons_test_fixture, raw_allLong) {
   EXPECT_EQ(execute_cycle(), commandRaw::up);
 }
 
+#ifdef LANGUAGE_SELECT
+TEST_F(buttons_test_fixture, language_short_and_long_press) {
+  press_button(buttonLangPin);
+  EXPECT_EQ(execute_cycle(), commandRaw::none);
+  release_button(buttonLangPin);
+  EXPECT_EQ(execute_cycle(), commandRaw::lang);
+
+  press_button(buttonLangPin);
+  EXPECT_EQ(execute_cycle(), commandRaw::none);
+  EXPECT_EQ(execute_cycle(buttonLongPress - 1), commandRaw::none);
+  EXPECT_EQ(execute_cycle(1), commandRaw::langLong);
+  EXPECT_EQ(execute_cycle(buttonLongPress * 3), commandRaw::none);
+  release_button(buttonLangPin);
+  EXPECT_EQ(execute_cycle(), commandRaw::none);
+
+  press_button(buttonLangPin);
+  EXPECT_EQ(execute_cycle(), commandRaw::none);
+  release_button(buttonLangPin);
+  EXPECT_EQ(execute_cycle(), commandRaw::lang);
+}
+
+TEST_F(buttons_test_fixture, language_command_mapping) {
+  for (auto state : {state_for_command::idle_pause, state_for_command::play,
+                     state_for_command::play_invert}) {
+    EXPECT_EQ(commands.getCommand(commandRaw::lang, state), command::language);
+    EXPECT_EQ(commands.getCommand(commandRaw::langLong, state), command::content_mode);
+  }
+  EXPECT_EQ(commands.getCommand(commandRaw::lang, state_for_command::admin), command::none);
+  EXPECT_EQ(commands.getCommand(commandRaw::langLong, state_for_command::admin), command::none);
+}
+#endif
+
 TEST_F(buttons_test_fixture, raw_updownLong) {
   press_button(buttonUpPin);
   EXPECT_EQ(execute_cycle(), commandRaw::none);
