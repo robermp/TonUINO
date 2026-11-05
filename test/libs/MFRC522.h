@@ -178,6 +178,8 @@ public:
   // Basic interface functions for communicating with the MFRC522
   /////////////////////////////////////////////////////////////////////////////////////
   byte PCD_ReadRegister(PCD_Register reg) { return 0x92; }
+  enum PCD_RxGain : byte { RxGain_max = 0x70 };
+  void PCD_SetAntennaGain(byte gain) {}
 
   /////////////////////////////////////////////////////////////////////////////////////
 	// Functions for manipulating the MFRC522
@@ -208,6 +210,12 @@ public:
 	}
 
 	bool called_PICC_HaltA = false;
+	StatusCode PICC_WakeupA(byte *bufferATQA, byte *bufferSize) {
+	  return PICC_RequestA(bufferATQA, bufferSize);
+	}
+	StatusCode PICC_Select(Uid *selectedUid, byte validBits = 0) {
+	  return card_is_in ? STATUS_OK : STATUS_ERROR;
+	}
 	StatusCode PICC_HaltA() {
 	  called_PICC_HaltA = true;
 	  return STATUS_OK;
@@ -229,6 +237,14 @@ public:
 	  called_PCD_Authenticate = false;
 	}
 	StatusCode MIFARE_Read(byte blockAddr, byte *buffer, byte *bufferSize) {
+	  if (use_test_blocks) {
+	    if (blockAddr >= 12)
+	      return STATUS_MIFARE_NACK;
+	    if (test_block_status[blockAddr] != STATUS_OK)
+	      return test_block_status[blockAddr];
+	    memcpy(buffer, test_blocks[blockAddr], buffferSizeRead);
+	    return STATUS_OK;
+	  }
 	  if (!called_PCD_Authenticate && blockAddr != 4 && *bufferSize != buffferSizeRead)
 	    return STATUS_ERROR;
 	  memcpy(buffer, t_buffer, buffferSizeRead);
@@ -307,7 +323,7 @@ public:
 	    uid.size = 4;
 	    for (uint8_t i = 0; i < uid.size; ++i)
 	      uid.uidByte[i] = i+1;
-	    uid.sak = 0x08; // todo: implement other card types
+	    uid.sak = card_sak;
 	    return true;
 	  }
 	  return false;
@@ -333,6 +349,10 @@ public:
 	static constexpr size_t buffferSizeRead  = 18; // buffer size for read and write
   static constexpr size_t buffferSizeWrite = 16; // buffer size for read and write
   byte t_buffer[buffferSizeRead]{};
+  byte card_sak{0x08};
+  bool use_test_blocks{false};
+  byte test_blocks[12][buffferSizeRead]{};
+  StatusCode test_block_status[12]{};
 
   bool card_is_in{false};
 	void card_in(uint32_t cookie, uint8_t version, uint8_t folder, uint8_t mode, uint8_t special, uint8_t special2) {

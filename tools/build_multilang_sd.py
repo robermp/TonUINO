@@ -22,6 +22,8 @@ Este script toma tres packs ya generados con `create_audio_messages.py`
 (uno por idioma, cada uno con subcarpetas mp3/ y advert/ y ficheros tipo
 `0300.mp3` o `0300_new_tag.mp3`) y los combina en una sola SD renumerando el
 prefijo de 4 digitos con el offset de cada idioma.
+Si falta el sonido 0262 en advert/, lo copia desde mp3/ para confirmar el
+cambio cuentos/musica sin interrumpir la cola de reproduccion.
 
 Tambien puede inyectar (opcionalmente) la pista que dice el nombre del idioma,
 que el firmware reproduce con `languageNameMp3 = 309`:
@@ -128,6 +130,15 @@ def plan_language(pack: Path, offset: int, out_dir: Path):
                 continue
             dst = out_sub / f"{new_num:04d}{suffix}.mp3"
             actions.append((f, dst))
+    confirmation = offset + 262
+    has_advert = any(dst.parent.name == "advert" and
+                     int(NAME_RE.match(dst.name).group(1)) == confirmation
+                     for _, dst in actions)
+    if not has_advert:
+        for src, dst in actions:
+            if dst.parent.name == "mp3" and int(NAME_RE.match(dst.name).group(1)) == confirmation:
+                actions.append((src, out_dir / "advert" / f"{confirmation:04d}.mp3"))
+                break
     return actions, warnings
 
 

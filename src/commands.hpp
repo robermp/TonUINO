@@ -69,6 +69,7 @@ enum class commandRaw: uint8_t {
   cmd_end        = 22,
 #ifdef LANGUAGE_SELECT
   lang           = 23,   // botón de idioma dedicado (estilo 2.x)
+  langLong       = 24,
 #endif
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,
@@ -111,6 +112,7 @@ enum class command: uint8_t {
   last        = 23,
 #ifdef LANGUAGE_SELECT
   language    = 24,  // ciclar idioma (ES->IT->EN)
+  content_mode = 25,
 #endif
 #ifdef BUTTONS3X3
   ext_begin = buttonExtSC_begin,

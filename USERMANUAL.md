@@ -83,6 +83,39 @@ inicial** guardado en la opción 15 del menú de administración.
 Las tarjetas Disney compatibles que dependen del idioma también usan el idioma
 activo en el momento de leerlas.
 
+### Cambiar entre cuentos y música
+
+Mantén **Idioma** durante un segundo para alternar **Cuentos ↔ Música**.
+Una pulsación larga cambia una sola vez y no cambia el idioma al soltar el
+botón. Funciona en reposo, reproducción y pausa, pero no en administración.
+Se confirma con un sonido. Actualiza también `advert/` desde
+`sd-card-multilang` para disponer del sonido durante la reproducción en los
+tres idiomas. Al encender siempre se inicia en **Cuentos**.
+
+El audio actual no se cambia automáticamente: retira y vuelve a presentar la
+tarjeta para escuchar el otro contenido. Se conserva la pista y el modo de
+reproducción de la tarjeta, sin reescribirla. Los accesos directos también usan
+el modo activo; «Repetir último» conserva el audio anterior.
+
+Prepara en la microSD carpetas alternativas con la misma numeración de pistas:
+
+| Contenido | Carpeta en Cuentos | Carpeta en Música |
+| --- | --- | --- |
+| Tarjeta TonUINO (magic cookie), ejemplo | `01` | `51` |
+| Disney Ultralight A | `96` | `46` |
+| Disney FUDAN/Mickey, español | `97` | `47` |
+| Disney FUDAN/Mickey, italiano | `98` | `48` |
+| Disney FUDAN/Mickey, inglés | `99` | `49` |
+
+Para las tarjetas TonUINO, Música suma 50 a las carpetas `01`–`49` y resta 50
+a `51`–`99`; `50` es compartida por ambos modos. Por ejemplo, la pista
+`97/003.mp3` en Cuentos corresponde a `47/003.mp3` en Música. Reserva
+`46`–`49` para la música Disney y evita usarlas para otros contenidos.
+Los audiolibros que abarcan varias carpetas deben mantenerse dentro de un
+mismo bloque (`01`–`49` o `51`–`99`); si lo cruzan se anuncia un error.
+Las carpetas `mp3/` y `advert/`, las tarjetas de administración y los
+modificadores no cambian.
+
 ### Apagar
 
 En reposo o pausa, mantén **Reproducir/Pausa** durante aproximadamente un
@@ -104,6 +137,7 @@ Una pulsación larga dura aproximadamente un segundo.
 | Volumen + | Subir volumen | Subir volumen | Opción siguiente |
 | Volumen − | Bajar volumen | Bajar volumen | Opción anterior |
 | Idioma | Cambiar idioma | Cambiar idioma | Sin función en administración |
+| Idioma, larga | Alternar cuentos/música | Alternar cuentos/música | Sin función en administración |
 | Siguiente + Anterior, larga | Volver a la primera pista de la cola | Acceso directo 1 | — |
 
 Mantener **Reproducir/Pausa + Siguiente + Anterior** o
@@ -370,6 +404,36 @@ The button changes language temporarily. After a restart, TonUINO restores the
 Compatible language-dependent Disney cards also use the language active when
 they are read.
 
+### Switching between stories and music
+
+Hold **Language** for one second to toggle **Stories ↔ Music**. Each long
+press toggles once and does not change language on release. It works while
+idle, playing, or paused, but not in admin. A sound confirms the change.
+Update `advert/` from `sd-card-multilang` as well, so the confirmation during
+playback is available in all three languages. Power-on always starts in **Stories**.
+
+Current audio is not switched automatically: remove and present the card
+again to hear the alternative content. Track numbers and playback modes are
+preserved without rewriting cards. Shortcuts also use the active mode;
+“Repeat last” keeps the previous audio.
+
+Prepare alternative microSD folders with matching track numbers:
+
+| Content | Stories folder | Music folder |
+| --- | --- | --- |
+| TonUINO (magic-cookie) card, example | `01` | `51` |
+| Disney Ultralight A | `96` | `46` |
+| Disney FUDAN/Mickey, Spanish | `97` | `47` |
+| Disney FUDAN/Mickey, Italian | `98` | `48` |
+| Disney FUDAN/Mickey, English | `99` | `49` |
+
+For TonUINO cards, Music adds 50 to folders `01`–`49` and subtracts 50 from
+`51`–`99`; folder `50` is shared. For example, Stories track `97/003.mp3`
+corresponds to Music track `47/003.mp3`. Reserve `46`–`49` for Disney music,
+not unrelated content. Multi-folder audiobooks must stay within one bank
+(`01`–`49` or `51`–`99`); crossing a bank boundary announces an error.
+System folders `mp3/` and `advert/`, admin cards, and modifiers are unchanged.
+
 ### Shutdown
 
 While idle or paused, hold **Play/Pause** for about one second. The standby
@@ -390,6 +454,7 @@ A long press takes about one second.
 | Volume + | Increase volume | Increase volume | Next option |
 | Volume − | Decrease volume | Decrease volume | Previous option |
 | Language | Change language | Change language | No function in admin |
+| Long Language | Toggle stories/music | Toggle stories/music | No function in admin |
 | Long Next + Previous | Return to first queue track | Shortcut 1 | — |
 
 Hold **Play/Pause + Next + Previous** or

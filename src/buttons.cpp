@@ -143,6 +143,9 @@ commandRaw Buttons::getCommandRaw() {
   else if (buttonLang.wasReleased() && not ignoreRelease) {
     ret = commandRaw::lang;
   }
+  else if (buttonLang.pressedFor(buttonLongPress) && longPressFactor == 0) {
+    ret = commandRaw::langLong;
+  }
 #endif
 
   switch (ret) {
@@ -151,6 +154,9 @@ commandRaw Buttons::getCommandRaw() {
   case commandRaw::upLongRepeat  :
   case commandRaw::downLong      :
   case commandRaw::downLongRepeat:
+#ifdef LANGUAGE_SELECT
+  case commandRaw::langLong      :
+#endif
 #ifdef FIVEBUTTONS
   case commandRaw::fourLong      :
   case commandRaw::fourLongRepeat:

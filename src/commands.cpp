@@ -64,6 +64,7 @@ const command cmd_table[][4] PROGMEM = {
 #endif
 #ifdef LANGUAGE_SELECT
 /* 23 lang,           */ ,{ command::none      , command::language   , command::language   , command::language    }
+/* 24 langLong,       */ ,{ command::none      , command::content_mode,command::content_mode,command::content_mode}
 #endif
 };
 Commands::Commands(const Settings& settings, CommandSource* source1, CommandSource* source2, CommandSource* source3, CommandSource* source4)
@@ -103,6 +104,7 @@ command Commands::getCommand(commandRaw b, state_for_command s) {
   if (b < commandRaw::cmd_end
 #ifdef LANGUAGE_SELECT
       || b == commandRaw::lang
+      || b == commandRaw::langLong
 #endif
      ) {
     PROGMEM_read(&cmd_table[static_cast<int>(b)][static_cast<int>(s)], ret);
@@ -202,4 +204,3 @@ bool Commands::isExtButton(command c) {
   return c >= command::ext_begin && c < command::ext_end;
 }
 #endif
-

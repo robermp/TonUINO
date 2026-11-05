@@ -577,6 +577,12 @@ bool Base::readCard() {
     return false;
   }
 
+#ifdef LANGUAGE_SELECT
+  if (not tonuino.resolveContentFolder(lastCardRead)) {
+    mp3.enqueueMp3FolderTrack(mp3Tracks::t_401_error);
+    return false;
+  }
+#endif
   if (tonuino.getActiveModifier().handleRFID(lastCardRead))
   {
     return false;
@@ -600,6 +606,12 @@ bool Base::handleShortcut(uint8_t shortCut) {
       return false; // do not end the current play
     }
 #endif // BT_MODULE
+#ifdef LANGUAGE_SELECT
+    if (not tonuino.resolveContentFolder(sc_folderSettings)) {
+      mp3.enqueueMp3FolderTrack(mp3Tracks::t_401_error);
+      return false;
+    }
+#endif
     if (sc_folderSettings.mode != pmode_t::repeat_last)
       tonuino.setMyFolder(sc_folderSettings, false /*myFolderIsCard*/);
     if (tonuino.getFolder() != 0) {
@@ -774,6 +786,9 @@ void Idle::react(command_e const &cmd_e) {
   case command::language:
     selectNextLanguage();
     return;
+  case command::content_mode:
+    tonuino.toggleContentMode();
+    return;
 #endif
   case command::volume_up:
     mp3.increaseVolume();
@@ -901,6 +916,9 @@ void Play::react(command_e const &cmd_e) {
   case command::language:
     selectNextLanguage();
     return;
+  case command::content_mode:
+    tonuino.toggleContentMode();
+    return;
 #endif
   case command::previous:
     tonuino.previousTrack();
@@ -997,6 +1015,9 @@ void Pause::react(command_e const &cmd_e) {
 #ifdef LANGUAGE_SELECT
   case command::language:
     selectNextLanguage();
+    return;
+  case command::content_mode:
+    tonuino.toggleContentMode();
     return;
 #endif
   case command::volume_up:
